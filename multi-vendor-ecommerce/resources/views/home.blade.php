@@ -3,8 +3,162 @@
         $heroProduct = $featuredProducts->first();
     @endphp
 
+
+    {{-- HERO AREA --}}
+    <section class="mb-6">
+        <x-homeslider />
+    </section>
+
+
+
     <div class="bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-8">
+
+
+         <!-- {{-- ================= TOP FEATURE ICON ROW ================= --}}
+            <section class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🚚</div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Free Delivery</p>
+                        <p class="text-gray-500">Free shipping on all orders</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">💰</div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Big Saving Shop</p>
+                        <p class="text-gray-500">Save big every single order</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">⏰</div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Online Support 24/7</p>
+                        <p class="text-gray-500">We’re here day and night</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🔁</div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Money Back Return</p>
+                        <p class="text-gray-500">Guarantee under 7 days</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🎁</div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Member Discount</p>
+                        <p class="text-gray-500">On orders over $120.00</p>
+                    </div>
+                </div>
+            </section> -->
+
+         {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
+            <section class="icons-carousel-section max-w-7xl mx-auto ">
+                <div class="relative border border-gray-200  overflow-hidden">
+
+                    <!-- Swiper container -->
+                    <div class="swiper iconSwiper">
+                        <div class="swiper-wrapper">
+                            <!-- Slide 1 -->
+                            <div class="swiper-slide">
+                                <div class="icon-card">
+                                    <div class="icon">🚚</div>
+                                    <div class="meta">
+                                        <p class="font-semibold text-gray-900 iconcardp1">Free Delivery</p>
+                                        <p class="text-gray-500 text-xs">Free shipping on all orders</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="swiper-slide">
+                                <div class="icon-card">
+                                    <div class="icon">💰</div>
+                                    <div class="meta">
+                                        <p class="font-semibold text-gray-900 iconcardp1">Big Saving Shop</p>
+                                        <p class="text-gray-500 text-xs">Save big every single order</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="swiper-slide">
+                                <div class="icon-card">
+                                    <div class="icon">⏰</div>
+                                    <div class="meta">
+                                        <p class="font-semibold text-gray-900 iconcardp1">Online Support 24/7</p>
+                                        <p class="text-gray-500 text-xs">We’re here day and night</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 4 -->
+                            <div class="swiper-slide">
+                                <div class="icon-card">
+                                    <div class="icon">🔁</div>
+                                    <div class="meta">
+                                        <p class="font-semibold text-gray-900 iconcardp1">Money Back Return</p>
+                                        <p class="text-gray-500 text-xs">Guarantee under 7 days</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 5 -->
+                            <div class="swiper-slide">
+                                <div class="icon-card">
+                                    <div class="icon">🎁</div>
+                                    <div class="meta">
+                                        <p class="font-semibold text-gray-900 iconcardp1">Member Discount</p>
+                                        <p class="text-gray-500 text-xs">On orders over $120.00</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- You can add more slides here; content preserved -->
+                        </div>
+
+                        <!-- Navigation (visible outside the bordered box) -->
+                        <div class="swiper-button-prev grt icon-swiper-prev"></div>
+                        <div class="swiper-button-next grt icon-swiper-next"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------------------------------------------------------------------- -->
+
+            {{-- ================= THREE COLOUR BANNERS ================= --}}
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5">
+                    <div class="flex-1">
+                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                            Smart Phones
+                        </span>
+                        <h3 class="mt-2 text-lg font-bold">OnePlus 8</h3>
+                        <p class="mt-1 text-xs">128 GB Green in 2013</p>
+                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
+                    </div>
+                </div>
+                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5">
+                    <div class="flex-1">
+                        <span class="text-[11px] font-semibold uppercase bg-yellow-300 text-gray-900 px-2 py-0.5 rounded">
+                            Smart Watches
+                        </span>
+                        <h3 class="mt-2 text-lg font-bold">Apple Watch Series 4</h3>
+                        <p class="mt-3 text-sm">From <span class="text-gray-900 font-semibold">$14.99/-</span></p>
+                    </div>
+                </div>
+                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5">
+                    <div class="flex-1">
+                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                            Popular Product
+                        </span>
+                        <h3 class="mt-2 text-lg font-bold">Polaroid Now Instant i-Type</h3>
+                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$90.99/-</span></p>
+                    </div>
+                </div>
+            </section>
 
             {{-- ================= HERO + TOP NAV BAR AREA ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -65,76 +219,10 @@
                 </div>
             </section>
 
-            {{-- ================= TOP FEATURE ICON ROW ================= --}}
-            <section class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🚚</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Free Delivery</p>
-                        <p class="text-gray-500">Free shipping on all orders</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">💰</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Big Saving Shop</p>
-                        <p class="text-gray-500">Save big every single order</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">⏰</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Online Support 24/7</p>
-                        <p class="text-gray-500">We’re here day and night</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🔁</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Money Back Return</p>
-                        <p class="text-gray-500">Guarantee under 7 days</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🎁</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Member Discount</p>
-                        <p class="text-gray-500">On orders over $120.00</p>
-                    </div>
-                </div>
-            </section>
 
-            {{-- ================= THREE COLOUR BANNERS ================= --}}
-            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="rounded-lg overflow-hidden bg-indigo-600 text-white flex items-center p-5">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
-                            Smart Phones
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">OnePlus 8</h3>
-                        <p class="mt-1 text-xs">128 GB Green in 2013</p>
-                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
-                    </div>
-                </div>
-                <div class="rounded-lg overflow-hidden bg-orange-500 text-white flex items-center p-5">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-yellow-300 text-gray-900 px-2 py-0.5 rounded">
-                            Smart Watches
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">Apple Watch Series 4</h3>
-                        <p class="mt-3 text-sm">From <span class="text-gray-900 font-semibold">$14.99/-</span></p>
-                    </div>
-                </div>
-                <div class="rounded-lg overflow-hidden bg-blue-700 text-white flex items-center p-5">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
-                            Popular Product
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">Polaroid Now Instant i-Type</h3>
-                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$90.99/-</span></p>
-                    </div>
-                </div>
-            </section>
+          
+
+            
 
             {{-- ================= HORIZONTAL OFFER STRIP ================= --}}
             <section class="bg-indigo-700 text-[11px] text-white rounded-lg shadow-sm flex flex-wrap items-center justify-between px-4 py-2">
