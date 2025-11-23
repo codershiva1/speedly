@@ -35,4 +35,39 @@ class PageController extends Controller
     {
         return view('pages.blog');
     }
+
+     public function terms(): View
+    {
+        return view('pages.terms');
+    }
+
+     public function privacy(): View
+    {
+        return view('pages.privacy');
+    }
+
+     public function refunds(): View
+    {
+        return view('pages.refunds');
+    }
+
+     public function shipping(): View
+    {
+        return view('pages.shipping');
+    }
+
+    public function vendor_policy(): View
+    {
+        return view('pages.vendor-policy');
+    }
+
+     public function cancellation(): View
+    {
+        return view('pages.cancellation');
+    }
+
+    public function cookie_policy(): View
+    {
+        return view('pages.cookie-policy');
+    }
 }

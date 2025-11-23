@@ -143,6 +143,15 @@
                                 <li><a href="{{ route('pages.find-store') }}" class="hover:text-amber-400">Find a Store</a></li>
                                 <li><a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a></li>
                                 <li><a href="{{ route('pages.about') }}" class="hover:text-amber-400">About Us</a></li>
+
+                                 <!-- New Policy / Legal Pages -->
+                                <li><a href="{{ route('pages.privacy') }}" class="hover:text-amber-400">Privacy Policy</a></li>
+                                <li><a href="{{ route('pages.terms') }}" class="hover:text-amber-400">Terms & Conditions</a></li>
+                                <li><a href="{{ route('pages.return-refund') }}" class="hover:text-amber-400">Return & Refund Policy</a></li>
+                                <li><a href="{{ route('pages.shipping') }}" class="hover:text-amber-400">Shipping Policy</a></li>
+                                <li><a href="{{ route('pages.cookie') }}" class="hover:text-amber-400">Cookie Policy</a></li>
+                                <li><a href="{{ route('pages.vendor-agreement') }}" class="hover:text-amber-400">Vendor Agreement</a></li>
+                                <li><a href="{{ route('pages.cancellation') }}" class="hover:text-amber-400">Cancellation</a></li>
                             </ul>
                         </div>
 

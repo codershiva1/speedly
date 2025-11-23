@@ -130,7 +130,7 @@
 
             {{-- ================= THREE COLOUR BANNERS ================= --}}
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5">
+                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5 banner">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Smart Phones
@@ -140,7 +140,7 @@
                         <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5">
+                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5 banner">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-yellow-300 text-gray-900 px-2 py-0.5 rounded">
                             Smart Watches
@@ -149,7 +149,7 @@
                         <p class="mt-3 text-sm">From <span class="text-gray-900 font-semibold">$14.99/-</span></p>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5">
+                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5 banner">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Popular Product
@@ -224,15 +224,57 @@
 
             
 
-            {{-- ================= HORIZONTAL OFFER STRIP ================= --}}
+            <!-- {{-- ================= HORIZONTAL OFFER STRIP ================= --}}
             <section class="bg-indigo-700 text-[11px] text-white rounded-lg shadow-sm flex flex-wrap items-center justify-between px-4 py-2">
                 <p>Mega offers now on Amazon Fresh | Up to 40% off</p>
                 <p>FREE delivery over ₹499. Fulfilled by Amazon.</p>
                 <p>Flat $10 instant cashback on wallet &amp; UPI transactions</p>
+            </section> -->
+
+            {{-- ================= MOVING OFFER STRIP ================= --}}
+            <section class="w-full overflow-hidden">
+                <div class="bg-indigo-700 text-white rounded-lg shadow-sm py-2 relative">
+
+                    <div class="marquee whitespace-nowrap flex items-center text-[12px]">
+
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-amber-300">&#9733;</span>
+                            Mega offers now on Amazon Fresh | Up to 40% off
+                        </span>
+
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-green-300">&#10003;</span>
+                            FREE delivery over ₹499. Fulfilled by Amazon.
+                        </span>
+
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-yellow-300">&#128179;</span>
+                            Flat $10 instant cashback on wallet & UPI transactions
+                        </span>
+
+                        {{-- Duplicate content for infinite loop --}}
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-amber-300">&#9733;</span>
+                            Mega offers now on Amazon Fresh | Up to 40% off
+                        </span>
+
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-green-300">&#10003;</span>
+                            FREE delivery over ₹499. Fulfilled by Amazon.
+                        </span>
+
+                        <span class="mx-6 flex items-center gap-1">
+                            <span class="text-yellow-300">&#128179;</span>
+                            Flat $10 instant cashback on wallet & UPI transactions
+                        </span>
+
+                    </div>
+                </div>
             </section>
 
+
             {{-- ================= CATEGORY STRIP ================= --}}
-            <section class="bg-white rounded-lg shadow-sm p-4">
+            <!-- <section class="bg-white rounded-lg shadow-sm p-4">
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 text-xs">
                     @foreach($topCategories->take(8) as $category)
                         <a href="{{ route('shop.index',['category'=>$category->slug]) }}"
@@ -247,7 +289,56 @@
                         </a>
                     @endforeach
                 </div>
-            </section>
+            </section> -->
+
+            {{-- ================= TWO-ROW CATEGORY SLIDER ================= --}}
+{{-- ================= CATEGORY SLIDER (2 ROWS) ================= --}}
+<section class="category-slider-section max-w-7xl mx-auto my-8">
+    <div class="relative border border-gray-200  overflow-hidden bg-white">
+
+        <div class="swiper categorySwiper">
+            <div class="swiper-wrapper ">
+
+                {{-- Chunk the categories in pairs (2 per slide) --}}
+                @foreach($topCategories->chunk(2) as $pair)
+                    <div class="swiper-slide twocategory-slide h-full">
+                        <div class="flex flex-col  category-slide">
+
+                            @foreach($pair as $category)
+                                <a href="{{ route('shop.index',['category'=>$category->slug]) }}"
+                                   class="cat-card flex items-center gap-3 border border-gray-100 p-3 category-slidelink">
+                                    
+                                    <div class="cat-icon">
+                                        <span>{{ strtoupper(substr($category->name,0,2)) }}</span>
+                                    </div>
+
+                                    <div>
+                                        <p class="cat-title">{{ $category->name }}</p>
+                                        <p class="cat-items">{{ $category->products_count }} Items</p>
+                                    </div>
+                                    <div class="cat-img-wrapper bg-white p-1 transition-all duration-300">
+                                        <img class="cat-img transition-transform duration-300"
+                                            style="height:50px; width:50px;"
+                                            src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/20-02-300x330.jpg"
+                                            alt="">
+                                    </div>
+                                </a>
+                            @endforeach
+
+                        </div>
+                    </div>
+                @endforeach
+
+            </div>
+
+            <div class="swiper-button-prev cat-prev"></div>
+            <div class="swiper-button-next cat-next"></div>
+
+        </div>
+    </div>
+</section>
+
+
 
             {{-- ================= DEALS / NEW / FEATURED ROW ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">

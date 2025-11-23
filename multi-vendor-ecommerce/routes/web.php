@@ -30,6 +30,16 @@ Route::get('/find-store', [PageController::class, 'findStore'])->name('pages.fin
 Route::get('/wishlist', [PageController::class, 'wishlist'])->name('pages.wishlist');
 Route::get('/blog', [PageController::class, 'blog'])->name('pages.blog');
 
+// ----------new pages --------------
+Route::get('/terms', [PageController::class, 'terms'])->name('pages.terms');
+Route::get('/privacy', [PageController::class, 'privacy'])->name('pages.privacy');
+Route::get('/return-refund', [PageController::class, 'refunds'])->name('pages.return-refund');
+Route::get('/shipping', [PageController::class, 'shipping'])->name('pages.shipping');
+Route::get('/vendor-agreement', [PageController::class, 'vendor_policy'])->name('pages.vendor-agreement');
+Route::get('/cancellation', [PageController::class, 'cancellation'])->name('pages.cancellation');
+Route::get('/cookie', [PageController::class, 'cookie_policy'])->name('pages.cookie');
+
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/product/{slug}', [ShopController::class, 'show'])->name('shop.show');
 Route::post('/product/{product:slug}/reviews', [ProductReviewController::class, 'store'])

@@ -116,7 +116,7 @@ body {
 
 
 
-/* --------------------------------------- */
+/* --------------------------------icon slider------------ */
 
 
 /* Swiper will be imported separately via app.css (see step below) */
@@ -234,4 +234,144 @@ body {
 @media (max-width: 640px) {
   .icon-card { min-width: 180px; height: 64px; padding: 10px; }
   .icons-carousel-section .swiper { padding-left: 28px; padding-right: 28px; }
+}
+
+
+/* -------------------home banners -------------------- */
+
+.banner {
+	position: relative;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+.banner img {
+	width: 100%;
+	display: block;
+	transition: transform 0.7s ease;
+}
+
+.banner:hover img {
+	transform: scale(1.1);
+}
+
+.banner::before,
+.banner::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0);
+	transition: all 0.7s ease-in-out;
+	z-index: 2;
+}
+
+/* HORIZONTAL (TOP + BOTTOM) */
+.banner:hover::after {
+	height: 0;
+	top: 50%;
+	bottom: 50%;
+	background: rgba(255,255,255,0.18);
+}
+
+/* VERTICAL (LEFT + RIGHT) */
+.banner:hover::before {
+	left: 50%;
+	right: 50%;
+	width: 0;
+	background: rgba(255,255,255,0.18);
+}
+
+
+
+/* --------------------home marque -------------------- */
+
+ .marquee {
+        display: inline-flex;
+        animation: scroll-left 16s linear infinite;
+    }
+
+    @keyframes scroll-left {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+
+
+    /* -----------------category slider -------------------- */
+    .twocategory-slide{
+      width:25% !important;
+      height: 200px;
+    }
+
+     .category-slide{
+      width:100% !important;
+      height: 100%;
+    }
+    .category-slidelink{
+      /* width:100% !important; */
+      height: 50%;
+      justify-content: space-between;
+    }
+
+    
+
+
+   .cat-card {
+    background: #fff;
+    transition: .25s ease;
+}
+
+/* Your existing hover stays */
+.cat-card:hover {
+    border-color: #6366f1;
+    transform: scale(1.02);
+}
+
+/* New image wrapper */
+.cat-img-wrapper {
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px;
+    transition: background-color .25s ease, transform .25s ease;
+}
+
+/* New image styling */
+.cat-img {
+    transition: transform .25s ease;
+}
+
+
+/* On hover of SAME card, only that card’s image changes */
+.cat-card:hover .cat-img-wrapper {
+    background: orange;
+}
+
+.cat-card:hover .cat-img {
+    transform: scale(1.12);
+}
+
+
+.cat-icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 9999px;
+    background: #eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#4338ca;
+    font-weight:600;
+}
+
+.cat-prev{
+  left: -13px !important;
+  top: 61% !important;
+  transform: translateY(-50%) !important;
+}
+.cat-next{
+  right: -13px !important;
+  top: 61% !important;
+  transform: translateY(-50%) !important;
 }
