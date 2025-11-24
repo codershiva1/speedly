@@ -18,7 +18,7 @@ class HomeController extends Controller
         $topCategories = Category::withCount('products')
             ->where('status', true)
             ->orderByDesc('products_count')
-            ->take(12)
+            ->take(20)
             ->get();
 
         $baseProductQuery = Product::with('images', 'category')

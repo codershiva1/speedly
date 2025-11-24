@@ -326,10 +326,12 @@
                                         <p class="cat-items">{{ $category->products_count }} Items</p>
                                     </div>
                                     <div class="cat-img-wrapper bg-white p-1 transition-all duration-300">
+
                                         <img class="cat-img transition-transform duration-300"
                                             style="height:50px; width:50px;"
-                                            src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/20-02-300x330.jpg"
-                                            alt="">
+                                            src="{{ $category->image ? asset('storage/'.$category->image) : 'https://via.placeholder.com/50' }}"
+                                            alt="{{ $category->name }}">
+
                                     </div>
                                 </a>
                             @endforeach
