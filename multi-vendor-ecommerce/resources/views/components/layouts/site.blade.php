@@ -10,6 +10,8 @@
         <title>{{ $title ?? config('app.name', 'Speedly Shop') }}</title>
 
         <!-- Fonts -->
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600;700&display=swap" rel="stylesheet" />
 
@@ -32,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <header class="bg-white border-b border-gray-100">
+            <!-- <header class="bg-white border-b border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
                     <div class="flex items-center space-x-6">
                         <a href="{{ route('home') }}" class="flex items-center space-x-2">
@@ -75,7 +77,222 @@
                         @endauth
                     </div>
                 </div>
-            </header>
+            </header> -->
+
+            <style>
+                body { margin: 0; font-family: Arial, sans-serif; }
+
+            .top-bar {
+                background: #f2c400;
+                padding: 15px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .logo { font-size: 30px; font-weight: bold; }
+
+            .menu-toggle {
+                background: #222;
+                color: #fff;
+                padding: 10px 15px;
+                border-radius: 5px;
+                margin-right: 20px;
+                cursor: pointer;
+                font-size: 20px;
+            }
+
+            .search-area {
+                display: flex;
+                flex: 1;
+                max-width: 600px;
+                margin-left: 20px;
+            }
+
+            .search-area select,
+            .search-area input,
+            .search-area button {
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
+
+            .search-area select { border-right: none; border-radius: 5px 0 0 5px; }
+            .search-area input { flex: 1; border-left: none; border-right: none; }
+            .search-area button { background: #222; color: #fff; border-radius: 0 5px 5px 0; cursor: pointer; }
+
+            .top-right { display: flex; align-items: center; gap: 25px; }
+
+            .nav-bar {
+                display: flex;
+                padding: 15px 40px;
+                align-items: center;
+                gap: 35px;
+                border-bottom: 1px solid #eee;
+                background: #fff;
+            }
+
+            .nav-link { text-decoration: none; color: #222; cursor: pointer; position: relative; }
+            .nav-link.active { background: #222; color: #fff; padding: 8px 18px; border-radius: 5px; }
+
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 40px;
+                left: 0;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                min-width: 160px;
+                padding: 10px 0;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+
+            .dropdown-menu a {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #222;
+            }
+
+            .dropdown-menu a:hover { background: #f3f3f3; }
+
+            .cart-icon { position: relative; cursor: pointer; }
+            .notif {
+                background: red;
+                width: 16px;
+                height: 16px;
+                color: #fff;
+                font-size: 11px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: -5px;
+                right: -8px;
+            }
+
+            /* Mobile Menu Hidden */
+            .mobile-menu {
+                display: none;
+                background: #333;
+                padding: 15px;
+            }
+            .mobile-menu a {
+                display: block;
+                padding: 10px;
+                color: #fff;
+                text-decoration: none;
+                border-bottom: 1px solid #444;
+            }
+            .hero-slider {
+            width: 100%;
+            height: 500px;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            background: #f6f6f6;
+            border-radius: 10px;
+        }
+
+            </style>
+
+            <div class="top-bar">
+            <div style="display:flex; align-items:center;">
+                <div class="logo">eGadgets <span style="font-size:12px;">Best Buy</span></div>
+
+                <div class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></div>
+
+                <div class="search-area">
+                    <select><option>All Collection</option></select>
+                    <input id="searchInput" type="text" placeholder="Search for products...">
+                    <button id="searchBtn"><i class="bi bi-search"></i> Search</button>
+                </div>
+            </div>
+
+            <div class="top-right">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="bi bi-headphones" style="font-size:22px;"></i>
+                    <div>
+                        <strong>(+001) 123-456-7890</strong>
+                        <span>sales@yourcompany.com</span>
+                    </div>
+                </div>
+
+                <i id="userBtn" class="bi bi-person" style="font-size:24px; cursor:pointer;"></i>
+
+                <div id="cartBtn" class="cart-icon">
+                    <i class="bi bi-bag" style="font-size:24px;"></i>
+                    <div class="notif">1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <div class="nav-bar">
+            <div class="nav-link active">Home</div>
+
+            <div class="nav-link dropdown">
+                Shop <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">Smartphones</a>
+                    <a href="#">Laptops</a>
+                    <a href="#">Accessories</a>
+                </div>
+            </div>
+
+            <div class="nav-link dropdown">
+                Categories <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">Men</a>
+                    <a href="#">Women</a>
+                    <a href="#">Kids</a>
+                </div>
+            </div>
+
+            <div class="nav-link dropdown">
+                Products <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">New Arrivals</a>
+                    <a href="#">Trending</a>
+                    <a href="#">Discounted</a>
+                </div>
+            </div>
+
+            <div class="nav-link dropdown">Features <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">Free Shipping</a>
+                    <a href="#">Premium Service</a>
+                </div>
+            </div>
+
+            <div class="nav-link dropdown">Pages <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">About Us</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+
+            <div class="nav-link dropdown">Blog <i class="bi bi-caret-down-fill"></i>
+                <div class="dropdown-menu">
+                    <a href="#">Latest Posts</a>
+                    <a href="#">Tech Updates</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE MENU -->
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Categories</a>
+            <a href="#">Products</a>
+            <a href="#">Features</a>
+            <a href="#">Pages</a>
+            <a href="#">Blog</a>
+        </div>
 
             <!-- Main content -->
             <main class="flex-1">
@@ -206,5 +423,55 @@
 
         
         @stack('scripts')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById("menuToggle");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            menuToggle.addEventListener("click", () => {
+                mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
+            });
+
+            // Dropdown Menus
+            document.querySelectorAll(".dropdown").forEach(drop => {
+                drop.addEventListener("click", function(e) {
+                    const menu = this.querySelector(".dropdown-menu");
+                    const isOpen = menu.style.display === "block";
+
+                    // Close all dropdowns first
+                    document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
+
+                    // Toggle this dropdown
+                    menu.style.display = isOpen ? "none" : "block";
+
+                    e.stopPropagation();
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener("click", () => {
+                document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
+            });
+
+            // Search Button Click
+            document.getElementById("searchBtn").addEventListener("click", () => {
+                let q = document.getElementById("searchInput").value;
+                alert("Searching for: " + q);
+            });
+
+            // User Icon Click
+            document.getElementById("userBtn").addEventListener("click", () => {
+                alert("User Profile Clicked!");
+            });
+
+            // Cart Click
+            document.getElementById("cartBtn").addEventListener("click", () => {
+                alert("Opening Cart...");
+            });
+
+        });
+        </script>
     </body>
 </html>
