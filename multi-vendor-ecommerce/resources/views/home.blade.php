@@ -1,4 +1,13 @@
 <x-layouts.site :title="config('app.name', 'Speedly Shop')">
+
+    @push('styles')
+        @vite(['resources/css/homeslider.css'])
+    @endpush
+
+    @push('scripts')
+        @vite(['resources/js/homeslider.js'])
+    @endpush
+
     @php
         $heroProduct = $featuredProducts->first();
     @endphp

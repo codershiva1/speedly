@@ -3,7 +3,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 
 
-import './homeslider.js';
+// import './homeslider.js';
 
 // at top of app.js (if not already)
 import 'swiper/css';
@@ -50,10 +50,10 @@ const categorySwiper = new Swiper(".categorySwiper", {
     slidesPerGroup: 1,       // move 1 slide at a time
     loop: true,              // enable looping
     loopFillGroupWithBlank: false, // don’t add blank slides
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
+    // autoplay: {
+    //     delay: 3000,
+    //     disableOnInteraction: false,
+    // },
    navigation: {
         nextEl: '.cat-next',
         prevEl: '.cat-prev',
@@ -70,7 +70,7 @@ const categorySwiper = new Swiper(".categorySwiper", {
 
 // -----------------------------------------
 
- import '../css/homeslider.css';
+//  import '../css/homeslider.css';
 
 window.Alpine = Alpine;
 

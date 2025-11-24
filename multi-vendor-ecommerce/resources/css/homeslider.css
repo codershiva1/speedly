@@ -212,8 +212,8 @@ body {
    /* position: absolute; */
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
+    background: rgba(168, 167, 167, 0.4);
+    color: white !important;
     border: none;
     padding: 8px 14px;
     cursor: pointer;
@@ -302,7 +302,7 @@ body {
     /* -----------------category slider -------------------- */
     .twocategory-slide{
       width:25% !important;
-      height: 200px;
+      height: 200px !important;
     }
 
      .category-slide{
