@@ -15,13 +15,17 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600;700&display=swap" rel="stylesheet" />
 
+       <!-- AOS CSS -->
+       <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @stack('styles')
 
     </head>
-    <body class="font-sans antialiased bg-gray-50 text-gray-900">
+    <body class="font-sans antialiased bg-gray-50 text-gray-900" style="overflow-x: hidden;">
         <div class="min-h-screen flex flex-col">
             <!-- Public header -->
             <div class="bg-slate-900 text-slate-100 text-[11px]">
@@ -299,8 +303,9 @@
                 {{ $slot }}
             </main>
 
+            
             <!-- Footer -->
-            <footer class="bg-slate-900 text-slate-100 mt-8">
+            <footer class="bg-slate-900 text-slate-100 mt-8" data-aos="fade-up">
                 <div class="border-b border-slate-800">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                         <div>
@@ -421,6 +426,13 @@
             </footer>
         </div>
 
+
+        <!-- Scroll to Top Button -->
+        <button id="scrollToTopBtn" title="Go to top">
+            ↑
+        </button>
+
+
         
         @stack('scripts')
         <script>
@@ -473,5 +485,20 @@
 
         });
         </script>
+
+
+
+        <!-- AOS JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+        <script>
+            // Initialize AOS
+            AOS.init({
+                duration: 1000, // animation duration in ms
+                once: true,     // animation happens only once
+                easing: 'ease-out-cubic',
+            });
+        </script>
+
     </body>
 </html>

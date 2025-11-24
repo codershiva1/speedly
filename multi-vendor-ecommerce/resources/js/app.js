@@ -72,6 +72,34 @@ const categorySwiper = new Swiper(".categorySwiper", {
 
 //  import '../css/homeslider.css';
 
+
+
+// -------------------scroll yo top----------------------
+
+    // Get the button
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+    // Show button after scrolling 200px
+    window.onscroll = function() { scrollFunction(); };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    }
+
+    // Smooth scroll to top when button clicked
+    scrollToTopBtn.addEventListener("click", function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+
+
 window.Alpine = Alpine;
 
 Alpine.start();

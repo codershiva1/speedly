@@ -14,7 +14,7 @@
 
 
     {{-- HERO AREA --}}
-    <section class="mb-6">
+    <section class="mb-6" data-aos="fade-up">
         <x-homeslider />
     </section>
 
@@ -64,7 +64,7 @@
             </section> -->
 
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
-            <section class="icons-carousel-section max-w-7xl mx-auto ">
+            <section class="icons-carousel-section max-w-7xl mx-auto " data-aos="fade-up">
                 <div class="relative border border-gray-200  overflow-hidden">
 
                     <!-- Swiper container -->
@@ -139,7 +139,7 @@
 
             {{-- ================= THREE COLOUR BANNERS ================= --}}
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5 banner">
+                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5 banner" data-aos="fade-right">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Smart Phones
@@ -149,7 +149,7 @@
                         <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5 banner">
+                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5 banner" data-aos="fade-up">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-yellow-300 text-gray-900 px-2 py-0.5 rounded">
                             Smart Watches
@@ -158,7 +158,7 @@
                         <p class="mt-3 text-sm">From <span class="text-gray-900 font-semibold">$14.99/-</span></p>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5 banner">
+                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5 banner" data-aos="fade-left">
                     <div class="flex-1">
                         <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Popular Product
@@ -172,7 +172,7 @@
             {{-- ================= HERO + TOP NAV BAR AREA ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {{-- LEFT: MAIN HERO SLIDER STYLE --}}
-                <div class="lg:col-span-9 bg-white rounded-lg shadow-sm overflow-hidden flex flex-col md:flex-row">
+                <div class="lg:col-span-9 bg-white rounded-lg shadow-sm overflow-hidden flex flex-col md:flex-row" data-aos="fade-right">
                     <div class="w-full md:w-2/3 p-6 flex flex-col justify-center">
                         <p class="inline-flex items-center text-xs font-semibold uppercase tracking-wide bg-amber-500 text-white px-3 py-1 rounded-full mb-4">
                             Weekend Discounts
@@ -199,7 +199,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full md:w-1/3 bg-gray-100 flex items-center justify-center">
+                    <div class="w-full md:w-1/3 bg-gray-100 flex items-center justify-center" data-aos="fade-left">
                         @php
                             $image = $heroProduct?->images->first();
                         @endphp
@@ -217,7 +217,7 @@
                 </div>
 
                 {{-- RIGHT: VERTICAL QUICK ACTION ICONS (FAKE WIDGET LIKE DEMO) --}}
-                <div class="lg:col-span-3 flex lg:flex-col gap-3 justify-end">
+                <div class="lg:col-span-3 flex lg:flex-col gap-3 justify-end" data-aos="fade-up">
                     <div class="flex lg:flex-col gap-3">
                         @foreach (['🏠','🧩','❤','⬆'] as $emoji)
                             <button class="flex items-center justify-center w-10 h-10 bg-white shadow rounded-full text-gray-700 hover:bg-gray-100 text-lg">
@@ -241,7 +241,7 @@
             </section> -->
 
             {{-- ================= MOVING OFFER STRIP ================= --}}
-            <section class="w-full overflow-hidden">
+            <section class="w-full overflow-hidden" data-aos="fade-up">
                 <div class="bg-indigo-700 text-white rounded-lg shadow-sm py-2 relative">
 
                     <div class="marquee whitespace-nowrap flex items-center text-[12px]">
@@ -302,7 +302,7 @@
 
             {{-- ================= TWO-ROW CATEGORY SLIDER ================= --}}
 {{-- ================= CATEGORY SLIDER (2 ROWS) ================= --}}
-<section class="category-slider-section max-w-7xl mx-auto my-8">
+<section class="category-slider-section max-w-7xl mx-auto my-8" data-aos="fade-up">
     <div class="relative border border-gray-200  overflow-hidden bg-white">
 
         <div class="swiper categorySwiper">
@@ -354,7 +354,7 @@
             {{-- ================= DEALS / NEW / FEATURED ROW ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {{-- LEFT BIG FEATURE CARD (DEAL OF THE DAY) --}}
-                <div class="lg:col-span-1 bg-white rounded-lg shadow-sm p-4 flex flex-col">
+                <div class="lg:col-span-1 bg-white rounded-lg shadow-sm p-4 flex flex-col" data-aos="fade-right">
                     <h2 class="text-sm font-semibold text-gray-900 mb-2">Deals of the Day</h2>
                     @php $highlight = $dealsOfDay->first(); @endphp
                     @if($highlight)
@@ -384,7 +384,7 @@
                 </div>
 
                 {{-- RIGHT: ROW OF PRODUCTS WITH TABS TITLES (STATIC LIKE DEMO) --}}
-                <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4">
+                <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4" data-aos="fade-left">
                     <div class="flex items-center justify-between mb-3 text-sm">
                         <div class="flex items-center space-x-6">
                             <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
@@ -424,7 +424,7 @@
             {{-- ================= BANNER + CATEGORY & PRODUCTS ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {{-- TWO WIDE TOP BANNERS (LIKE SURFACE KEYBOARD / SPEAKER) --}}
-                <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" data-aos="fade-right">
                     <div class="rounded-lg bg-blue-700 text-white p-5 flex items-center">
                         <div class="flex-1">
                             <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
@@ -446,7 +446,7 @@
                 </div>
 
                 {{-- BELOW: CATEGORIES SIDEBAR + ROW OF PRODUCTS --}}
-                <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4 gap-4 mt-2">
+                <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4 gap-4 mt-2" data-aos="fade-left">
                     {{-- LEFT SIDEBAR CATEGORIES --}}
                     <aside class="lg:col-span-1 bg-white rounded-lg shadow-sm p-4 text-xs">
                         <h2 class="text-sm font-semibold text-gray-900 mb-3">Shop By Categories</h2>
@@ -510,7 +510,7 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     @foreach($latestNews as $article)
-                        <article class="bg-white border border-gray-100 rounded-lg overflow-hidden flex flex-col text-xs">
+                        <article class="bg-white border border-gray-100 rounded-lg overflow-hidden flex flex-col text-xs" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                             <div class="h-28 bg-gray-100 overflow-hidden">
                                 <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
                             </div>
