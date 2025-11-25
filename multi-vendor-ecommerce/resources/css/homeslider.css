@@ -375,3 +375,78 @@ body {
   top: 61% !important;
   transform: translateY(-50%) !important;
 }
+
+
+/* ------------------deal section homepage ------------- */
+
+/* THE CARD — IMPORTANT: FIXED HEIGHT & NO MOVEMENT */
+.eg-card {
+    position: relative;
+    background: transparent;
+    transition: box-shadow .25s ease;
+}
+
+/* Inner box (image + content) */
+.eg-box {
+    overflow: hidden;
+    background: #fff;
+    transition: transform .3s ease;
+}
+
+/* Subtle image zoom on hover */
+.eg-img {
+    transition: transform .45s ease;
+}
+.eg-card:hover .eg-img {
+    transform: scale(1.07);
+}
+
+/* ⭐ THE IMPORTANT PART ⭐  
+   CTA BUTTON STARTS OUTSIDE AND SLIDES UP  
+   WITHOUT CHANGING CARD SIZE 
+*/
+.eg-cta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -55px;      /* stays BELOW card */
+    height: 46px;
+    background: #ffcc00;
+    color: #000;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 0 0 4px 4px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        bottom .35s ease,
+        opacity .25s ease,
+        transform .35s ease;
+    z-index: 50;
+}
+
+/* On hover: CTA slides up NEAR the card bottom  
+   BUT DOES NOT CHANGE CARD HEIGHT  
+*/
+.eg-card:hover .eg-cta {
+    bottom: -45px;        /* touches card bottom */
+    opacity: 1;
+    transform: translateY(0);
+    z-index: 700;
+}
+
+/* SHADOW ONLY ON HOVER (as in video) */
+.eg-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+
+.deals-swiperslide{
+ width:25% !important;
+      /* height: 200px !important; */
+}
+
+.deals-slide{
+  width:100% !important;
+      /* height: 100%; */
+}

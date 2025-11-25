@@ -384,7 +384,7 @@
                 </div>
 
                 {{-- RIGHT: ROW OF PRODUCTS WITH TABS TITLES (STATIC LIKE DEMO) --}}
-                <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4" data-aos="fade-left">
+                <!-- <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4" data-aos="fade-left">
                     <div class="flex items-center justify-between mb-3 text-sm">
                         <div class="flex items-center space-x-6">
                             <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
@@ -418,7 +418,100 @@
                             <p class="text-xs text-gray-500">No products in deals list.</p>
                         @endforelse
                     </div>
+                </div> -->
+
+                {{-- RIGHT: PRODUCT SLIDER WITH 2–ROW PAIRS --}}
+<div class="lg:col-span-3 bg-white shadow-sm " data-aos="fade-left">
+
+    {{-- Tabs --}}
+    <div class="flex items-center justify-between mb-3 text-sm">
+        <div class="flex items-center space-x-6">
+            <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
+                Deals of the Day
+            </span>
+            <span class="text-gray-500">New Products</span>
+            <span class="text-gray-500">Featured Products</span>
+        </div>
+        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+    </div>
+
+    {{-- === SWIPER WRAPPER === --}}
+    <div class="relative">
+
+        <div class="swiper dealsSwiper">
+            <div class="swiper-wrapper pb-10">
+
+               {{-- Chunk products into PAIRS (2 per column) --}}
+               {{-- Chunk products into PAIRS (2 per column) --}}
+@foreach($dealsOfDay->chunk(2) as $pair)
+    <div class="swiper-slide deals-swiperslide">
+        <div class="grid grid-rows-2 deals-slide">
+            @foreach($pair as $product)
+
+                <div class="eg-card group relative">
+
+                    {{-- CARD BOX --}}
+                    <div class="eg-box border border-gray-200 bg-white overflow-hidden">
+
+                        {{-- IMAGE --}}
+                        <a href="{{ route('shop.show',$product->slug) }}" class="block h-40 overflow-hidden">
+                            @php $image = $product->images->first(); @endphp
+
+                            @if($image)
+                                <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif"
+                                     class="eg-img  object-cover" />
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                    No image
+                                </div>
+                            @endif
+                        </a>
+
+                        {{-- CONTENT --}}
+                        <div class="p-3 text-xs bg-white">
+                            <div class="text-[11px] text-gray-500">
+                                {{ optional($product->category)->name }}
+                            </div>
+
+                            <a href="{{ route('shop.show',$product->slug) }}"
+                               class="font-semibold text-gray-900 line-clamp-2 mt-1 block">
+                                {{ $product->name }}
+                            </a>
+
+                            <div class="font-bold text-indigo-600 mt-2">
+                                ₹{{ $product->discount_price ?? $product->price }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- CTA OUTSIDE CARD (Does NOT push anything) --}}
+                    <button class="eg-cta">
+                        Add to Cart
+                    </button>
+
                 </div>
+
+            @endforeach
+        </div>
+    </div>
+@endforeach
+
+
+
+
+
+
+            </div>
+
+            {{-- Navigation --}}
+            <div class="swiper-button-prev deals-prev"></div>
+            <div class="swiper-button-next deals-next"></div>
+        </div>
+    </div>
+
+</div>
+
             </section>
 
             {{-- ================= BANNER + CATEGORY & PRODUCTS ================= --}}
