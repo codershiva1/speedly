@@ -201,6 +201,133 @@
             border-radius: 10px;
         }
 
+        .nav-link {
+            position: relative;
+            display: inline-block; /* Adjust based on your main navigation structure */
+        }
+
+        /* Style for the main dropdown container */
+        .shop-dropdown-menu .dropdown-menu-content {
+            display: none; /* Hide by default */
+            position: absolute;
+            top: 100%; /* Position below the "Shop" link */
+            left: 0; 
+            background-color: #ffffff; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            min-width: 800px; /* Adjust width as needed for the 3 columns */
+            z-index: 1;
+            padding: 20px;
+            display: flex; /* Use Flexbox for columns */
+            border-top: 2px solid #ddd; /* A subtle separator */
+        }
+
+        /* Show the dropdown on hover */
+        .shop-dropdown-menu:hover .dropdown-menu-content {
+            display: flex; 
+        }
+
+        /* Style for each column */
+        .menu-column {
+            flex: 1; /* Make columns take equal space */
+            padding: 0 15px;
+            min-width: 200px; /* Minimum width for the text columns */
+        }
+
+        /* Style for the titles (CATEGORY PAGE LAYOUT, etc.) */
+        .menu-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee; /* Separator line like in the image */
+        }
+
+        /* Style for the list of links */
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .menu-list li {
+            padding: 5px 0;
+        }
+
+        .menu-list li a {
+            text-decoration: none;
+            color: #666; /* Light gray for the text links */
+            font-size: 14px;
+            display: block;
+        }
+
+        .menu-list li a:hover {
+            color: #000; /* Darker on hover */
+        }
+
+        /* Separator line for the lists */
+        .menu-list .separator {
+            height: 1px;
+            background-color: #eee;
+            margin: 10px 0;
+            list-style: none; /* Hide bullet point */
+        }
+
+        /* Banner Column Styling */
+        .menu-banners {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; 
+        }
+
+        .menu-banner {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Text at the bottom */
+            padding: 15px;
+            color: #ffffff;
+            background-size: cover;
+            background-position: center;
+            min-height: 200px; /* Height for the banners */
+            border-radius: 5px; /* Optional: subtle rounding */
+        }
+
+        .banner-text {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.2;
+        }
+
+        .banner-text-large {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        /* Specific Banner Backgrounds (You need to use your own images here) */
+        .smartphone-banner {
+            /* Use your smartphone image URL */
+            background-image: url('path/to/your/smartphone-image.jpg'); 
+            background-color: #4CAF50; /* Fallback color */
+        }
+
+        .speaker-banner {
+            /* Use your speaker image URL */
+            background-image: url('path/to/your/speaker-image.jpg');
+            background-color: #8C8A79; /* The khaki/grey color from the image */
+            justify-content: center; /* Center the text for the speaker banner */
+            text-align: center;
+        }
+        .speaker-text {
+            color: #333; /* Darker text for the speaker banner */
+        }
+        .shop-dropdown-menu .dropdown-menu-content {
+            display: none; 
+            
+        }
             </style>
 
             <div class="top-bar">
@@ -239,12 +366,62 @@
             <div class="nav-link active">Home</div>
 
             <div class="nav-link dropdown">
-                Shop <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">Smartphones</a>
-                    <a href="#">Laptops</a>
-                    <a href="#">Accessories</a>
-                </div>
+                
+                <div class="nav-link shop-dropdown-menu">
+    Shop <i class="bi bi-caret-down-fill"></i>
+    
+        <div class="dropdown-menu-content">
+            
+            <div class="menu-column">
+                <h3 class="menu-title">CATEGORY PAGE LAYOUT</h3>
+                <ul class="menu-list">
+                    <li><a href="#">Left Sidebar</a></li>
+                    <li><a href="#">Right Sidebar</a></li>
+                    <li><a href="#">Filter Toggle</a></li>
+                    <li><a href="#">Off-Sidebar Left</a></li>
+                    <li><a href="#">Off-Sidebar Right</a></li>
+                    <li class="separator"></li>
+                    <li><a href="#">Shop - Column 3</a></li>
+                    <li><a href="#">Shop - Column 4</a></li>
+                    <li><a href="#">Shop - Column 5</a></li>
+                    <li><a href="#">Shop - Column 6</a></li>
+                </ul>
+            </div>
+            
+            <div class="menu-column">
+                <h3 class="menu-title">PRODUCT PAGE LAYOUT</h3>
+                <ul class="menu-list">
+                    <li><a href="#">Product - Default</a></li>
+                    <li><a href="#">Product - Sticky</a></li>
+                    <li><a href="#">Product - Masonry</a></li>
+                </ul>
+                
+                <h3 class="menu-title product-gallery-title">PRODUCT GALLERY</h3>
+                <ul class="menu-list">
+                    <li><a href="#">Product - Left Gallery</a></li>
+                    <li><a href="#">Product - Right Gallery</a></li>
+                    <li><a href="#">Product - Bottom Gallery</a></li>
+                    <li><a href="#">Product - No Gallery</a></li>
+                </ul>
+            </div>
+            
+            <div class="menu-column menu-banners">
+                <a href="#">
+                    <div class="menu-banner smartphone-banner">
+                        <span class="banner-text">Branded</span>
+                        <span class="banner-text-large">Smart Phone</span>
+                        </div>
+                </a>
+                <a href="#">
+                    <div class="menu-banner speaker-banner">
+                        <span class="banner-text-large speaker-text">BEOPLAY</span>
+                        <span class="banner-text speaker-text">Home Speaker</span>
+                        </div>
+                </a>
+            </div>
+            
+        </div>
+    </div>
             </div>
 
             <div class="nav-link dropdown">
