@@ -21,7 +21,7 @@
 
 
     <div class="bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
 
 
          <!-- {{-- ================= TOP FEATURE ICON ROW ================= --}}
@@ -137,34 +137,55 @@
 
             <!-- ---------------------------------------------------------------------- -->
 
+                  
             {{-- ================= THREE COLOUR BANNERS ================= --}}
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class=" overflow-hidden bg-indigo-600 text-white flex items-center p-5 banner" data-aos="fade-right">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
-                            Smart Phones
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">OnePlus 8</h3>
-                        <p class="mt-1 text-xs">128 GB Green in 2013</p>
-                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
+                <div class="banner relative overflow-hidden ">
+                        <!-- Banner Image -->
+                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-01.jpg" class="w-full h-full object-cover banner-img" />
+
+                        <!-- Your Banner Text -->
+                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                        <div class="flex-1">
+                            <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                                Smart Phones
+                            </span>
+                            <h3 class="mt-2 text-lg font-bold">OnePlus 8</h3>
+                            <p class="mt-1 text-xs">128 GB Green in 2013</p>
+                            <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
+                        </div>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-orange-500 text-white flex items-center p-5 banner" data-aos="fade-up">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-yellow-300 text-gray-900 px-2 py-0.5 rounded">
-                            Smart Watches
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">Apple Watch Series 4</h3>
-                        <p class="mt-3 text-sm">From <span class="text-gray-900 font-semibold">$14.99/-</span></p>
+               <div class="banner relative overflow-hidden ">
+                        <!-- Banner Image -->
+                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-02.jpg"
+                        class="w-full h-full object-cover banner-img" />
+
+                        <!-- Your Banner Text -->
+                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                        <div class="flex-1">
+                            <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                                Smart Watches
+                            </span>
+                            <h3 class="mt-2 text-lg font-bold">Apple Watch Series 4</h3>
+                            <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$14.99/-</span></p>
+                        </div>
                     </div>
                 </div>
-                <div class=" overflow-hidden bg-blue-700 text-white flex items-center p-5 banner" data-aos="fade-left">
-                    <div class="flex-1">
-                        <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                <div class="banner relative overflow-hidden ">
+                        <!-- Banner Image -->
+                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg"
+                        class="w-full h-full object-cover banner-img" />
+
+                        <!-- Your Banner Text -->
+                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                        <div class="flex-1">
+                            <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Popular Product
-                        </span>
-                        <h3 class="mt-2 text-lg font-bold">Polaroid Now Instant i-Type</h3>
-                        <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$90.99/-</span></p>
+                            </span>
+                            <h3 class="mt-2 text-lg font-bold">Polaroid Now Instant i-Type</h3>
+                            <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$90.99/-</span></p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -242,9 +263,9 @@
 
             {{-- ================= MOVING OFFER STRIP ================= --}}
             <section class="w-full overflow-hidden" data-aos="fade-up">
-                <div class="bg-indigo-700 text-white rounded-lg shadow-sm py-2 relative">
+                <div class="bg-indigo-700 text-white shadow-sm py-4 relative">
 
-                    <div class="marquee whitespace-nowrap flex items-center text-[12px]">
+                    <div class="marquee whitespace-nowrap flex items-center text-[20px]">
 
                         <span class="mx-6 flex items-center gap-1">
                             <span class="text-amber-300">&#9733;</span>
@@ -317,18 +338,16 @@
                                 <a href="{{ route('shop.index',['category'=>$category->slug]) }}"
                                    class="cat-card flex items-center gap-3 border border-gray-100 p-3 category-slidelink">
                                     
-                                    <div class="cat-icon">
-                                        <span>{{ strtoupper(substr($category->name,0,2)) }}</span>
-                                    </div>
+                                   
 
-                                    <div>
-                                        <p class="cat-title">{{ $category->name }}</p>
+                                    <div class="">
+                                        <p class="cat-title font-semibold text-gray-900">{{ $category->name }}</p>
                                         <p class="cat-items">{{ $category->products_count }} Items</p>
                                     </div>
                                     <div class="cat-img-wrapper bg-white p-1 transition-all duration-300">
 
                                         <img class="cat-img transition-transform duration-300"
-                                            style="height:50px; width:50px;"
+                                            style="height:60px; width:60px;"
                                             src="{{ $category->image ? asset('storage/'.$category->image) : 'https://via.placeholder.com/50' }}"
                                             alt="{{ $category->name }}">
 
@@ -352,13 +371,13 @@
 
 
             {{-- ================= DEALS / NEW / FEATURED ROW ================= --}}
-            <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <section class="grid grid-cols-1 lg:grid-cols-3  gap-6">
                 {{-- LEFT BIG FEATURE CARD (DEAL OF THE DAY) --}}
-                <div class="lg:col-span-1 bg-white rounded-lg shadow-sm p-4 flex flex-col" data-aos="fade-right">
+                <div class="lg:col-span-1 bg-white  flex flex-col" data-aos="fade-right">
                     <h2 class="text-sm font-semibold text-gray-900 mb-2">Deals of the Day</h2>
                     @php $highlight = $dealsOfDay->first(); @endphp
                     @if($highlight)
-                        <div class="border border-amber-400 rounded-lg overflow-hidden flex-1 flex flex-col">
+                        <div class="border-2 border-red-400  overflow-hidden flex-1 flex flex-col">
                             <div class="h-44 bg-gray-100 flex items-center justify-center overflow-hidden">
                                 @php $image = $highlight->images->first(); @endphp
                                 @if($image)
@@ -421,130 +440,145 @@
                 </div> -->
 
                 {{-- RIGHT: PRODUCT SLIDER WITH 2–ROW PAIRS --}}
-<div class="lg:col-span-3 bg-white shadow-sm " data-aos="fade-left">
+                <div class="lg:col-span-2 bg-gray-50  " data-aos="fade-left">
 
-    {{-- Tabs --}}
-    <div class="flex items-center justify-between mb-3 text-sm">
-        <div class="flex items-center space-x-6">
-            <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
-                Deals of the Day
-            </span>
-            <span class="text-gray-500">New Products</span>
-            <span class="text-gray-500">Featured Products</span>
-        </div>
-        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
-    </div>
-
-    {{-- === SWIPER WRAPPER === --}}
-    <div class="relative">
-
-        <div class="swiper dealsSwiper">
-            <div class="swiper-wrapper pb-10">
-
-               {{-- Chunk products into PAIRS (2 per column) --}}
-               {{-- Chunk products into PAIRS (2 per column) --}}
-@foreach($dealsOfDay->chunk(2) as $pair)
-    <div class="swiper-slide deals-swiperslide">
-        <div class="grid grid-rows-2 deals-slide">
-            @foreach($pair as $product)
-
-                <div class="eg-card group relative">
-
-                    {{-- CARD BOX --}}
-                    <div class="eg-box border border-gray-200 bg-white overflow-hidden">
-
-                        {{-- IMAGE --}}
-                        <a href="{{ route('shop.show',$product->slug) }}" class="block h-40 overflow-hidden">
-                            @php $image = $product->images->first(); @endphp
-
-                            @if($image)
-                                <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif"
-                                     class="eg-img  object-cover" />
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                    No image
-                                </div>
-                            @endif
-                        </a>
-
-                        {{-- CONTENT --}}
-                        <div class="p-3 text-xs bg-white">
-                            <div class="text-[11px] text-gray-500">
-                                {{ optional($product->category)->name }}
-                            </div>
-
-                            <a href="{{ route('shop.show',$product->slug) }}"
-                               class="font-semibold text-gray-900 line-clamp-2 mt-1 block">
-                                {{ $product->name }}
-                            </a>
-
-                            <div class="font-bold text-indigo-600 mt-2">
-                                ₹{{ $product->discount_price ?? $product->price }}
-                            </div>
+                    {{-- Tabs --}}
+                    <div class="flex items-center justify-between mb-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
+                                Deals of the Day
+                            </span>
+                            <span class="text-gray-500">New Products</span>
+                            <span class="text-gray-500">Featured Products</span>
                         </div>
-
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                     </div>
 
-                    {{-- CTA OUTSIDE CARD (Does NOT push anything) --}}
-                    <button class="eg-cta">
-                        Add to Cart
-                    </button>
+                    {{-- === SWIPER WRAPPER === --}}
+                    <div class="relative">
+
+                        <div class="swiper dealsSwiper">
+                            <div class="swiper-wrapper pb-12">
+
+                                {{-- Chunk products into PAIRS (2 per column) --}}
+                            
+                                @foreach($dealsOfDay->chunk(2) as $pair)
+                                    <div class="swiper-slide deals-swiperslide">
+                                        <div class="grid grid-rows-2 deals-slide">
+                                            @foreach($pair as $product)
+
+                                                <div class="eg-card group relative">
+
+                                                    {{-- CARD BOX --}}
+                                                    <div class="eg-box border border-gray-200 bg-white overflow-hidden">
+
+                                                        {{-- IMAGE --}}
+                                                        <a href="{{ route('shop.show',$product->slug) }}" class="block h-40 overflow-hidden">
+                                                            @php $image = $product->images->first(); @endphp
+
+                                                            @if($image)
+                                                                <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif"
+                                                                    class="eg-img  object-cover" />
+                                                            @else
+                                                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                                                    No image
+                                                                </div>
+                                                            @endif
+                                                        </a>
+
+                                                        {{-- CONTENT --}}
+                                                        <div class="p-3 text-xs bg-white">
+                                                            <div class="text-[11px] text-gray-500">
+                                                                {{ optional($product->category)->name }}
+                                                            </div>
+
+                                                            <a href="{{ route('shop.show',$product->slug) }}"
+                                                            class="font-semibold text-gray-900 line-clamp-2 mt-1 block">
+                                                                {{ $product->name }}
+                                                            </a>
+
+                                                            <div class="font-bold text-indigo-600 mt-2">
+                                                                ₹{{ $product->discount_price ?? $product->price }}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    {{-- CTA OUTSIDE CARD (Does NOT push anything) --}}
+                                                    <div class=" eg-cta bg-white border-l border-r border-b border-gray-200 pb-1" >
+                                                        <button class="eg-cta-button">
+                                                            Add to Cart
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+
+                            {{-- Navigation --}}
+                            <div class="swiper-button-prev deals-prev"></div>
+                            <div class="swiper-button-next deals-next"></div>
+                        </div>
+                    </div>
 
                 </div>
-
-            @endforeach
-        </div>
-    </div>
-@endforeach
-
-
-
-
-
-
-            </div>
-
-            {{-- Navigation --}}
-            <div class="swiper-button-prev deals-prev"></div>
-            <div class="swiper-button-next deals-next"></div>
-        </div>
-    </div>
-
-</div>
 
             </section>
 
             {{-- ================= BANNER + CATEGORY & PRODUCTS ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {{-- TWO WIDE TOP BANNERS (LIKE SURFACE KEYBOARD / SPEAKER) --}}
-                <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" data-aos="fade-right">
-                    <div class="rounded-lg bg-blue-700 text-white p-5 flex items-center">
-                        <div class="flex-1">
-                            <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
-                                Popular Product
-                            </span>
-                            <h3 class="mt-2 text-lg font-bold">Microsoft Surface Wireless Keyboard</h3>
-                            <p class="mt-2 text-xs">From <span class="text-yellow-300 font-semibold">$37.85/-</span></p>
+                <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" >
+
+                   <div class="banner relative overflow-hidden " data-aos="fade-right">
+                        <!-- Banner Image -->
+                        <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-04.jpg"
+                            class="w-full h-full object-cover banner-img" />
+
+                        <!-- Your Banner Text -->
+                        <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                            <div class="flex-1">
+                                <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                                    Popular Product
+                                </span>
+                                <h3 class="mt-2 text-lg font-bold">Microsoft Surface Wireless Keyboard</h3>
+                                <p class="mt-2 text-xs">From <span class="text-yellow-300 font-semibold">$37.85/-</span></p>
+                            </div>
                         </div>
                     </div>
-                    <div class="rounded-lg bg-gray-900 text-white p-5 flex items-center">
-                        <div class="flex-1">
-                            <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
-                                Popular Product
-                            </span>
-                            <h3 class="mt-2 text-lg font-bold">Bang &amp; Olufsen Beoplay A1 Speaker</h3>
-                            <p class="mt-2 text-xs">From <span class="text-emerald-300 font-semibold">$10.99/-</span></p>
+
+                    <div class="banner relative overflow-hidden " data-aos="fade-left">
+                        <!-- Banner Image -->
+                        <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-05.jpg"
+                            class="w-full h-full object-cover banner-img" />
+
+                        <!-- Your Banner Text -->
+                        <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                            <div class="flex-1">
+                                <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
+                                    Popular Product
+                                </span>
+                                <h3 class="mt-2 text-lg font-bold">Bang &amp; Olufsen Beoplay A1 Speaker</h3>
+                                <p class="mt-2 text-xs">From <span class="text-emerald-300 font-semibold">$10.99/-</span></p>
+                            </div>
                         </div>
                     </div>
+                       
                 </div>
 
                 {{-- BELOW: CATEGORIES SIDEBAR + ROW OF PRODUCTS --}}
-                <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4 gap-4 mt-2" data-aos="fade-left">
+                <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4  mt-2" data-aos="fade-left">
                     {{-- LEFT SIDEBAR CATEGORIES --}}
-                    <aside class="lg:col-span-1 bg-white rounded-lg shadow-sm p-4 text-xs">
-                        <h2 class="text-sm font-semibold text-gray-900 mb-3">Shop By Categories</h2>
+                    <aside class="lg:col-span-1 bg-white  shadow-sm p-4 text-xs h-80">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-3">Shop By <br> Categories</h2>
+                        <hr>
                         <ul class="space-y-1">
-                            @foreach ($categories->take(6) as $category)
+                            @foreach ($categories->take(5) as $category)
                                 <li>
                                     <a href="{{ route('shop.index',['category'=>$category->slug]) }}"
                                        class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50">
@@ -558,18 +592,98 @@
                                 </li>
                             @endforeach
                         </ul>
+                        <a href="{{ route('shop.index') }}" >
                         <button class="mt-3 inline-flex items-center text-indigo-600 text-[11px] hover:underline">
+                            <strong>
                             + All Category
+                            </strong>
                         </button>
+                        </a>
                     </aside>
 
                     {{-- RIGHT PRODUCTS STRIP --}}
-                    <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-sm font-semibold text-gray-900">Popular Product</span>
-                            <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    <div class="lg:col-span-3 bg-gray-50   ">
+                        <div class="flex items-center justify-between banner">
+                            <a href="#" class="banner-image ">
+								<img decoding="async" src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2024/08/category-slider-banner-02-1.jpg" title="category-slider-banner-02" alt="category-slider-banner-02" loading="lazy">
+                            </a>
+                            <!-- <span class="text-sm font-semibold text-gray-900">Popular Product</span>
+                            class="text-xs text-indigo-600 hover:underline">View all -->
                         </div>
-                        <div class="flex space-x-4 overflow-x-auto scrollbar-thin pb-1">
+                        <!-- ------------------------------------------- -->
+
+                        {{-- === SWIPER WRAPPER === --}}
+                            <div class="relative">
+
+                                <div class="swiper dealsSwiper">
+                                    <div class="swiper-wrapper pb-12">
+                                    
+                                        @foreach($featuredProducts as $product)
+                                            <div class="swiper-slide deals-swiperslide">
+                                                <!-- <div class="grid grid-rows-2 deals-slide"> -->
+                                                
+
+                                                        <div class="eg-card group relative deals-slide">
+
+                                                            {{-- CARD BOX --}}
+                                                            <div class="eg-box border border-gray-200 bg-white overflow-hidden">
+
+                                                                {{-- IMAGE --}}
+                                                                <a href="{{ route('shop.show',$product->slug) }}" class="block h-40 overflow-hidden">
+                                                                    @php $image = $product->images->first(); @endphp
+
+                                                                    @if($image)
+                                                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif"
+                                                                            class="eg-img  object-cover" />
+                                                                    @else
+                                                                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                                                            No image
+                                                                        </div>
+                                                                    @endif
+                                                                </a>
+
+                                                                {{-- CONTENT --}}
+                                                                <div class="p-3 text-xs bg-white">
+                                                                    <div class="text-[11px] text-gray-500">
+                                                                        {{ optional($product->category)->name }}
+                                                                    </div>
+
+                                                                    <a href="{{ route('shop.show',$product->slug) }}"
+                                                                    class="font-semibold text-gray-900 line-clamp-2 mt-1 block">
+                                                                        {{ $product->name }}
+                                                                    </a>
+
+                                                                    <div class="font-bold text-indigo-600 mt-2">
+                                                                        ₹{{ $product->discount_price ?? $product->price }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            {{-- CTA OUTSIDE CARD (Does NOT push anything) --}}
+                                                            <div class=" eg-cta bg-white border-l border-r border-b border-gray-200 pb-1" >
+                                                                <button class="eg-cta-button">
+                                                                    Add to Cart
+                                                                </button>
+                                                            </div>
+
+                                                        </div>
+
+                                            
+                                                <!-- </div> -->
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                    {{-- Navigation --}}
+                                    <div class="swiper-button-prev deals-prev"></div>
+                                    <div class="swiper-button-next deals-next"></div>
+                                </div>
+                            </div>
+
+                        <!-- ----------------------------------------------------- -->
+                        <!-- <div class="flex space-x-4 overflow-x-auto scrollbar-thin pb-1">
                             @forelse($featuredProducts as $product)
                                 <a href="{{ route('shop.show',$product->slug) }}"
                                    class="flex-shrink-0 w-44 bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-sm transition flex flex-col">
@@ -590,21 +704,21 @@
                             @empty
                                 <p class="text-xs text-gray-500">No products yet.</p>
                             @endforelse
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
 
             {{-- ================= LATEST NEWS ================= --}}
-            <section class="bg-white rounded-lg shadow-sm p-4">
+            <section class="bg-white  shadow-sm p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-semibold text-gray-900">Latest News</h2>
                     <a href="{{ route('pages.blog') }}" class="text-xs text-indigo-600 hover:underline">View all articles</a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     @foreach($latestNews as $article)
-                        <article class="bg-white border border-gray-100 rounded-lg overflow-hidden flex flex-col text-xs" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                            <div class="h-28 bg-gray-100 overflow-hidden">
+                        <article class="bg-white border border-gray-100  overflow-hidden flex flex-col text-xs" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                            <div class="h-48 bg-gray-100 overflow-hidden news-img">
                                 <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
                             </div>
                             <div class="p-3 flex-1 flex flex-col">

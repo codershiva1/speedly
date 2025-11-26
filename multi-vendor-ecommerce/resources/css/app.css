@@ -31,3 +31,61 @@
     background-color: #0056b3;
     transform: scale(1.1);
 }
+
+
+/* -------------------globel banners -------------------- */
+
+.banner {
+	position: relative;
+	overflow: hidden;
+
+}
+
+.banner img {
+	width: 100%;
+   height: 100%;
+	display: block;
+	transition: transform 1.5s ease;
+}
+.banner-bg{
+  transition: transform 1.5s ease;
+}
+.news-img img{
+  transition: transform 1.5s ease;
+}
+
+/* Hover Effect for BOTH */
+.news-img:hover img,
+.banner:hover img,
+.banner:hover .banner-bg {
+    transform: scale(1.1);
+}
+
+.banner::before,
+.banner::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0);
+	transition: all 0.7s ease-in-out;
+	z-index: 2;
+}
+
+/* HORIZONTAL (TOP + BOTTOM) */
+.banner:hover::after {
+	height: 0;
+	top: 50%;
+	bottom: 50%;
+	background: rgba(255,255,255,0.18);
+}
+
+/* VERTICAL (LEFT + RIGHT) */
+.banner:hover::before {
+	left: 50%;
+	right: 50%;
+	width: 0;
+	background: rgba(255,255,255,0.18);
+}

@@ -237,52 +237,7 @@ body {
 }
 
 
-/* -------------------home banners -------------------- */
 
-.banner {
-	position: relative;
-	overflow: hidden;
-	border-radius: 8px;
-}
-
-.banner img {
-	width: 100%;
-	display: block;
-	transition: transform 0.7s ease;
-}
-
-.banner:hover img {
-	transform: scale(1.1);
-}
-
-.banner::before,
-.banner::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(255, 255, 255, 0);
-	transition: all 0.7s ease-in-out;
-	z-index: 2;
-}
-
-/* HORIZONTAL (TOP + BOTTOM) */
-.banner:hover::after {
-	height: 0;
-	top: 50%;
-	bottom: 50%;
-	background: rgba(255,255,255,0.18);
-}
-
-/* VERTICAL (LEFT + RIGHT) */
-.banner:hover::before {
-	left: 50%;
-	right: 50%;
-	width: 0;
-	background: rgba(255,255,255,0.18);
-}
 
 
 
@@ -395,9 +350,9 @@ body {
 
 /* Subtle image zoom on hover */
 .eg-img {
-    transition: transform .45s ease;
+    transition: transform 1.2s ease;
 }
-.eg-card:hover .eg-img {
+.eg-box:hover .eg-img {
     transform: scale(1.07);
 }
 
@@ -406,37 +361,54 @@ body {
    WITHOUT CHANGING CARD SIZE 
 */
 .eg-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     left: 0;
     right: 0;
     bottom: -55px;      /* stays BELOW card */
     height: 46px;
-    background: #ffcc00;
-    color: #000;
-    font-weight: 600;
-    text-align: center;
-    border-radius: 0 0 4px 4px;
+
     opacity: 0;
     transform: translateY(10px);
     transition:
-        bottom .35s ease,
-        opacity .25s ease,
-        transform .35s ease;
+        bottom .55s ease,
+        opacity .55s ease,
+        transform .55s ease;
     z-index: 50;
+     pointer-events: none;   /* IMPORTANT */
+}
+.eg-cta-button{
+  width: 90%;
+  height: 85%;
+  color: #000;
+  font-weight: 500;
+  text-align: center;
+  background: #ffcc00;
+  border-radius:4px;
 }
 
 /* On hover: CTA slides up NEAR the card bottom  
    BUT DOES NOT CHANGE CARD HEIGHT  
 */
-.eg-card:hover .eg-cta {
+.eg-box:hover + .eg-cta {
     bottom: -45px;        /* touches card bottom */
     opacity: 1;
     transform: translateY(0);
     z-index: 700;
+    pointer-events: auto;   /* NOW CTA is clickable */
 }
 
+/* Keep CTA visible when hovering CTA itself */
+.eg-cta:hover {
+    bottom: -45px;              /* Same value! */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
 /* SHADOW ONLY ON HOVER (as in video) */
-.eg-card:hover {
+.eg-box:hover {
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
@@ -450,3 +422,4 @@ body {
   width:100% !important;
       /* height: 100%; */
 }
+
