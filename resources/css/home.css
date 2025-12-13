@@ -1,0 +1,425 @@
+body {
+    margin: 0;
+    background: #000;
+}
+
+.custom-slider {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background: #000;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    color: white;
+    transition: left 0.9s ease;
+}
+
+.slide-1 { background: url('https://picsum.photos/id/1016/1200/400') center/cover; }
+.slide-2 { background: url('https://picsum.photos/id/1024/1200/400') center/cover; }
+.slide-3 { background: url('https://picsum.photos/id/1037/1200/400') center/cover; }
+
+.slide.active {
+    left: 0;
+}
+
+/* Ghost slide */
+.ghost-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 100%;
+    background-size: cover !important;
+    background-position: center !important;
+    filter: brightness(40%);
+    transition: left 0.8s ease;
+    z-index: 10;
+}
+
+/* Banner content */
+.banner-content {
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button */
+.banner-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #ffcc00;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: 0.3s;
+    color: #000;
+}
+
+.banner-btn:hover {
+    background: white;
+    transform: translateY(-3px);
+}
+
+/* Navigation buttons */
+.slider-nav button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+#prevSlide { left: 10px; }
+#nextSlide { right: 10px; }
+
+/* Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.dot {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #fff;
+}
+
+
+
+/* --------------------------------icon slider------------ */
+
+
+/* Swiper will be imported separately via app.css (see step below) */
+
+/* Container & layout */
+.icons-carousel-section .swiper {
+  width: 100%;
+  /* padding: 0px 48px; space for arrows left/right */
+  box-sizing: border-box;
+}
+
+/* Each slide/card */
+.icon-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px;
+  border-left: 1px solid #e5e7eb;      /* only left border */
+  border-right: 1px solid #e5e7eb;     /* only right border */
+  
+  /* border-radius: 6px; */
+  box-sizing: border-box;
+  height: 120px;
+  min-width: 240px; 
+  width: 100% !important;             /* keeps cards readable */
+  perspective: 600px; /* needed for 3D flip */
+  
+}
+
+/* Collapse borders so adjacent cards don’t double */
+.swiper-wrapper .swiper-slide:not(:last-child) .icon-card {
+  border-right: none;
+}
+
+/* COLLAPSED border effect — overlap left border by 1px so adjacent borders collapse */
+.swiper-wrapper .swiper-slide {
+  /* margin-left: -1px;             overlaps borders so they look collapsed */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Remove the extra rounded corners for internal slides so they look like a row */
+/* .swiper-wrapper .swiper-slide .icon-card {
+  border-radius: 0.5rem;
+} */
+
+/* Icon sizing */
+.icon-card .icon {
+  width: 40px;
+  height: 40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9999px;
+  background:#ffedd5; /* amber-100 */
+  color:#b45309;      /* amber-600 */
+  font-size: 20px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.icon-card:hover .icon {
+  transform: rotateY(180deg); /* flips icon on hover */
+}
+
+.icon-card:hover .iconcardp1{
+    color:#ef5f17;
+}
+
+/* Position arrows outside the container */
+.icon-swiper-prev,
+.icon-swiper-next {
+  color: #b45309; /* amber-600 */
+}
+
+/* Move default Swiper arrows outwards (adjust to taste) */
+.icon-swiper-prev {
+  left: -13px !important;
+  top: 72% !important;
+  transform: translateY(-50%) !important;
+}
+.icon-swiper-next {
+  right: -13px !important;
+  top: 72% !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Make sure arrows are visible above slides */
+.swiper-button-prev,
+.swiper-button-next {
+   /* position: absolute; */
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(168, 167, 167, 0.4);
+    color: white !important;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    z-index: 20;
+    
+  /* z-index: 40;
+  background: rgba(255,255,255,0.9);
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); */
+}
+
+/* Small screens: show fewer slides and smaller cards */
+@media (max-width: 640px) {
+  .icon-card { min-width: 180px; height: 64px; padding: 10px; }
+  .icons-carousel-section .swiper { padding-left: 28px; padding-right: 28px; }
+}
+
+
+
+
+
+
+/* --------------------home marque -------------------- */
+
+ .marquee {
+        display: inline-flex;
+        animation: scroll-left 16s linear infinite;
+    }
+
+    @keyframes scroll-left {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+
+
+    /* -----------------category slider -------------------- */
+    .twocategory-slide{
+      width:25% !important;
+      height: 200px !important;
+    }
+
+     .category-slide{
+      width:100% !important;
+      height: 100%;
+    }
+    .category-slidelink{
+      /* width:100% !important; */
+      height: 50%;
+      justify-content: space-between;
+    }
+
+    
+
+
+   .cat-card {
+    background: #fff;
+    transition: .25s ease;
+}
+
+/* Your existing hover stays */
+.cat-card:hover {
+    border-color: #6366f1;
+    transform: scale(1.02);
+}
+
+/* New image wrapper */
+.cat-img-wrapper {
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px;
+    transition: background-color .25s ease, transform .25s ease;
+}
+
+/* New image styling */
+.cat-img {
+    transition: transform .25s ease;
+}
+
+
+/* On hover of SAME card, only that card’s image changes */
+.cat-card:hover .cat-img-wrapper {
+    background: orange;
+}
+
+.cat-card:hover .cat-img {
+    transform: scale(1.12);
+}
+
+
+.cat-icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 9999px;
+    background: #eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#4338ca;
+    font-weight:600;
+}
+
+.cat-prev{
+  left: -13px !important;
+  top: 61% !important;
+  transform: translateY(-50%) !important;
+}
+.cat-next{
+  right: -13px !important;
+  top: 61% !important;
+  transform: translateY(-50%) !important;
+}
+
+
+/* ------------------deal section homepage ------------- */
+
+/* THE CARD — IMPORTANT: FIXED HEIGHT & NO MOVEMENT */
+.eg-card {
+    position: relative;
+    background: transparent;
+    transition: box-shadow .25s ease;
+}
+
+/* Inner box (image + content) */
+.eg-box {
+    overflow: hidden;
+    background: #fff;
+    transition: transform .3s ease;
+}
+
+/* Subtle image zoom on hover */
+.eg-img {
+    transition: transform 1.2s ease;
+}
+.eg-box:hover .eg-img {
+    transform: scale(1.07);
+}
+
+/* ⭐ THE IMPORTANT PART ⭐  
+   CTA BUTTON STARTS OUTSIDE AND SLIDES UP  
+   WITHOUT CHANGING CARD SIZE 
+*/
+.eg-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -55px;      /* stays BELOW card */
+    height: 46px;
+
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        bottom .55s ease,
+        opacity .55s ease,
+        transform .55s ease;
+    z-index: 50;
+     pointer-events: none;   /* IMPORTANT */
+}
+.eg-cta-button{
+  width: 90%;
+  height: 85%;
+  color: #000;
+  font-weight: 500;
+  text-align: center;
+  background: #ffcc00;
+  border-radius:4px;
+}
+
+/* On hover: CTA slides up NEAR the card bottom  
+   BUT DOES NOT CHANGE CARD HEIGHT  
+*/
+.eg-box:hover + .eg-cta {
+    bottom: -45px;        /* touches card bottom */
+    opacity: 1;
+    transform: translateY(0);
+    z-index: 700;
+    pointer-events: auto;   /* NOW CTA is clickable */
+}
+
+/* Keep CTA visible when hovering CTA itself */
+.eg-cta:hover {
+    bottom: -45px;              /* Same value! */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+/* SHADOW ONLY ON HOVER (as in video) */
+.eg-box:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+
+.deals-swiperslide{
+ width:25% !important;
+      /* height: 200px !important; */
+}
+
+.deals-slide{
+  width:100% !important;
+      /* height: 100%; */
+}
+
