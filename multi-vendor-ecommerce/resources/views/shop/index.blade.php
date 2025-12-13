@@ -38,96 +38,260 @@
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach ($featuredProducts as $product)
-                        <a href="{{ route('shop.show', $product->slug) }}" class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden flex flex-col">
-                            <div class="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
-                                @php $primaryImage = $product->images->first(); @endphp
-                                @if ($primaryImage)
-                                    <img src="{{ asset('storage/'.$primaryImage->path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
-                                @else
-                                    <span class="text-gray-400 text-xs">{{ __('No Image') }}</span>
-                                @endif
-                            </div>
-                            <div class="p-3 flex-1 flex flex-col">
-                                <p class="text-xs text-gray-500 mb-1">{{ optional($product->category)->name }}</p>
-                                <h3 class="text-sm font-semibold text-gray-900 line-clamp-2 flex-1">{{ $product->name }}</h3>
-                                <div class="mt-2 flex items-baseline space-x-2">
-                                    <span class="text-base font-bold text-indigo-600">₹{{ $product->discount_price ?? $product->price }}</span>
-                                    @if ($product->discount_price)
-                                        <span class="text-xs line-through text-gray-400">₹{{ $product->price }}</span>
+          
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach ($featuredProducts->take(6) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
                                 </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
                             </div>
-                        </a>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
             </section>
         @endif
 
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <section class="grid grid-cols-1 md:grid-cols-6 gap-4">
             <!-- Filters -->
-            <aside class="md:col-span-1 bg-white rounded-lg shadow-sm p-4 text-sm space-y-4">
-                <div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Filter by category</h3>
-                    <div class="space-y-1 max-h-48 overflow-auto text-xs">
-                        <a href="{{ route('shop.index', array_merge(request()->except('page', 'category'), ['category' => null])) }}" class="block px-2 py-1 rounded {{ empty($filters['category']) ? 'bg-indigo-50 text-indigo-700' : 'hover:bg-gray-50 text-gray-700' }}">All categories</a>
-                        @foreach ($categories as $category)
-                            <a href="{{ route('shop.index', array_merge(request()->except('page'), ['category' => $category->slug])) }}" class="block px-2 py-1 rounded {{ ($filters['category'] ?? null) === $category->slug ? 'bg-indigo-50 text-indigo-700' : 'hover:bg-gray-50 text-gray-700' }}">
-                                {{ $category->name }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
+           <aside class="md:col-span-1 bg-white rounded-xl border border-gray-200 p-4 text-sm space-y-6 sticky top-8 bottom-8 h-fit overflow-y-auto
+">
 
-                <div class="border-t border-gray-100 pt-3">
-                    <h3 class="font-semibold text-gray-900 mb-2">Price range</h3>
-                    <form method="GET" action="{{ route('shop.index') }}" class="space-y-2">
-                        <div class="flex items-center space-x-2 text-xs">
-                            <input type="number" name="min_price" value="{{ $filters['min_price'] ?? '' }}" placeholder="Min" class="w-20 px-2 py-1 border border-gray-200 rounded" />
-                            <span>-</span>
-                            <input type="number" name="max_price" value="{{ $filters['max_price'] ?? '' }}" placeholder="Max" class="w-20 px-2 py-1 border border-gray-200 rounded" />
-                        </div>
-                        @foreach (request()->except('page', 'min_price', 'max_price') as $name => $value)
-                            <input type="hidden" name="{{ $name }}" value="{{ $value }}" />
-                        @endforeach
-                        <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-semibold hover:bg-indigo-500">Apply</button>
-                    </form>
-                </div>
-            </aside>
+    <!-- CATEGORY FILTER -->
+    <div>
+        <h3 class="font-semibold text-gray-900 mb-3 text-sm">Filter by Category</h3>
+
+        <div class="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+
+            {{-- ALL CATEGORY --}}
+            <a href="{{ route('shop.index', array_merge(request()->except('page', 'category'), ['category' => null])) }}"
+               class="block px-3 py-1.5 rounded-lg text-xs font-medium 
+               {{ empty($filters['category']) 
+                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' 
+                    : 'hover:bg-gray-50 text-gray-700 border border-transparent' }}">
+                All Categories
+            </a>
+
+            {{-- CATEGORY LIST --}}
+            @foreach ($categories as $category)
+                <a href="{{ route('shop.index', array_merge(request()->except('page'), ['category' => $category->slug])) }}"
+                   class="block px-3 py-1.5 rounded-lg text-xs font-medium 
+                   {{ ($filters['category'] ?? null) === $category->slug
+                        ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                        : 'hover:bg-gray-50 text-gray-700 border border-transparent' }}">
+                    {{ $category->name }}
+                </a>
+            @endforeach
+
+        </div>
+    </div>
+
+    <!-- PRICE RANGE FILTER -->
+    <div class="border-t border-gray-100 pt-4">
+    <h3 class="font-semibold text-gray-900 mb-3 text-sm">Price Range</h3>
+
+    <form method="GET" action="{{ route('shop.index') }}" class="space-y-3">
+
+        <!-- MIN – MAX INPUTS -->
+        <div class="flex items-center gap-1 w-full">
+
+            <input type="number"
+                   name="min_price"
+                   value="{{ $filters['min_price'] ?? '' }}"
+                   placeholder="Min"
+                   class="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-xs 
+                          focus:ring-indigo-200 focus:border-indigo-400 w-full" />
+
+            <span class="text-gray-400 text-sm">—</span>
+
+            <input type="number"
+                   name="max_price"
+                   value="{{ $filters['max_price'] ?? '' }}"
+                   placeholder="Max"
+                   class="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-xs
+                          focus:ring-indigo-200 focus:border-indigo-400 w-full" />
+        </div>
+
+        {{-- KEEP OTHER FILTERS --}}
+        @foreach (request()->except('page', 'min_price', 'max_price') as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
+
+        <!-- APPLY BUTTON -->
+        <button type="submit"
+                class="w-full inline-flex items-center justify-center px-4 py-2 bg-indigo-600 
+                       text-white rounded-lg text-xs font-semibold shadow-sm hover:bg-indigo-500">
+            Apply
+        </button>
+    </form>
+</div>
+
+
+
+</aside>
+
 
             <!-- Products grid -->
-            <div class="md:col-span-3">
+            <div class="md:col-span-5">
                 <div class="flex items-center justify-between mb-4 text-xs text-gray-600">
-                    <p>{{ $products->total() }} products found</p>
-                </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    @forelse ($products as $product)
-                        <a href="{{ route('shop.show', $product->slug) }}" class="block bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition flex flex-col">
-                            <div class="h-44 bg-gray-100 flex items-center justify-center overflow-hidden">
-                                @php $primaryImage = $product->images->first(); @endphp
-                                @if ($primaryImage)
-                                    <img src="{{ asset('storage/'.$primaryImage->path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
-                                @else
-                                    <span class="text-gray-400 text-xs">{{ __('No Image') }}</span>
-                                @endif
-                            </div>
-                            <div class="p-3 flex-1 flex flex-col">
-                                <p class="text-[11px] text-gray-500 mb-1">{{ optional($product->category)->name }}</p>
-                                <h2 class="font-semibold text-gray-900 text-sm line-clamp-2 flex-1">{{ $product->name }}</h2>
-                                <p class="mt-1 text-xs text-gray-500 line-clamp-1">{{ $product->short_description }}</p>
-                                <div class="mt-2 flex items-baseline space-x-2">
-                                    <span class="text-base font-bold text-indigo-600">₹{{ $product->discount_price ?? $product->price }}</span>
-                                    @if ($product->discount_price)
-                                        <span class="text-xs line-through text-gray-400">₹{{ $product->price }}</span>
+    <!-- PRODUCTS COUNT -->
+    <p>{{ $products->total() }} products found</p>
+
+    <!-- SORT DROPDOWN -->
+    <form method="GET" action="{{ route('shop.index') }}">
+        <select name="sort"
+                onchange="this.form.submit()"
+                class="border border-gray-300 rounded-lg px-2 py-1 bg-white text-xs text-gray-700 cursor-pointer">
+            
+            <option value="">Sort By</option>
+            <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>
+                Price: Low to High
+            </option>
+            <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>
+                Price: High to Low
+            </option>
+            <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>
+                Latest
+            </option>
+            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                Oldest
+            </option>
+        </select>
+
+        {{-- KEEP OTHER FILTERS --}}
+        @foreach(request()->except('page', 'sort') as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
+    </form>
+
+</div>
+
+                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    @foreach ($products as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
                                 </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
                             </div>
-                        </a>
-                    @empty
-                        <p class="text-gray-500 text-sm">{{ __('No products available yet.') }}</p>
-                    @endforelse
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="mt-6">

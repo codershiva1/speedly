@@ -94,7 +94,7 @@ const dealsSwiper = new Swiper('.dealsSwiper', {
 });
 
 
-//  import '../css/homeslider.css';
+//  import '../css/home.css';
 
 
 

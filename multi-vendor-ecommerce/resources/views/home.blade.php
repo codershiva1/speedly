@@ -1,7 +1,7 @@
 <x-layouts.site :title="config('app.name', 'Speedly Shop')">
 
     @push('styles')
-        @vite(['resources/css/homeslider.css'])
+        @vite(['resources/css/home.css'])
     @endpush
 
     @push('scripts')
@@ -22,6 +22,104 @@
 
     <div class="bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
+
+        <section class="max-w-7xl mx-auto  px-4">
+
+            <div class="flex gap-6">
+
+                <!-- LEFT: Category Grid -->
+                <div class="w-5/6">
+                    <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-7 gap-4">
+
+                        @foreach($topCategories->take(14) as $category)
+                            <a href="{{ route('shop.index', ['category' => $category->slug]) }}"
+                            class="group flex flex-col items-center text-center bg-[#F4F7FB] rounded-2xl p-2 shadow-sm 
+                                    hover:shadow-md hover:-translate-y-1 transition-all">
+
+                                <!-- Image (Fixed Size & Same for All) -->
+                                <div class="h-20 w-20 flex items-center justify-center overflow-hidden rounded-md">
+                                    <img src="{{ $category->image ? asset('storage/'.$category->image) : 'https://via.placeholder.com/120' }}"
+                                        alt="{{ $category->name }}"
+                                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                </div>
+
+                                <!-- Category Name -->
+                                <p class="mt-3 font-semibold text-gray-900 text-xs md:text-sm leading-tight">
+                                    {{ $category->name }}
+                                </p>
+
+                                <!-- Item Count -->
+                                <p class="text-gray-500 text-[11px] md:text-xs">
+                                    {{ $category->products_count }} Items
+                                </p>
+                                
+                            </a>
+                        @endforeach
+
+                    </div>
+                </div>
+
+                <!-- RIGHT: FILTER BOX -->
+                <div class="w-1/6">
+                    <div class="bg-white shadow-md rounded-xl p-4">
+
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>
+
+                    <div class="space-y-3">
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Grocery</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Fruits & Vegetables</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Personal Care</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Snacks & Beverages</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Household Supplies</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Electronics</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Home Decore</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
+                                <span class="text-sm text-gray-700">Household Supplies</span>
+                            </label>
+
+                        </div>
+
+
+                        <!-- <button class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all">
+                            Apply Filter
+                        </button> -->
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
 
 
          <!-- {{-- ================= TOP FEATURE ICON ROW ================= --}}
@@ -64,18 +162,35 @@
             </section> -->
 
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
-            <section class="icons-carousel-section max-w-7xl mx-auto " data-aos="fade-up">
-                <div class="relative border border-gray-200  overflow-hidden">
+           <section class="icons-carousel-section max-w-7xl mx-auto" data-aos="fade-up">
+                <div class="grid grid-cols-1 md:grid-cols-4 border border-gray-200">
 
-                    <!-- Swiper container -->
+                    <!-- LEFT SIDE (1/4 WIDTH) -->
+                    <div class="relative hidden md:flex items-center p-6 bg-cover bg-center md:col-span-1"
+                        style="background-image: url('https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg');">
+
+                        <!-- DARK OVERLAY -->
+                        <div class="absolute inset-0 bg-black/40"></div>
+
+                        <!-- TEXT LEFT ALIGNED -->
+                        <div class="relative text-white text-left">
+                            <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
+                            <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
+                        </div>
+                </div>
+
+
+                <!-- RIGHT SIDE SLIDER (3/4 WIDTH) -->
+                <div class="md:col-span-3 overflow-hidden relative">
                     <div class="swiper iconSwiper">
                         <div class="swiper-wrapper">
+
                             <!-- Slide 1 -->
                             <div class="swiper-slide">
                                 <div class="icon-card">
                                     <div class="icon">🚚</div>
                                     <div class="meta">
-                                        <p class="font-semibold text-gray-900 iconcardp1">Free Delivery</p>
+                                        <p class="font-semibold text-gray-900">Free Delivery</p>
                                         <p class="text-gray-500 text-xs">Free shipping on all orders</p>
                                     </div>
                                 </div>
@@ -86,7 +201,7 @@
                                 <div class="icon-card">
                                     <div class="icon">💰</div>
                                     <div class="meta">
-                                        <p class="font-semibold text-gray-900 iconcardp1">Big Saving Shop</p>
+                                        <p class="font-semibold text-gray-900">Big Saving Shop</p>
                                         <p class="text-gray-500 text-xs">Save big every single order</p>
                                     </div>
                                 </div>
@@ -97,7 +212,7 @@
                                 <div class="icon-card">
                                     <div class="icon">⏰</div>
                                     <div class="meta">
-                                        <p class="font-semibold text-gray-900 iconcardp1">Online Support 24/7</p>
+                                        <p class="font-semibold text-gray-900">Online Support 24/7</p>
                                         <p class="text-gray-500 text-xs">We’re here day and night</p>
                                     </div>
                                 </div>
@@ -108,7 +223,7 @@
                                 <div class="icon-card">
                                     <div class="icon">🔁</div>
                                     <div class="meta">
-                                        <p class="font-semibold text-gray-900 iconcardp1">Money Back Return</p>
+                                        <p class="font-semibold text-gray-900">Money Back Return</p>
                                         <p class="text-gray-500 text-xs">Guarantee under 7 days</p>
                                     </div>
                                 </div>
@@ -119,21 +234,21 @@
                                 <div class="icon-card">
                                     <div class="icon">🎁</div>
                                     <div class="meta">
-                                        <p class="font-semibold text-gray-900 iconcardp1">Member Discount</p>
+                                        <p class="font-semibold text-gray-900">Member Discount</p>
                                         <p class="text-gray-500 text-xs">On orders over $120.00</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- You can add more slides here; content preserved -->
                         </div>
 
-                        <!-- Navigation (visible outside the bordered box) -->
-                        <div class="swiper-button-prev grt icon-swiper-prev"></div>
-                        <div class="swiper-button-next grt icon-swiper-next"></div>
+                        <!-- Navigation -->
+                        <div class="swiper-button-prev icon-swiper-prev"></div>
+                        <div class="swiper-button-next icon-swiper-next"></div>
                     </div>
                 </div>
-            </section>
+           </section>
+
 
             <!-- ---------------------------------------------------------------------- -->
 
@@ -191,7 +306,7 @@
             </section>
 
             {{-- ================= HERO + TOP NAV BAR AREA ================= --}}
-            <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {{-- LEFT: MAIN HERO SLIDER STYLE --}}
                 <div class="lg:col-span-9 bg-white rounded-lg shadow-sm overflow-hidden flex flex-col md:flex-row" data-aos="fade-right">
                     <div class="w-full md:w-2/3 p-6 flex flex-col justify-center">
@@ -247,7 +362,7 @@
                         @endforeach
                     </div>
                 </div>
-            </section>
+            </section> -->
 
 
           
@@ -323,7 +438,9 @@
 
             {{-- ================= TWO-ROW CATEGORY SLIDER ================= --}}
 {{-- ================= CATEGORY SLIDER (2 ROWS) ================= --}}
-<section class="category-slider-section max-w-7xl mx-auto my-8" data-aos="fade-up">
+
+
+<!-- <section class="category-slider-section max-w-7xl mx-auto my-8" data-aos="fade-up">
     <div class="relative border border-gray-200  overflow-hidden bg-white">
 
         <div class="swiper categorySwiper">
@@ -366,14 +483,16 @@
 
         </div>
     </div>
-</section>
+</section> -->
+
+
 
 
 
             {{-- ================= DEALS / NEW / FEATURED ROW ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-3  gap-6">
                 {{-- LEFT BIG FEATURE CARD (DEAL OF THE DAY) --}}
-                <div class="lg:col-span-1 bg-white  flex flex-col" data-aos="fade-right">
+                <!-- <div class="lg:col-span-1 bg-white  flex flex-col" data-aos="fade-right">
                     <h2 class="text-sm font-semibold text-gray-900 mb-2">Deals of the Day</h2>
                     @php $highlight = $dealsOfDay->first(); @endphp
                     @if($highlight)
@@ -400,7 +519,7 @@
                     @else
                         <p class="text-xs text-gray-500">No deals available.</p>
                     @endif
-                </div>
+                </div> -->
 
                 {{-- RIGHT: ROW OF PRODUCTS WITH TABS TITLES (STATIC LIKE DEMO) --}}
                 <!-- <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4" data-aos="fade-left">
@@ -440,7 +559,7 @@
                 </div> -->
 
                 {{-- RIGHT: PRODUCT SLIDER WITH 2–ROW PAIRS --}}
-                <div class="lg:col-span-2 bg-gray-50  " data-aos="fade-left">
+                <div class="lg:col-span-3 bg-gray-50  " data-aos="fade-left">
 
                     {{-- Tabs --}}
                     <div class="flex items-center justify-between mb-3 text-sm">
@@ -455,7 +574,89 @@
                     </div>
 
                     {{-- === SWIPER WRAPPER === --}}
-                    <div class="relative">
+
+
+                    @if($featuredProducts->isNotEmpty())
+            <section>
+                <!-- <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
+                </div> -->
+          
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach ($featuredProducts->take(6) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
+                                    @endif
+                                </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
+                            </div>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+
+
+
+                    <!-- <div class="relative">
 
                         <div class="swiper dealsSwiper">
                             <div class="swiper-wrapper pb-12">
@@ -524,23 +725,25 @@
                             <div class="swiper-button-prev deals-prev"></div>
                             <div class="swiper-button-next deals-next"></div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
+
+                
             </section>
 
             {{-- ================= BANNER + CATEGORY & PRODUCTS ================= --}}
             <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {{-- TWO WIDE TOP BANNERS (LIKE SURFACE KEYBOARD / SPEAKER) --}}
-                <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" >
+                <!-- <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" >
 
                    <div class="banner relative overflow-hidden " data-aos="fade-right">
-                        <!-- Banner Image -->
+                      
                         <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-04.jpg"
                             class="w-full h-full object-cover banner-img" />
 
-                        <!-- Your Banner Text -->
+                        
                         <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
                             <div class="flex-1">
                                 <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
@@ -553,11 +756,11 @@
                     </div>
 
                     <div class="banner relative overflow-hidden " data-aos="fade-left">
-                        <!-- Banner Image -->
+                      
                         <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-05.jpg"
                             class="w-full h-full object-cover banner-img" />
 
-                        <!-- Your Banner Text -->
+                     
                         <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
                             <div class="flex-1">
                                 <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
@@ -569,13 +772,13 @@
                         </div>
                     </div>
                        
-                </div>
+                </div> -->
 
                 {{-- BELOW: CATEGORIES SIDEBAR + ROW OF PRODUCTS --}}
                 <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4  mt-2" data-aos="fade-left">
                     {{-- LEFT SIDEBAR CATEGORIES --}}
-                    <aside class="lg:col-span-1 bg-white  shadow-sm p-4 text-xs h-80">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-3">Shop By <br> Categories</h2>
+                    <aside class="lg:col-span-1 bg-white  shadow-sm pr-4 text-xs h-fit-content">
+                        <!-- <h2 class="text-lg font-semibold text-gray-900 mb-3">Shop By <br> Categories</h2>
                         <hr>
                         <ul class="space-y-1">
                             @foreach ($categories->take(5) as $category)
@@ -598,7 +801,24 @@
                             + All Category
                             </strong>
                         </button>
-                        </a>
+                        </a> -->
+
+                        <div class="">
+
+                            <!-- LEFT SIDE (1/4 WIDTH) -->
+                            <div class="relative hidden md:flex items-center px-6 py-40 bg-cover bg-center md:col-span-1"
+                                style="background-image: url('https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg');">
+
+                                <!-- DARK OVERLAY -->
+                                <div class="absolute inset-0 bg-black/40"></div>
+
+                                <!-- TEXT LEFT ALIGNED -->
+                                <div class="relative text-white text-left">
+                                    <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
+                                    <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
+                                </div>
+                        </div>
+                        
                     </aside>
 
                     {{-- RIGHT PRODUCTS STRIP --}}
@@ -613,14 +833,14 @@
                         <!-- ------------------------------------------- -->
 
                         {{-- === SWIPER WRAPPER === --}}
-                            <div class="relative">
+                            <!-- <div class="relative">
 
                                 <div class="swiper dealsSwiper">
                                     <div class="swiper-wrapper pb-12">
                                     
                                         @foreach($featuredProducts as $product)
                                             <div class="swiper-slide deals-swiperslide">
-                                                <!-- <div class="grid grid-rows-2 deals-slide"> -->
+                                                <div class="grid grid-rows-2 deals-slide">
                                                 
 
                                                         <div class="eg-card group relative deals-slide">
@@ -670,7 +890,7 @@
                                                         </div>
 
                                             
-                                                <!-- </div> -->
+                                                </div>
                                             </div>
                                         @endforeach
 
@@ -680,7 +900,80 @@
                                     <div class="swiper-button-prev deals-prev"></div>
                                     <div class="swiper-button-next deals-next"></div>
                                 </div>
+                            </div> -->
+
+
+                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    @foreach ($featuredProducts->take(4) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
+                                    @endif
+                                </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
                             </div>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+
+
 
                         <!-- ----------------------------------------------------- -->
                         <!-- <div class="flex space-x-4 overflow-x-auto scrollbar-thin pb-1">
@@ -708,6 +1001,67 @@
                     </div>
                 </div>
             </section>
+
+            {{-- ================= BEST SELLER ================= --}}
+
+
+            <section class="bg-white  shadow-sm p-4">
+            <div class="container mx-auto">
+
+                <!-- SECTION HEADING -->
+                  <div class="flex items-center justify-between mb-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1">
+                                Best Sellers
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
+
+
+                <!-- GRID -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+
+                    <!-- PRODUCT CARD -->
+                    @foreach ($categories->take(6) as $category)
+                        <div class="bg-gray-100 rounded-2xl p-3 w-auto">
+
+                            <!-- INNER IMAGE GRID -->
+                            <div class="grid grid-cols-2 grid-rows-2 gap-2 rounded-xl p-2">
+                                @foreach ($category->products->take(4) as $product)
+                                    <div class="bg-white rounded-xl flex items-center justify-center h-[62px] w-[62px]">
+                                        <img 
+                                            src="{{ asset('storage/' . $product->images->first()->path) }}"
+                                            class="w-full h-full object-contain p-1"
+                                            alt=""
+                                        >
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- + MORE (WHITE PILL) -->
+                            <div class="flex justify-center mt-2">
+                                <span class="bg-white text-xs text-gray-600 px-3 py-0.5 rounded-full shadow-sm">
+                                    +{{ max(0, $category->products->count() - 4) }} more
+                                </span>
+                            </div>
+
+                            <!-- CATEGORY NAME -->
+                            <p class="text-sm font-semibold text-gray-900 text-center leading-tight mt-1">
+                                {{ $category->name }}
+                            </p>
+
+                        </div>
+                        @endforeach
+
+                    <!-- Add more cards as needed -->
+
+                </div>
+            </div>
+        </section>
+
+
 
             {{-- ================= LATEST NEWS ================= --}}
             <section class="bg-white  shadow-sm p-4">

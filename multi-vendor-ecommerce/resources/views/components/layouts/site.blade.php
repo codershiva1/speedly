@@ -17,6 +17,10 @@
 
        <!-- AOS CSS -->
        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 
 
         <!-- Scripts -->
@@ -25,10 +29,10 @@
         @stack('styles')
 
     </head>
-    <body class="font-sans antialiased bg-gray-50 text-gray-900" style="overflow-x: hidden;">
-        <div class="min-h-screen flex flex-col">
+    <body class="font-sans antialiased bg-gray-50 text-gray-900" >
+        <div class="min-h-screen flex flex-col" style="overflow-x: clip;">
             <!-- Public header -->
-            <div class="bg-slate-900 text-slate-100 text-[11px]">
+            <!-- <div class="bg-slate-900 text-slate-100 text-[11px]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
                     <p class="hidden sm:block">Welcome to our multi-vendor marketplace. Free shipping on selected items.</p>
                     <div class="flex items-center space-x-4">
@@ -37,67 +41,29 @@
                         <a href="{{ route('pages.faq') }}" class="hover:text-amber-300">Help &amp; FAQ</a>
                     </div>
                 </div>
-            </div>
-            <!-- <header class="bg-white border-b border-gray-100">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-6">
-                        <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                            <x-application-logo class="h-8 w-auto text-indigo-600" />
-                            <span class="font-semibold text-gray-900 hidden sm:inline">{{ config('app.name', 'Speedly Shop') }}</span>
-                        </a>
-                        <nav class="flex flex-wrap items-center space-x-3 md:space-x-4 text-[13px] font-medium">
-                            <a href="{{ route('home') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('home') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Home</a>
-                            <a href="{{ route('shop.index') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('shop.*') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Shop</a>
-                            <a href="{{ route('vendors.index') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('vendors.*') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Vendors</a>
-                            <a href="{{ route('pages.about') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.about') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">About</a>
-                            <a href="{{ route('pages.service') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.service') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Service</a>
-                            <a href="{{ route('pages.find-store') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.find-store') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Find a Store</a>
-                            <a href="{{ route('pages.faq') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.faq') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">FAQ's</a>
-                            <a href="{{ route('pages.wishlist') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.wishlist') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Wishlist</a>
-                            <a href="{{ route('pages.blog') }}" class="inline-flex items-center h-8 px-2 border-b-2 {{ request()->routeIs('pages.blog') ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-indigo-500' }}">Blog</a>
-                        </nav>
-                    </div>
+            </div> -->
+           
 
-                    <div class="flex items-center space-x-3">
-                        <form method="GET" action="{{ route('shop.index') }}" class="hidden sm:flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1 text-xs">
-                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Search products" class="bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 w-40" />
-                            <button type="submit" class="ml-1 text-gray-400 hover:text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11.25 6.75a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" />
-                                </svg>
-                            </button>
-                        </form>
-
-                        @auth
-                            <a href="{{ route('account.cart.index') }}" class="relative text-gray-500 hover:text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25h11.218a1.125 1.125 0 001.1-.883l1.5-7.5A1.125 1.125 0 0020.218 4.5H5.106M7.5 14.25L5.106 4.5M7.5 14.25L6 18.75m1.5-4.5h9.75m0 0L18 18.75m-9.75 0A1.125 1.125 0 109.375 18.75 1.125 1.125 0 008.25 17.625zm9.75 0a1.125 1.125 0 101.125 1.125A1.125 1.125 0 0018 17.625z" />
-                                </svg>
-                            </a>
-                            <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50">Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-xs font-semibold text-gray-700 hover:text-indigo-600">Login</a>
-                            <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full bg-indigo-600 text-white hover:bg-indigo-500">Sign up</a>
-                        @endauth
-                    </div>
-                </div>
-            </header> -->
-
-            <style>
-                body { margin: 0; font-family: Arial, sans-serif; }
+            <style>           
+            body { margin: 0; font-family: Arial, sans-serif; }
 
             .top-bar {
-                background: #f2c400;
-                padding: 15px 40px;
+                background: #fff;
+                padding: 0 15px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                flex-wrap: wrap;
+                flex-wrap: wrap; /* allow wrapping */
+                gap: 10px; /* space between rows on mobile */
             }
 
-            .logo { font-size: 30px; font-weight: bold; }
+            .logo {
+                width: 150px;
+                font-size: 30px;
+                font-weight: bold;
+            }
 
-            .menu-toggle {
+            /* .menu-toggle {
                 background: #222;
                 color: #fff;
                 padding: 10px 15px;
@@ -105,364 +71,780 @@
                 margin-right: 20px;
                 cursor: pointer;
                 font-size: 20px;
+            } */
+
+            .searchbar{
+                padding:5px;
+
             }
 
-            .search-area {
+            #searchInput {
+                border: none;
+            }
+
+            .top-right {
                 display: flex;
-                flex: 1;
-                max-width: 600px;
-                margin-left: 20px;
-            }
-
-            .search-area select,
-            .search-area input,
-            .search-area button {
-                padding: 10px;
-                border: 1px solid #ccc;
-            }
-
-            .search-area select { border-right: none; border-radius: 5px 0 0 5px; }
-            .search-area input { flex: 1; border-left: none; border-right: none; }
-            .search-area button { background: #222; color: #fff; border-radius: 0 5px 5px 0; cursor: pointer; }
-
-            .top-right { display: flex; align-items: center; gap: 25px; }
-
-            .nav-bar {
-                display: flex;
-                padding: 15px 40px;
                 align-items: center;
-                gap: 35px;
+                gap: 25px;
+            }
+
+
+
+            #locationHeader{
+                cursor:pointer;
+                /* margin-top:-10px; */
+                gap:14%;
+            }
+            /* ========================================================= */
+            /*   MOBILE / TABLET VIEW (Below 744px)                       */
+            /* ========================================================= */
+            @media (max-width: 764px) {
+
+                .top-bar {
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                /* Logo stays left */
+                .logo {
+                    order: 1;
+                }
+
+                /* Top-right stays right */
+                .top-right {
+                    order: 2;
+                }
+
+                /* Search Bar wrapper div (your middle parent) */
+                .top-bar > div:nth-child(2) {
+                    order: 3;             /* moves search below */
+                    flex-basis: 100%;     /* full width */
+                    margin-top: 5px;
+                }
+
+                .searchbar{
+                    padding-top:0;
+                    margin-top:-5px;
+                }
+
+                /* Make search bar full width and cleaner */
+                #searchBarBox {
+                    max-width: 100%;
+                    width: 100%;
+                }
+
+                #locationHeader{
+                margin-top:0px;
+                justify-content:space-between;
+                }
+            }
+            /* ------------------ */
+            /* Hide hamburger by default */
+            #mobilemenuToggle {
+                display: none;
+                font-size:35px;
+            }
+
+            /* Mobile menu popup base */
+            .mobile-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0,0,0,0.6);
+                display: none;
+                z-index: 9999;
+            }
+
+            /* Slide box */
+            .mobile-menu-content {
+                width: 80%;
+                height: 100%;
+                background: #fff;
+                padding: 20px;
+                transform: translateX(-100%);
+                transition: 0.3s ease;
+                position: relative;
+            }
+
+            /* Close icon */
+            .mobile-menu .close-menu {
+                font-size: 24px;
+                cursor: pointer;
+                position: absolute;
+                top:0;
+                right: 20px;
+            }
+
+            /* MOBILE NAV LINKS */
+            .mobile-nav-links .mobile-link {
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+                font-size: 18px;
+                font-weight: 500;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .mobile-dropdown {
+                display: none;
+                padding-left: 10px;
+            }
+            .mobile-dropdown a {
+                display: block;
+                padding: 8px 0;
+                font-size: 16px;
+                color: #444;
+            }
+
+
+            /* ----------------------------------------------- */
+            /* RESPONSIVE RULES FOR MAX-WIDTH 744px            */
+            /* ----------------------------------------------- */
+            @media (max-width: 744px) {
+
+                /* Show hamburger */
+                #mobilemenuToggle {
+                    display: block;
+                }
+
+                /* Hide desktop nav-bar */
+                .nav-bar {
+                    display: none !important;
+                }
+            }
+
+            /* ---------------------- */
+
+                        /* .top-bar {
+                            background: #fff;
+                            padding: 0 15px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            flex-wrap: wrap;
+                        }
+
+                        .logo { width:150px;font-size: 30px; font-weight: bold; }
+
+                        .menu-toggle {
+                            background: #222;
+                            color: #fff;
+                            padding: 10px 15px;
+                            border-radius: 5px;
+                            margin-right: 20px;
+                            cursor: pointer;
+                            font-size: 20px;
+                        }
+
+                        
+                    #searchInput{
+                        border:none;
+                    } */
+            /* ------------------------header menu---------------------------- */
+
+                        /* .top-right { display: flex; align-items: center; gap: 25px; } */
+
+                        .nav-link.active { background: #222; color: #fff; padding: 8px 18px; border-radius: 5px; }
+                        
+                        .nav-link {
+                            position: relative;
+                            display: inline-block; /* Adjust based on your main navigation structure */
+                        }
+
+                        /* -------- NAVBAR DROPDOWN FIX -------- */
+            .nav-bar {
+                position: relative;
+                display: flex;
+                flex-wrap:wrap;
+                /* padding: 15px 40px; */
+                align-items: center;
+                /* gap: 35px; */
                 border-bottom: 1px solid #eee;
                 background: #fff;
+                z-index: 10;
             }
 
-            .nav-link { text-decoration: none; color: #222; cursor: pointer; position: relative; }
-            .nav-link.active { background: #222; color: #fff; padding: 8px 18px; border-radius: 5px; }
+            .nav-link.dropdown {
+                position: relative;
+            }
 
-            .dropdown-menu {
+            .menu-button {
+                position: relative;
+                padding: 8px 18px;
+                cursor: pointer;
+                overflow: hidden;
+                border-radius: 5px;
+                z-index: 1;
+                color: #222;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            /* Sliding BLACK background */
+            .menu-button::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: #000;
+                transition: left 0.35s ease;
+                z-index: -1;
+            }
+
+            .menu-button::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                transition: left 0.35s ease;
+                z-index: -2;
+            }
+
+            .menu-button:hover::before {
+                left: 0;
+            }
+
+            .menu-button:hover::after {
+                left: 100%;
+            }
+
+            .menu-button:hover {
+                color: #fff !important;
+            }
+
+            .menu-button:hover i {
+                color: #fff !important;
+            }
+
+            .menu-button * {
+                position: relative;
+                z-index: 3;
+            }
+
+            /* Dropdown menus */
+            .dropdown-menu,
+            .shop-dropdown-menu .dropdown-menu-content {
                 display: none;
                 position: absolute;
-                top: 40px;
+                top: 100%; /* BELOW navbar */
                 left: 0;
                 background: #fff;
                 border: 1px solid #ddd;
                 border-radius: 5px;
-                min-width: 160px;
-                padding: 10px 0;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 z-index: 100;
             }
 
+            .dropdown-menu-content {
+                display: none;  /* HIDDEN initially */
+                position: absolute;
+                top: 100%;       /* Below navbar */
+                left: 0;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 20px;
+                min-width: 800px;
+                gap: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+
+            /* Show dropdown on hover */
+            .nav-link.dropdown:hover > .dropdown-menu,
+            .nav-link.dropdown:hover > .dropdown-menu-content {
+                display: flex;
+            
+            }
+            .nav-link.dropdown:hover > .dropdown-menu {
+            
+                flex-direction:column;
+            }
+            .nav-link.dropdown:hover > #pagesdropdown-menu {
+            
+                flex-direction:row;
+            }
+
+            /* Normal dropdown links */
             .dropdown-menu a {
                 display: block;
                 padding: 10px 15px;
-                text-decoration: none;
                 color: #222;
-            }
-
-            .dropdown-menu a:hover { background: #f3f3f3; }
-
-            .cart-icon { position: relative; cursor: pointer; }
-            .notif {
-                background: red;
-                width: 16px;
-                height: 16px;
-                color: #fff;
-                font-size: 11px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: absolute;
-                top: -5px;
-                right: -8px;
-            }
-
-            /* Mobile Menu Hidden */
-            .mobile-menu {
-                display: none;
-                background: #333;
-                padding: 15px;
-            }
-            .mobile-menu a {
-                display: block;
-                padding: 10px;
-                color: #fff;
                 text-decoration: none;
-                border-bottom: 1px solid #444;
+                white-space: nowrap;
             }
-            .hero-slider {
-            width: 100%;
-            height: 500px;
-            display: flex;
-            position: relative;
-            overflow: hidden;
-            background: #f6f6f6;
-            border-radius: 10px;
-        }
 
-        .nav-link {
-            position: relative;
-            display: inline-block; /* Adjust based on your main navigation structure */
-        }
+            .dropdown-menu a:hover {
+                background: #f3f3f3;
+            }
 
-        /* Style for the main dropdown container */
-        .shop-dropdown-menu .dropdown-menu-content {
-            display: none; /* Hide by default */
-            position: absolute;
-            top: 100%; /* Position below the "Shop" link */
-            left: 0; 
-            background-color: #ffffff; 
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            min-width: 800px; /* Adjust width as needed for the 3 columns */
-            z-index: 1;
-            padding: 20px;
-            display: flex; /* Use Flexbox for columns */
-            border-top: 2px solid #ddd; /* A subtle separator */
-        }
+                        .cart-icon { position: relative; cursor: pointer; }
+                        .notif {
+                            background: red;
+                            width: 16px;
+                            height: 16px;
+                            color: #fff;
+                            font-size: 11px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: absolute;
+                            top: -5px;
+                            right: -8px;
+                        }
 
-        /* Show the dropdown on hover */
-        .shop-dropdown-menu:hover .dropdown-menu-content {
-            display: flex; 
-        }
+                        /* Mobile Menu Hidden */
+                        .mobile-menu {
+                            display: none;
+                            background: #333;
+                            padding: 15px;
+                        }
+                        .mobile-menu a {
+                            display: block;
+                            padding: 10px;
+                            /* color: #fff; */
+                            text-decoration: none;
+                            border-bottom: 1px solid #444;
+                        }
+                        .hero-slider {
+                        width: 100%;
+                        height: 500px;
+                        display: flex;
+                        position: relative;
+                        overflow: hidden;
+                        background: #f6f6f6;
+                        border-radius: 10px;
+                    }
 
-        /* Style for each column */
-        .menu-column {
-            flex: 1; /* Make columns take equal space */
-            padding: 0 15px;
-            min-width: 200px; /* Minimum width for the text columns */
-        }
+                    /* Style for each column */
+                    .menu-column {
+                        flex: 1; /* Make columns take equal space */
+                        padding: 0 15px;
+                        min-width: 200px; /* Minimum width for the text columns */
+                    }
 
-        /* Style for the titles (CATEGORY PAGE LAYOUT, etc.) */
-        .menu-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee; /* Separator line like in the image */
-        }
+                    /* Style for the titles (CATEGORY PAGE LAYOUT, etc.) */
+                    .menu-title {
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: #333;
+                        text-transform: uppercase;
+                        margin-bottom: 10px;
+                        padding-bottom: 5px;
+                        border-bottom: 1px solid #eee; /* Separator line like in the image */
+                    }
 
-        /* Style for the list of links */
-        .menu-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
+                    /* Style for the list of links */
+                    .menu-list {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0 0 20px 0;
+                    }
 
-        .menu-list li {
-            padding: 5px 0;
-        }
+                    .menu-list li {
+                        padding: 5px 0;
+                    }
 
-        .menu-list li a {
-            text-decoration: none;
-            color: #666; /* Light gray for the text links */
-            font-size: 14px;
-            display: block;
-        }
+                    .menu-list li a {
+                        text-decoration: none;
+                        color: #666; /* Light gray for the text links */
+                        font-size: 14px;
+                        display: block;
+                    }
 
-        .menu-list li a:hover {
-            color: #000; /* Darker on hover */
-        }
+                    .menu-list li a:hover {
+                        color: #000; /* Darker on hover */
+                    }
 
-        /* Separator line for the lists */
-        .menu-list .separator {
-            height: 1px;
-            background-color: #eee;
-            margin: 10px 0;
-            list-style: none; /* Hide bullet point */
-        }
+                    /* Separator line for the lists */
+                    .menu-list .separator {
+                        height: 1px;
+                        background-color: #eee;
+                        margin: 10px 0;
+                        list-style: none; /* Hide bullet point */
+                    }
 
-        /* Banner Column Styling */
-        .menu-banners {
-            display: flex;
-            flex-direction: column;
-            gap: 10px; 
-        }
+                    /* Banner Column Styling */
+                    .menu-banners {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px; 
+                    }
 
-        .menu-banner {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end; /* Text at the bottom */
-            padding: 15px;
-            color: #ffffff;
-            background-size: cover;
-            background-position: center;
-            min-height: 200px; /* Height for the banners */
-            border-radius: 5px; /* Optional: subtle rounding */
-        }
+                    .menu-banner {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end; /* Text at the bottom */
+                        padding: 15px;
+                        color: #ffffff;
+                        background-size: cover;
+                        background-position: center;
+                        min-height: 200px; /* Height for the banners */
+                        border-radius: 5px; /* Optional: subtle rounding */
+                    }
 
-        .banner-text {
-            font-size: 14px;
-            font-weight: 300;
-            line-height: 1.2;
-        }
+                    .banner-text {
+                        font-size: 14px;
+                        font-weight: 300;
+                        line-height: 1.2;
+                    }
 
-        .banner-text-large {
-            font-size: 24px;
-            font-weight: bold;
-            line-height: 1;
-            margin-bottom: 5px;
-        }
+                    .banner-text-large {
+                        font-size: 24px;
+                        font-weight: bold;
+                        line-height: 1;
+                        margin-bottom: 5px;
+                    }
 
-        /* Specific Banner Backgrounds (You need to use your own images here) */
-        .smartphone-banner {
-            /* Use your smartphone image URL */
-            background-image: url('path/to/your/smartphone-image.jpg'); 
-            background-color: #4CAF50; /* Fallback color */
-        }
+                    /* Specific Banner Backgrounds (You need to use your own images here) */
+                    .smartphone-banner {
+                        /* Use your smartphone image URL */
+                        background-image: url('path/to/your/smartphone-image.jpg'); 
+                        background-color: #4CAF50; /* Fallback color */
+                    }
 
-        .speaker-banner {
-            /* Use your speaker image URL */
-            background-image: url('path/to/your/speaker-image.jpg');
-            background-color: #8C8A79; /* The khaki/grey color from the image */
-            justify-content: center; /* Center the text for the speaker banner */
-            text-align: center;
-        }
-        .speaker-text {
-            color: #333; /* Darker text for the speaker banner */
-        }
-        .shop-dropdown-menu .dropdown-menu-content {
-            display: none; 
-            
-        }
+                    .speaker-banner {
+                        /* Use your speaker image URL */
+                        background-image: url('path/to/your/speaker-image.jpg');
+                        background-color: #8C8A79; /* The khaki/grey color from the image */
+                        justify-content: center; /* Center the text for the speaker banner */
+                        text-align: center;
+                    }
+                    .speaker-text {
+                        color: #333; /* Darker text for the speaker banner */
+                    }
+                
+
+
             </style>
 
+
             <div class="top-bar">
-            <div style="display:flex; align-items:center;">
-                <div class="logo">eGadgets <span style="font-size:12px;">Best Buy</span></div>
-
-                <div class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></div>
-
-                <div class="search-area">
-                    <select><option>All Collection</option></select>
-                    <input id="searchInput" type="text" placeholder="Search for products...">
-                    <button id="searchBtn"><i class="bi bi-search"></i> Search</button>
+                <div class="logo">
+                    <img src="http://localhost/speedly_wind\multi-vendor-ecommerce\public\storage\uploads\logo\speedly_logo3.png" alt="">
+                    
                 </div>
-            </div>
+                <div style="display:flex; align-items:center;">
+                    <div class="w-full bg-white searchbar">
+                        <div id="searchBarBox" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
 
-            <div class="top-right">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <i class="bi bi-headphones" style="font-size:22px;"></i>
-                    <div>
-                        <strong>(+001) 123-456-7890</strong>
-                        <span>sales@yourcompany.com</span>
+                            <!-- Search Icon -->
+                            <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
+
+                            <!-- Animated placeholder -->
+                            <div class="relative w-full overflow-hidden h-6 pointer-events-none" id="placeholderContainer">
+                                <div id="placeholderWrapper" class="relative transition-transform duration-700 ease-out">
+                                    <!-- Spans will be added by JS -->
+                                </div>
+                            </div>
+                            <!-- Search input (clickable but readonly on home page) -->
+                            <input 
+                                id="searchInput"
+                                type="text"
+                                class="bg-transparent focus:outline-none text-gray-700 placeholder-transparent pointer-events-none"
+                                readonly
+                            >
+
+                            <!-- Voice Search -->
+                            <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
+                                <i class="bi bi-mic-fill text-xl"></i>
+                            </button>
+
+                            <!-- Image Search -->
+                            <button class="ml-3 text-green-400 hover:text-green-500" title="Image Search">
+                                <i class="bi bi-image-fill text-xl"></i>
+                            </button>
+                        </div>
                     </div>
+                
                 </div>
 
-                <i id="userBtn" class="bi bi-person" style="font-size:24px; cursor:pointer;"></i>
+                <div class="top-right">
+                    
+                    <div id="cartBtn" class="cart-icon">
+                        <i class="bi bi-bag" style="font-size:24px;"></i>
+                        <div class="notif">1</div>
+                    </div>
+                    <i id="userBtn" class="bi bi-person" style="font-size:24px; cursor:pointer;"></i>
 
-                <div id="cartBtn" class="cart-icon">
-                    <i class="bi bi-bag" style="font-size:24px;"></i>
-                    <div class="notif">1</div>
+                    <i id="userBtn" class="bi bi-gear" style="font-size:24px; cursor:pointer;"></i>
                 </div>
             </div>
+       
+
+
+                <!-- LOCATION HEADER -->
+            <div class="d-flex align-items-center px-4 bg-white" id="locationHeader">
+                <div class="d-flex flex-column" id="mainlocationHeader">
+                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
+                        Delivery in 8 minutes
+                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
+                    </span>
+
+                    <span class="text-muted" style="margin-top:-2px; font-size:15px;">
+                        Laxmangarh, Sikar...
+                        <i class="bi bi-caret-down-fill"></i>
+                    </span>
+
+                </div>
+                <!-- ----------- -->
+
+                <div class="" id="mobilemenuToggle" ><i class="bi bi-list"></i></div> 
+
+                <div class="nav-bar">
+                 <!-- <div class="nav-link active menu-button">Home</div> -->
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Shop <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu-content">
+                            <div class="menu-column">
+                                <h3 class="menu-title">CATEGORY PAGE LAYOUT</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Left Sidebar</a></li>
+                                    <li><a href="#">Right Sidebar</a></li>
+                                    <li><a href="#">Filter Toggle</a></li>
+                                    <li><a href="#">Off-Sidebar Left</a></li>
+                                    <li><a href="#">Off-Sidebar Right</a></li>
+                                    <li class="separator"></li>
+                                    <li><a href="#">Shop - Column 3</a></li>
+                                    <li><a href="#">Shop - Column 4</a></li>
+                                    <li><a href="#">Shop - Column 5</a></li>
+                                    <li><a href="#">Shop - Column 6</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-column">
+                                <h3 class="menu-title">PRODUCT PAGE LAYOUT</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Product - Default</a></li>
+                                    <li><a href="#">Product - Sticky</a></li>
+                                    <li><a href="#">Product - Masonry</a></li>
+                                </ul>
+                                <h3 class="menu-title product-gallery-title">PRODUCT GALLERY</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Product - Left Gallery</a></li>
+                                    <li><a href="#">Product - Right Gallery</a></li>
+                                    <li><a href="#">Product - Bottom Gallery</a></li>
+                                    <li><a href="#">Product - No Gallery</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-column menu-banners">
+                                <a href="#">
+                                    <div class="menu-banner smartphone-banner">
+                                        <span class="banner-text">Branded</span>
+                                        <span class="banner-text-large">Smart Phone</span>
+                                    </div>
+                                </a>
+                                <a href="#">
+                                    <div class="menu-banner speaker-banner">
+                                        <span class="banner-text-large speaker-text">BEOPLAY</span>
+                                        <span class="banner-text speaker-text">Home Speaker</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Categories <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Men</a>
+                            <a href="#">Women</a>
+                            <a href="#">Kids</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Products <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">New Arrivals</a>
+                            <a href="#">Trending</a>
+                            <a href="#">Discounted</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Features <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Free Shipping</a>
+                            <a href="#">Premium Service</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Pages <i class="bi bi-caret-down-fill"></i>
+                        </div>
+
+                                            
+                        <div class="dropdown-menu" id="pagesdropdown-menu">
+                            <div>
+                                <a href="{{ route('pages.about') }}" class="hover:text-amber-400">About Us</a>
+                                <a href="#" class="hover:text-amber-400">Contact Us</a>
+                                <a href="{{ route('pages.service') }}" class="hover:text-amber-400">Service</a>
+                                <a href="{{ route('pages.find-store') }}" class="hover:text-amber-400">Find a Store</a>
+                                <a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a>
+                                <a href="{{ route('pages.privacy') }}" class="hover:text-amber-400">Privacy Policy</a>
+                            </div>
+                            <div>
+                                <a href="{{ route('pages.terms') }}" class="hover:text-amber-400">Terms & Conditions</a>
+                                <a href="{{ route('pages.return-refund') }}" class="hover:text-amber-400">Return & Refund Policy</a>
+                                <a href="{{ route('pages.shipping') }}" class="hover:text-amber-400">Shipping Policy</a>
+                                <a href="{{ route('pages.cookie') }}" class="hover:text-amber-400">Cookie Policy</a>
+                                <a href="{{ route('pages.vendor-agreement') }}" class="hover:text-amber-400">Vendor Agreement</a>
+                                <a href="{{ route('pages.cancellation') }}" class="hover:text-amber-400">Cancellation</a>
+                            </div>        
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Blog <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Latest Posts</a>
+                            <a href="#">Tech Updates</a>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+
+<!-- MOBILE MENU POPUP -->
+<div id="mobileMenu" class="mobile-menu">
+    <div class="mobile-menu-content">
+        <i class="bi bi-x-lg close-menu"></i>
+
+        <!-- Put SAME nav-bar content here -->
+        <div class="mobile-nav-links">
+            <!-- Copy your nav links here -->
+
+            <div class="mobile-link" data-toggle="shop">
+                Shop <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-shop">
+                <a href="#">Left Sidebar</a>
+                <a href="#">Right Sidebar</a>
+                <a href="#">Filter Toggle</a>
+                <a href="#">Off-Sidebar Left</a>
+                <a href="#">Off-Sidebar Right</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="categories">
+                Categories <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-categories">
+                <a href="#">Men</a>
+                <a href="#">Women</a>
+                <a href="#">Kids</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="products">
+                Products <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-products">
+                <a href="#">New Arrivals</a>
+                <a href="#">Trending</a>
+                <a href="#">Discounted</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="features">
+                Features <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-features">
+                <a href="#">Free Shipping</a>
+                <a href="#">Premium Service</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="pages">
+                Pages <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-pages">
+                <a href="{{ route('pages.about') }}">About Us</a>
+                <a href="#">Contact Us</a>
+                <a href="{{ route('pages.service') }}">Service</a>
+                <a href="{{ route('pages.find-store') }}">Find a Store</a>
+                <a href="{{ route('pages.faq') }}">FAQ's</a>
+                <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
+                <a href="{{ route('pages.terms') }}">Terms & Conditions</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="blog">
+                Blog <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-blog">
+                <a href="#">Latest Posts</a>
+                <a href="#">Tech Updates</a>
+            </div>
+
         </div>
-
-        <!-- NAVIGATION BAR -->
-        <div class="nav-bar">
-            <div class="nav-link active">Home</div>
-
-            <div class="nav-link dropdown">
                 
-                <div class="nav-link shop-dropdown-menu">
-    Shop <i class="bi bi-caret-down-fill"></i>
-    
-        <div class="dropdown-menu-content">
+    </div>
+</div>
+
+<!-- LOCATION POPUP -->
+<div class="modal fade" id="locationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4" style="border-radius:12px;">
             
-            <div class="menu-column">
-                <h3 class="menu-title">CATEGORY PAGE LAYOUT</h3>
-                <ul class="menu-list">
-                    <li><a href="#">Left Sidebar</a></li>
-                    <li><a href="#">Right Sidebar</a></li>
-                    <li><a href="#">Filter Toggle</a></li>
-                    <li><a href="#">Off-Sidebar Left</a></li>
-                    <li><a href="#">Off-Sidebar Right</a></li>
-                    <li class="separator"></li>
-                    <li><a href="#">Shop - Column 3</a></li>
-                    <li><a href="#">Shop - Column 4</a></li>
-                    <li><a href="#">Shop - Column 5</a></li>
-                    <li><a href="#">Shop - Column 6</a></li>
-                </ul>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="m-0 fw-semibold">Change Location</h5>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal" style="cursor:pointer;"></i>
             </div>
-            
-            <div class="menu-column">
-                <h3 class="menu-title">PRODUCT PAGE LAYOUT</h3>
-                <ul class="menu-list">
-                    <li><a href="#">Product - Default</a></li>
-                    <li><a href="#">Product - Sticky</a></li>
-                    <li><a href="#">Product - Masonry</a></li>
-                </ul>
-                
-                <h3 class="menu-title product-gallery-title">PRODUCT GALLERY</h3>
-                <ul class="menu-list">
-                    <li><a href="#">Product - Left Gallery</a></li>
-                    <li><a href="#">Product - Right Gallery</a></li>
-                    <li><a href="#">Product - Bottom Gallery</a></li>
-                    <li><a href="#">Product - No Gallery</a></li>
-                </ul>
+
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- Detect My Location Button -->
+                <button class="btn btn-success px-4 py-2 fw-semibold" id="detectLocationBtn" style="border-radius:10px;">
+                    Detect my location
+                </button>
+
+                <!-- OR Divider -->
+                <div class="d-flex flex-column align-items-center text-muted fw-semibold">
+                    <span>OR</span>
+                </div>
+
+                <!-- Search Box -->
+                <input 
+                    type="text"
+                    class="form-control py-2"
+                    placeholder="search delivery location"
+                    style="border-radius:12px; min-width:220px;"
+                >
             </div>
-            
-            <div class="menu-column menu-banners">
-                <a href="#">
-                    <div class="menu-banner smartphone-banner">
-                        <span class="banner-text">Branded</span>
-                        <span class="banner-text-large">Smart Phone</span>
-                        </div>
-                </a>
-                <a href="#">
-                    <div class="menu-banner speaker-banner">
-                        <span class="banner-text-large speaker-text">BEOPLAY</span>
-                        <span class="banner-text speaker-text">Home Speaker</span>
-                        </div>
-                </a>
-            </div>
-            
+
         </div>
     </div>
-            </div>
+</div>
 
-            <div class="nav-link dropdown">
-                Categories <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">Men</a>
-                    <a href="#">Women</a>
-                    <a href="#">Kids</a>
-                </div>
-            </div>
 
-            <div class="nav-link dropdown">
-                Products <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">New Arrivals</a>
-                    <a href="#">Trending</a>
-                    <a href="#">Discounted</a>
-                </div>
-            </div>
+        
 
-            <div class="nav-link dropdown">Features <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">Free Shipping</a>
-                    <a href="#">Premium Service</a>
-                </div>
-            </div>
+        <!-- NAVIGATION BAR -->
+        <!-- NAVIGATION BAR -->
 
-            <div class="nav-link dropdown">Pages <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">About Us</a>
-                    <a href="#">Contact Us</a>
-                </div>
-            </div>
 
-            <div class="nav-link dropdown">Blog <i class="bi bi-caret-down-fill"></i>
-                <div class="dropdown-menu">
-                    <a href="#">Latest Posts</a>
-                    <a href="#">Tech Updates</a>
-                </div>
-            </div>
-        </div>
+
 
         <!-- MOBILE MENU -->
         <div id="mobileMenu" class="mobile-menu">
@@ -612,43 +994,82 @@
 
         
         @stack('scripts')
+
+        <script>
+    const menuToggle = document.getElementById("mobilemenuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMenu = document.querySelector(".close-menu");
+    const content = document.querySelector(".mobile-menu-content");
+
+    // Open menu
+    menuToggle.addEventListener("click", () => {
+        mobileMenu.style.display = "block";
+        setTimeout(() => {
+            content.style.transform = "translateX(0)";
+        }, 10);
+    });
+
+    // Close menu (outside click)
+    mobileMenu.addEventListener("click", (e) => {
+        if (e.target === mobileMenu) {
+            content.style.transform = "translateX(-100%)";
+            setTimeout(() => mobileMenu.style.display = "none", 300);
+        }
+    });
+
+    // Close using X
+    closeMenu.addEventListener("click", () => {
+        content.style.transform = "translateX(-100%)";
+        setTimeout(() => mobileMenu.style.display = "none", 300);
+    });
+
+    // Dropdown toggle inside menu
+    document.querySelectorAll(".mobile-link").forEach(link => {
+        link.addEventListener("click", () => {
+            const target = document.getElementById("drop-" + link.dataset.toggle);
+            target.style.display = target.style.display === "block" ? "none" : "block";
+        });
+    });
+</script>
+
+        
         <script>
             document.addEventListener("DOMContentLoaded", function() {
 
             // Mobile Menu Toggle
-            const menuToggle = document.getElementById("menuToggle");
-            const mobileMenu = document.getElementById("mobileMenu");
+            // const menuToggle = document.getElementById("menuToggle");
+            // const mobileMenu = document.getElementById("mobileMenu");
 
-            menuToggle.addEventListener("click", () => {
-                mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
-            });
+            // menuToggle.addEventListener("click", () => {
+            //     mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
+            // });
 
             // Dropdown Menus
-            document.querySelectorAll(".dropdown").forEach(drop => {
-                drop.addEventListener("click", function(e) {
-                    const menu = this.querySelector(".dropdown-menu");
-                    const isOpen = menu.style.display === "block";
+            // document.querySelectorAll(".dropdown").forEach(drop => {
+            //     drop.addEventListener("click", function(e) {
+            //         const menu = this.querySelector(".dropdown-menu");
+            //         const isOpen = menu.style.display === "block";
 
-                    // Close all dropdowns first
-                    document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
+            //         // Close all dropdowns first
+            //         document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
 
-                    // Toggle this dropdown
-                    menu.style.display = isOpen ? "none" : "block";
+            //         // Toggle this dropdown
+            //         menu.style.display = isOpen ? "none" : "block";
 
-                    e.stopPropagation();
-                });
-            });
+            //         e.stopPropagation();
+            //     });
+            // });
 
             // Close dropdowns when clicking outside
-            document.addEventListener("click", () => {
-                document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
-            });
+            // document.addEventListener("click", () => {
+            //     document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
+            // });
 
             // Search Button Click
-            document.getElementById("searchBtn").addEventListener("click", () => {
-                let q = document.getElementById("searchInput").value;
-                alert("Searching for: " + q);
-            });
+            // document.getElementById("searchBtn").addEventListener("click", () => {
+            //     let q = document.getElementById("searchInput").value;
+            //     alert("Searching for: " + q);
+            // });
 
             // User Icon Click
             document.getElementById("userBtn").addEventListener("click", () => {
@@ -661,8 +1082,82 @@
             });
 
         });
+
+
+        const items = [
+    'Search "bread"',
+    'Search "chips"',
+    'Search "hukkas"',
+    'Search "milk"',
+    'Search "sugar"',
+    'Search "coffee"',
+    'Search "butter"',
+];
+
+let currentIndex = 0;
+
+const wrapper = document.getElementById("placeholderWrapper");
+const container = document.getElementById("placeholderContainer");
+
+// Dynamically add placeholders as <span>
+wrapper.innerHTML = items.map(text => `<span class="block text-gray-400">${text}</span>`).join("");
+
+// Measure actual row height dynamically
+let rowHeight = wrapper.children[0].offsetHeight;
+
+wrapper.style.transform = "translateY(0)";
+wrapper.style.transition = "transform 0.7s ease-out";
+
+let animInterval;
+
+function startTicker() {
+    animInterval = setInterval(() => {
+        currentIndex++;
+
+        wrapper.style.transform = `translateY(-${currentIndex * rowHeight}px)`;
+
+        // Reset to start when finished
+        if (currentIndex >= items.length - 1) {
+            setTimeout(() => {
+                wrapper.style.transition = "none";
+                wrapper.style.transform = "translateY(0)";
+                currentIndex = 0;
+
+                setTimeout(() => {
+                    wrapper.style.transition = "transform 0.7s ease-out";
+                }, 20);
+
+            }, 800);
+        }
+
+    }, 2500);
+}
+
+function stopTicker() {
+    clearInterval(animInterval);
+}
+
+startTicker();
+
+// On click → open search page
+document.getElementById("searchBarBox").addEventListener("click", () => {
+    stopTicker();
+    window.location.href = "/search";
+});
+
+
+
+
+document.getElementById("mainlocationHeader").addEventListener("click", function() {
+    var modal = new bootstrap.Modal(document.getElementById("locationModal"));
+    modal.show();
+    console.log('model opened');
+});
+
+
         </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
         <!-- AOS JS -->
@@ -676,6 +1171,7 @@
                 easing: 'ease-out-cubic',
             });
         </script>
+
 
     </body>
 </html>
