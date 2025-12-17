@@ -98,29 +98,33 @@ const dealsSwiper = new Swiper('.dealsSwiper', {
 
 
 
-// -------------------scroll yo top----------------------
+// ------------------- scroll to top ----------------------
 
-    // Get the button
+document.addEventListener("DOMContentLoaded", function () {
+
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
-    // Show button after scrolling 200px
-    window.onscroll = function() { scrollFunction(); };
+    // ❌ Button not present → do nothing
+    if (!scrollToTopBtn) return;
 
-    function scrollFunction() {
+    // Show button after scrolling 200px
+    window.addEventListener("scroll", function () {
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
             scrollToTopBtn.style.display = "block";
         } else {
             scrollToTopBtn.style.display = "none";
         }
-    }
+    });
 
-    // Smooth scroll to top when button clicked
-    scrollToTopBtn.addEventListener("click", function() {
+    // Smooth scroll to top
+    scrollToTopBtn.addEventListener("click", function () {
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
     });
+
+});
 
 
 

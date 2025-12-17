@@ -82,6 +82,42 @@ class ShopController extends Controller
         $averageRating = $approvedReviews->avg('rating');
         $ratingCount = $approvedReviews->count();
 
-        return view('shop.show', compact('product', 'approvedReviews', 'averageRating', 'ratingCount'));
+        // --- SIMILAR PRODUCTS ---
+        $similarProducts = Product::with('images')
+            ->where('status', 'active')
+            ->where('category_id', $product->category_id) // same category
+            ->where('id', '!=', $product->id) // exclude current product
+            ->latest()
+            ->take(6)
+            ->get();
+
+        // --- TOP 10 PRODUCTS IN THIS CATEGORY ---
+        $topCategoryProducts = Product::with('images')
+            ->where('status', 'active')
+            ->where('category_id', $product->category_id)
+            ->orderByDesc('is_trending') // assuming you track sales_count
+            ->take(6)
+            ->get();
+
+        // --- PEOPLE ALSO BOUGHT (related by orders) ---
+        // Simplest approach: products from same category or randomly
+        $peopleAlsoBought = Product::with('images')
+            ->where('status', 'active')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(6)
+            ->get();
+
+        return view('shop.show', compact(
+            'product',
+            'approvedReviews',
+            'averageRating',
+            'ratingCount',
+            'similarProducts',
+            'topCategoryProducts',
+            'peopleAlsoBought'
+        ));
     }
+
 }

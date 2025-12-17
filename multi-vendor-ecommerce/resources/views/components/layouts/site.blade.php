@@ -534,8 +534,9 @@
 
             <div class="top-bar">
                 <div class="logo">
-                    <img src="http://localhost/speedly_wind\multi-vendor-ecommerce\public\storage\uploads\logo\speedly_logo3.png" alt="">
-                    
+                    <a href="{{ route('home') }}">
+                       <img src="http://localhost/speedly_wind\multi-vendor-ecommerce\public\storage\uploads\logo\speedly_logo3.png" alt="">
+                    </a>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="w-full bg-white searchbar">
