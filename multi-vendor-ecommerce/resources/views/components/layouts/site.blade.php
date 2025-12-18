@@ -533,7 +533,19 @@
 
 
             <div class="top-bar">
-                <div class="logo">
+                <div class="logo" style="padding-top:10px;">
+                    <div class="d-flex flex-column" id="mainlocationHeader">
+                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
+                        Delivery in 8 minutes
+                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
+                    </span>
+
+                    <span class="text-muted" style="margin-top:-2px; font-size:15px;">
+                        Laxmangarh, Sikar...
+                        <i class="bi bi-caret-down-fill"></i>
+                    </span>
+
+                </div>
                     <a href="{{ route('home') }}">
                        <img src="http://localhost/speedly_wind\multi-vendor-ecommerce\public\storage\uploads\logo\speedly_logo3.png" alt="">
                     </a>
@@ -563,6 +575,7 @@
                             <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
                                 <i class="bi bi-mic-fill text-xl"></i>
                             </button>
+                            
 
                             <!-- Image Search -->
                             <button class="ml-3 text-green-400 hover:text-green-500" title="Image Search">
@@ -574,21 +587,65 @@
                 </div>
 
                 <div class="top-right">
+
                     
                     <div id="cartBtn" class="cart-icon">
-                        <i class="bi bi-bag" style="font-size:24px;"></i>
-                        <div class="notif">1</div>
+                        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"><i class="bi bi-bag" style="font-size:24px;"></i>
+                        <div class="notif">1</div></a>
                     </div>
-                    <i id="userBtn" class="bi bi-person" style="font-size:24px; cursor:pointer;"></i>
+                   <x-dropdown align="right" width="48" >
+                       
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
 
-                    <i id="userBtn" class="bi bi-gear" style="font-size:24px; cursor:pointer;"></i>
+                            <!-- User Circle Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-8 w-8 text-gray-600"
+                                viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a3 3 0 110 6 3 3 0 010-6zm0 12a7.963 7.963 0 01-5.33-2.03c.03-1.77 3.56-2.74 5.33-2.74 1.77 0 5.3.97 5.33 2.74A7.963 7.963 0 0112 20z"
+                                    clip-rule="evenodd" />
+                            </svg>
+
+                            <!-- Dropdown Arrow -->
+                            <svg class="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        
+                        <x-dropdown-link :href="route('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form>
+                    </x-slot>
+                </x-dropdown>
+                    
+
+                    <!-- <i id="userBtn" class="bi bi-gear" style="font-size:24px; cursor:pointer;"></i> -->
                 </div>
             </div>
        
 
 
                 <!-- LOCATION HEADER -->
-            <div class="d-flex align-items-center px-4 bg-white" id="locationHeader">
+            <!-- <div class="d-flex align-items-center px-4 bg-white" id="locationHeader">
                 <div class="d-flex flex-column" id="mainlocationHeader">
                     <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
                         Delivery in 8 minutes
@@ -600,13 +657,13 @@
                         <i class="bi bi-caret-down-fill"></i>
                     </span>
 
-                </div>
+                </div> -->
                 <!-- ----------- -->
 
-                <div class="" id="mobilemenuToggle" ><i class="bi bi-list"></i></div> 
+                <!-- <div class="" id="mobilemenuToggle" ><i class="bi bi-list"></i></div>  -->
 
-                <div class="nav-bar">
-                 <!-- <div class="nav-link active menu-button">Home</div> -->
+                <!-- <div class="nav-bar">
+                 
 
                     <div class="nav-link dropdown">
                         <div class="menu-button">
@@ -728,8 +785,8 @@
                         </div>
                     </div>
                   
-                </div>
-            </div>
+                </div> -->
+            <!-- </div> -->
 
 <!-- MOBILE MENU POPUP -->
 <div id="mobileMenu" class="mobile-menu">
@@ -1073,14 +1130,14 @@
             // });
 
             // User Icon Click
-            document.getElementById("userBtn").addEventListener("click", () => {
-                alert("User Profile Clicked!");
-            });
+            // document.getElementById("userBtn").addEventListener("click", () => {
+            //     alert("User Profile Clicked!");
+            // });
 
             // Cart Click
-            document.getElementById("cartBtn").addEventListener("click", () => {
-                alert("Opening Cart...");
-            });
+            // document.getElementById("cartBtn").addEventListener("click", () => {
+            //     alert("Opening Cart...");
+            // });
 
         });
 

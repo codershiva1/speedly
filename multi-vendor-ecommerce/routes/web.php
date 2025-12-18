@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('account')
     ->name('account.')
-    ->middleware(['auth', 'verified', 'role:customer'])
+    ->middleware(['auth', 'verified',])
     ->group(function () {
         Route::get('/dashboard', [AccountController::class, 'dashboard'])->name('dashboard');
 
