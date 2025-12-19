@@ -533,9 +533,12 @@
 
 
             <div class="top-bar">
-                <div class="logo" style="padding-top:10px;">
-                    <div class="d-flex flex-column" id="mainlocationHeader">
-                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
+                
+                <div class="logo" style="display: flex;gap: 20px;width:325px">
+                     <a href="{{ route('home') }}">
+<img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/logo/speedly_logo3.png" alt=""></a>
+                    <div class="d-flex flex-column" id="mainlocationHeader" style="margin-top:10px;">
+                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:150px">
                         Delivery in 8 minutes
                     <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
                     </span>
@@ -546,9 +549,7 @@
                     </span>
 
                 </div>
-                    <a href="{{ route('home') }}">
-                       <img src="http://localhost/speedly_wind\multi-vendor-ecommerce\public\storage\uploads\logo\speedly_logo3.png" alt="">
-                    </a>
+                   
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="w-full bg-white searchbar">
@@ -609,11 +610,11 @@
                             </svg>
 
                             <!-- Dropdown Arrow -->
-                            <svg class="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                            <!-- <svg class="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                     clip-rule="evenodd" />
-                            </svg>
+                            </svg> -->
 
                         </button>
                     </x-slot>

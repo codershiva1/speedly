@@ -21,8 +21,8 @@
 
 
     <div class="bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
-
+        <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
+<div class=" mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
         <section class="max-w-7xl mx-auto  px-4">
 
             <div class="flex gap-6">
@@ -163,21 +163,21 @@
 
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
            <section class="icons-carousel-section max-w-7xl mx-auto" data-aos="fade-up">
-                <div class="grid grid-cols-1 md:grid-cols-4 border border-gray-200">
+                <div class="">
 
                     <!-- LEFT SIDE (1/4 WIDTH) -->
-                    <div class="relative hidden md:flex items-center p-6 bg-cover bg-center md:col-span-1"
+                    <!-- <div class="relative hidden md:flex items-center p-6 bg-cover bg-center md:col-span-1"
                         style="background-image: url('https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg');">
 
-                        <!-- DARK OVERLAY -->
+                       
                         <div class="absolute inset-0 bg-black/40"></div>
 
-                        <!-- TEXT LEFT ALIGNED -->
+                        
                         <div class="relative text-white text-left">
                             <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
                             <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
                         </div>
-                </div>
+                </div> -->
 
 
                 <!-- RIGHT SIDE SLIDER (3/4 WIDTH) -->
@@ -250,17 +250,170 @@
            </section>
 
 
+
+
+
+
+
+            @if($featuredProducts->isNotEmpty())
+            <section>
+                <!-- <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
+                </div> -->
+          
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach ($featuredProducts->take(6) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
+                                    @endif
+                                </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
+                            </div>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+
+                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach ($featuredProducts->take(6) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
+                                    @endif
+                                </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
+                            </div>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+
             <!-- ---------------------------------------------------------------------- -->
 
                   
             {{-- ================= THREE COLOUR BANNERS ================= --}}
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="banner relative overflow-hidden ">
+                <div class="banner relative overflow-hidden " style="height:200px;">
                         <!-- Banner Image -->
-                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-01.jpg" class="w-full h-full object-cover banner-img" />
+                    <img src="https://i.pinimg.com/1200x/fa/cc/de/faccde06184e838e68cbe361149ece9d.jpg" class="w-full h-full object-cover banner-img" />
 
                         <!-- Your Banner Text -->
-                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                    <!-- <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
                         <div class="flex-1">
                             <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                                 Smart Phones
@@ -269,15 +422,15 @@
                             <p class="mt-1 text-xs">128 GB Green in 2013</p>
                             <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$60.99/-</span></p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-               <div class="banner relative overflow-hidden ">
+               <div class="banner relative overflow-hidden "  style="height:200px;">
                         <!-- Banner Image -->
-                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-02.jpg"
+                    <img src="https://i.pinimg.com/1200x/62/0b/6e/620b6eaa3fbc897871fff2b6f6d3efe1.jpg"
                         class="w-full h-full object-cover banner-img" />
 
                         <!-- Your Banner Text -->
-                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                    <!-- <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
                         <div class="flex-1">
                             <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                                 Smart Watches
@@ -285,15 +438,15 @@
                             <h3 class="mt-2 text-lg font-bold">Apple Watch Series 4</h3>
                             <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$14.99/-</span></p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="banner relative overflow-hidden ">
+                <div class="banner relative overflow-hidden "  style="height:200px;">
                         <!-- Banner Image -->
-                    <img src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg"
+                    <img src="https://i.pinimg.com/736x/c0/4c/89/c04c89ef90ce8c726b0b483823e79b93.jpg"
                         class="w-full h-full object-cover banner-img" />
 
                         <!-- Your Banner Text -->
-                    <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
+                    <!-- <div class="absolute inset-0 flex items-center px-6 py-5 text-white z-10">
                         <div class="flex-1">
                             <span class="text-[11px] font-semibold uppercase bg-amber-400 text-gray-900 px-2 py-0.5 rounded">
                             Popular Product
@@ -301,7 +454,7 @@
                             <h3 class="mt-2 text-lg font-bold">Polaroid Now Instant i-Type</h3>
                             <p class="mt-3 text-sm">From <span class="text-yellow-300 font-semibold">$90.99/-</span></p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </section>
 
@@ -378,7 +531,7 @@
 
             {{-- ================= MOVING OFFER STRIP ================= --}}
             <section class="w-full overflow-hidden" data-aos="fade-up">
-                <div class="bg-indigo-700 text-white shadow-sm py-4 relative">
+                <div class="bg-indigo-700 text-white shadow-sm relative" style="padding:5px;">
 
                     <div class="marquee whitespace-nowrap flex items-center text-[20px]">
 
@@ -562,7 +715,7 @@
                 <div class="lg:col-span-3 bg-gray-50  " data-aos="fade-left">
 
                     {{-- Tabs --}}
-                    <div class="flex items-center justify-between mb-3 text-sm">
+                    <!-- <div class="flex items-center justify-between mb-3 text-sm">
                         <div class="flex items-center space-x-6">
                             <span class="font-semibold text-gray-900 border-b-2 border-indigo-600 pb-1">
                                 Deals of the Day
@@ -571,7 +724,7 @@
                             <span class="text-gray-500">Featured Products</span>
                         </div>
                         <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
-                    </div>
+                    </div> -->
 
                     {{-- === SWIPER WRAPPER === --}}
 
@@ -592,12 +745,82 @@
                                     @php 
                                         $img = $product->images->first(); 
                                         $fullPath = $img 
-                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            ? 'http://localhost/speedly/multi-vendor-ecommerce/public/storage/' . $img->path 
                                             : null;
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                            class="w-full h-full object-contain"
+                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                    @else
+                                        <span class="text-gray-400 text-xs">No Image</span>
+                                    @endif
+                                </div>
+                            </a>
+
+                            {{-- PRODUCT TITLE & SIZE --}}
+                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
+                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
+                            </svg>
+                            8 MINS
+                            </span>
+
+                            <div class="mt-2 flex-1">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+
+                                @if($product->size)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                @endif
+                            </div>
+
+                            {{-- PRICE & ADD BUTTON --}}
+                            <div class="mt-3 flex items-center justify-between">
+                                
+                                {{-- PRICE (discount below actual) --}}
+                                <div class="flex flex-col leading-tight">
+                                    {{-- Price --}}
+                                    <span class="text-base font-bold text-gray-900">
+                                        ₹{{ $product->price }}
+                                    </span>
+
+                                    {{-- Discount Price under it --}}
+                                    @if ($product->discount_price)
+                                        <span class="line-through text-xs text-gray-400">
+                                            ₹{{ $product->discount_price }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- ADD BUTTON --}}
+                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+
+                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach ($featuredProducts->take(6) as $product)
+                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                            {{-- IMAGE --}}
+                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                    @php 
+                                        $img = $product->images->first(); 
+                                        $fullPath = $img 
+                                            ? 'http://localhost/speedly/multi-vendor-ecommerce/storage/' . $img->path 
+                                            : null;
+                                    @endphp
+
+                                    @if ($img)
+                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
                                             class="w-full h-full object-contain"
                                             alt="{{ $product->name }}" style="object-fit: fill;">
                                     @else
@@ -777,7 +1000,7 @@
                 {{-- BELOW: CATEGORIES SIDEBAR + ROW OF PRODUCTS --}}
                 <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4  mt-2" data-aos="fade-left">
                     {{-- LEFT SIDEBAR CATEGORIES --}}
-                    <aside class="lg:col-span-1 bg-white  shadow-sm pr-4 text-xs h-fit-content">
+                    <aside class="lg:col-span-1 bg-white  shadow-sm  text-xs h-fit-content">
                         <!-- <h2 class="text-lg font-semibold text-gray-900 mb-3">Shop By <br> Categories</h2>
                         <hr>
                         <ul class="space-y-1">
@@ -803,33 +1026,37 @@
                         </button>
                         </a> -->
 
-                        <div class="">
+                        
 
                             <!-- LEFT SIDE (1/4 WIDTH) -->
-                            <div class="relative hidden md:flex items-center px-6 py-40 bg-cover bg-center md:col-span-1"
-                                style="background-image: url('https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg');">
+                           <div class="relative hidden md:flex items-center justify-center 
+                                    h-full min-h-[300px] px-6 py-10 
+                                    bg-cover bg-center bg-no-repeat
+                                    md:col-span-1"
+                            style="background-image: url('https://i.pinimg.com/736x/35/95/9e/35959e77f6237aaec2c673e772c73e08.jpg');">
 
-                                <!-- DARK OVERLAY -->
-                                <div class="absolute inset-0 bg-black/40"></div>
+                            <!-- OPTIONAL DARK OVERLAY -->
+                            <div class="absolute inset-0 bg-black/40"></div>
 
-                                <!-- TEXT LEFT ALIGNED -->
-                                <div class="relative text-white text-left">
-                                    <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
-                                    <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
-                                </div>
+                            <!-- TEXT -->
+                            <div class="relative text-white text-left z-10">
+                                <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
+                                <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
+                            </div>
                         </div>
+                                            
                         
                     </aside>
 
                     {{-- RIGHT PRODUCTS STRIP --}}
                     <div class="lg:col-span-3 bg-gray-50   ">
-                        <div class="flex items-center justify-between banner">
+                        <!-- <div class="flex items-center justify-between banner">
                             <a href="#" class="banner-image ">
 								<img decoding="async" src="https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2024/08/category-slider-banner-02-1.jpg" title="category-slider-banner-02" alt="category-slider-banner-02" loading="lazy">
                             </a>
-                            <!-- <span class="text-sm font-semibold text-gray-900">Popular Product</span>
-                            class="text-xs text-indigo-600 hover:underline">View all -->
-                        </div>
+                            <span class="text-sm font-semibold text-gray-900">Popular Product</span>
+                            class="text-xs text-indigo-600 hover:underline">View all
+                        </div> -->
                         <!-- ------------------------------------------- -->
 
                         {{-- === SWIPER WRAPPER === --}}
@@ -913,12 +1140,12 @@
                                     @php 
                                         $img = $product->images->first(); 
                                         $fullPath = $img 
-                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
+                                            ? 'http://localhost/speedly/multi-vendor-ecommerce/storage/' . $img->path 
                                             : null;
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
+                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
                                             class="w-full h-full object-contain"
                                             alt="{{ $product->name }}" style="object-fit: fill;">
                                     @else
@@ -1025,14 +1252,19 @@
 
                     <!-- PRODUCT CARD -->
                     @foreach ($categories->take(6) as $category)
-                        <div class="bg-gray-100 rounded-2xl p-3 w-auto">
+                        <div class="bg-gray-100  w-auto">
 
                             <!-- INNER IMAGE GRID -->
-                            <div class="grid grid-cols-2 grid-rows-2 gap-2 rounded-xl p-2">
+                            <div class="grid grid-cols-2 grid-rows-2 ">
                                 @foreach ($category->products->take(4) as $product)
-                                    <div class="bg-white rounded-xl flex items-center justify-center h-[62px] w-[62px]">
-                                        <img 
+                                    <div class="bg-white  flex items-center justify-center ">
+                                        <!-- <img 
                                             src="{{ asset('storage/' . $product->images->first()->path) }}"
+                                            class="w-full h-full object-contain p-1"
+                                            alt=""
+                                        > -->
+                                         <img 
+                                            src="{{ asset('storage/uploads/categories/3/image1.avif') }}"
                                             class="w-full h-full object-contain p-1"
                                             alt=""
                                         >
@@ -1048,7 +1280,7 @@
                             </div>
 
                             <!-- CATEGORY NAME -->
-                            <p class="text-sm font-semibold text-gray-900 text-center leading-tight mt-1">
+                            <p class="text-sm font-semibold text-gray-900 text-center mb-3 leading-tight mt-1">
                                 {{ $category->name }}
                             </p>
 
@@ -1073,7 +1305,8 @@
                     @foreach($latestNews as $article)
                         <article class="bg-white border border-gray-100  overflow-hidden flex flex-col text-xs" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                             <div class="h-48 bg-gray-100 overflow-hidden news-img">
-                                <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
+                                <!-- <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover"> -->
+                                 <img src="https://i.pinimg.com/1200x/e0/2a/f3/e02af35aeb189bb2414984bd23e921da.jpg" alt="" class="w-full h-full object-cover">
                             </div>
                             <div class="p-3 flex-1 flex flex-col">
                                 <p class="text-[11px] text-gray-400 mb-1">{{ $article['date']->format('d M Y') }}</p>
