@@ -20,7 +20,8 @@
 
 
 
-    <div class="bg-gray-50">
+    <!-- <div class="bg-gray-50"> -->
+        <div style="background: white;">
         <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
 <div class=" mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
         <section class="max-w-7xl mx-auto  px-4">
@@ -38,9 +39,10 @@
 
                                 <!-- Image (Fixed Size & Same for All) -->
                                 <div class="h-20 w-20 flex items-center justify-center overflow-hidden rounded-md">
-                                    <img src="{{ $category->image ? asset('storage/'.$category->image) : 'https://via.placeholder.com/120' }}"
-                                        alt="{{ $category->name }}"
-                                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    <img src="{{ asset('storage/'.$category->image) }}"
+                                    alt="{{ $category->name }}"
+                                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+
                                 </div>
 
                                 <!-- Category Name -->
@@ -61,58 +63,26 @@
 
                 <!-- RIGHT: FILTER BOX -->
                 <div class="w-1/6">
-                    <div class="bg-white shadow-md rounded-xl p-4">
+                    <div class="bg-white shadow-md rounded-xl p-4" style="height: 340px;overflow-y: scroll;">
 
                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>
 
                     <div class="space-y-3">
 
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Grocery</span>
-                            </label>
+                        @foreach($topCategories as $category)
+                            <a
+                                href="{{ route('shop.index', ['category' => $category->slug]) }}"
+                                class="flex items-center justify-between text-sm px-2 py-1 rounded
+                                    hover:bg-gray-100
+                                    {{ request('category') == $category->slug ? 'font-semibold text-blue-600' : 'text-gray-700' }}"
+                            >
+                                <span>{{ $category->name }}</span>
 
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Fruits & Vegetables</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Personal Care</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Snacks & Beverages</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Household Supplies</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Electronics</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Home Decore</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <!-- <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"> -->
-                                <span class="text-sm text-gray-700">Household Supplies</span>
-                            </label>
-
-                        </div>
-
-
-                        <!-- <button class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all">
-                            Apply Filter
-                        </button> -->
+                                <span class="text-gray-400 text-xs">
+                                    ({{ $category->products_count }})
+                                </span>
+                            </a>
+                        @endforeach
 
                     </div>
                 </div>
@@ -260,6 +230,15 @@
                 <!-- <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
                 </div> -->
+                <div class="flex items-center justify-between mb-3 mt-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
+                                Best offer Products
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
           
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
@@ -276,9 +255,9 @@
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
-                                            class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                        <img src="{{ asset('storage/uploads/products/1/image3.png') }}"
+                                        class="w-full h-full object-contain"
+                                        alt="{{ $product->name }}">
                                     @else
                                         <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
@@ -322,14 +301,38 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                               
+                                    @auth
+                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                            ADD
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
+                                
                             </div>
                         </div>
                     @endforeach
                 </div>
+                </section> 
 
+                <section>
+                    <div class="flex items-center justify-between mb-3 mt-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
+                                Best offer Products
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
 
                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
@@ -346,9 +349,9 @@
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                        <img src="{{ asset('storage/uploads/products/2/image6.png')}}" 
                                             class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                            alt="{{ $product->name }}" >
                                     @else
                                         <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
@@ -392,9 +395,20 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                                @auth
+                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                            ADD
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
@@ -730,10 +744,19 @@
 
 
                     @if($featuredProducts->isNotEmpty())
-            <section>
+            <section style="background: white;">
                 <!-- <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
                 </div> -->
+                <div class="flex items-center justify-between mb-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
+                                Best offer Products
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
           
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
@@ -750,9 +773,9 @@
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                        <img src="{{ asset('storage/uploads/products/2/image5.png')}}" 
                                             class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                            alt="{{ $product->name }}" >
                                     @else
                                         <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
@@ -796,15 +819,36 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                               @auth
+                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                            ADD
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
                 </div>
+                </section> 
 
-
+                <section>
+                    <div class="flex items-center justify-between mb-3 mt-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
+                                Best offer Products
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
                         <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
@@ -820,9 +864,9 @@
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                        <img src="{{ asset('storage/uploads/products/2/image4.png')}}" 
                                             class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                            alt="{{ $product->name }}" >
                                     @else
                                         <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
@@ -866,9 +910,20 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                                @auth
+                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                            ADD
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
@@ -957,7 +1012,18 @@
             </section>
 
             {{-- ================= BANNER + CATEGORY & PRODUCTS ================= --}}
-            <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <section >
+                <div class="flex items-center justify-between mb-3 text-sm">
+                        <div class="flex items-center space-x-6">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
+                                Best offer Products
+                            </span>
+                           
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {{-- TWO WIDE TOP BANNERS (LIKE SURFACE KEYBOARD / SPEAKER) --}}
                 <!-- <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4" >
 
@@ -998,6 +1064,7 @@
                 </div> -->
 
                 {{-- BELOW: CATEGORIES SIDEBAR + ROW OF PRODUCTS --}}
+                
                 <div class="lg:col-span-4 grid grid-cols-1 lg:grid-cols-4  mt-2" data-aos="fade-left">
                     {{-- LEFT SIDEBAR CATEGORIES --}}
                     <aside class="lg:col-span-1 bg-white  shadow-sm  text-xs h-fit-content">
@@ -1145,9 +1212,9 @@
                                     @endphp
 
                                     @if ($img)
-                                        <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/categories/3/image1.avif" 
+                                        <img src="{{ asset('storage/uploads/products/2/image7.png')}}" 
                                             class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
+                                            alt="{{ $product->name }}" >
                                     @else
                                         <span class="text-gray-400 text-xs">No Image</span>
                                     @endif
@@ -1191,9 +1258,20 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                                @auth
+                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
+                                            ADD
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
@@ -1227,6 +1305,7 @@
                         </div> -->
                     </div>
                 </div>
+                </div>
             </section>
 
             {{-- ================= BEST SELLER ================= --}}
@@ -1238,7 +1317,7 @@
                 <!-- SECTION HEADING -->
                   <div class="flex items-center justify-between mb-3 text-sm">
                         <div class="flex items-center space-x-6">
-                            <span class="font-semibold text-gray-900   pb-1">
+                            <span class="font-semibold text-gray-900   pb-1" style="font-size:22px;">
                                 Best Sellers
                             </span>
                            
@@ -1264,7 +1343,7 @@
                                             alt=""
                                         > -->
                                          <img 
-                                            src="{{ asset('storage/uploads/categories/3/image1.avif') }}"
+                                            src="{{ asset('storage/uploads/products/1/image2.png')}}"
                                             class="w-full h-full object-contain p-1"
                                             alt=""
                                         >
@@ -1298,7 +1377,7 @@
             {{-- ================= LATEST NEWS ================= --}}
             <section class="bg-white  shadow-sm p-4">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-sm font-semibold text-gray-900">Latest News</h2>
+                    <h2 class="text-sm font-semibold text-gray-900" style="font-size:22px;">Latest News</h2>
                     <a href="{{ route('pages.blog') }}" class="text-xs text-indigo-600 hover:underline">View all articles</a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
