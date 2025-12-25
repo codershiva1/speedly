@@ -536,7 +536,7 @@
                 
                 <div class="logo" style="display: flex;gap: 20px;width:325px">
                      <a href="{{ route('home') }}">
-<img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/logo/speedly_logo3.png" alt=""></a>
+                     <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/storage/uploads/logo/speedly_logo3.png" alt=""></a>
                     <div class="d-flex flex-column" id="mainlocationHeader" style="margin-top:10px;">
                     <span class="flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:150px">
                         Delivery in 8 minutes
@@ -589,58 +589,61 @@
 
                 <div class="top-right">
 
-                    
+                    <!-- Cart Icon -->
                     <div id="cartBtn" class="cart-icon">
-                        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"><i class="bi bi-bag" style="font-size:24px;"></i>
-                        <div class="notif">1</div></a>
+                        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
+                            <i class="bi bi-bag" style="font-size:24px;"></i>
+                            <div class="notif">1</div>
+                        </a>
                     </div>
-                   <x-dropdown align="right" width="48" >
-                       
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
 
-                            <!-- User Circle Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-8 w-8 text-gray-600"
-                                viewBox="0 0 24 24"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a3 3 0 110 6 3 3 0 010-6zm0 12a7.963 7.963 0 01-5.33-2.03c.03-1.77 3.56-2.74 5.33-2.74 1.77 0 5.3.97 5.33 2.74A7.963 7.963 0 0112 20z"
-                                    clip-rule="evenodd" />
-                            </svg>
+                    <!-- AUTH CHECK -->
+                    @auth
+                        <!-- ================= Logged In User ================= -->
+                        <x-dropdown align="right" width="48">
 
-                            <!-- Dropdown Arrow -->
-                            <!-- <svg class="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg> -->
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
 
-                        </button>
-                    </x-slot>
+                                    <!-- User Icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-8 w-8 text-gray-600"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a3 3 0 110 6 3 3 0 010-6zm0 12a7.963 7.963 0 01-5.33-2.03c.03-1.77 3.56-2.74 5.33-2.74 1.77 0 5.3.97 5.33 2.74A7.963 7.963 0 0112 20z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </x-slot>
 
-                    <x-slot name="content">
-                        
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </form>
+                            </x-slot>
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-                    
+                        </x-dropdown>
 
-                    <!-- <i id="userBtn" class="bi bi-gear" style="font-size:24px; cursor:pointer;"></i> -->
+                    @else
+                        <!-- ================= Guest User ================= -->
+                        <a href="{{ route('login') }}"
+                            class="px-4 py-2 rounded-full bg-green-600 text-white font-medium hover:bg-green-700 transition">
+                            Login
+                        </a>
+                    @endauth
+
                 </div>
+
             </div>
        
 
@@ -915,6 +918,17 @@
             <a href="#">Pages</a>
             <a href="#">Blog</a>
         </div>
+
+
+          <!-- Page Heading -->
+            @isset($header)
+                <header class="">
+                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
+
 
             <!-- Main content -->
             <main class="flex-1">

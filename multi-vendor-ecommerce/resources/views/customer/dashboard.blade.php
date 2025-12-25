@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.site :title="__('Customer Dashboard').' | '.config('app.name')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Customer Dashboard') }}
@@ -74,4 +74,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.site>

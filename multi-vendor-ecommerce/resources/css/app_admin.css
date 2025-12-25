@@ -309,6 +309,10 @@
     display: none;
     -webkit-appearance: none;
   }
+
+   .font-outfit {
+    font-family: var(--font-outfit);
+  }
 }
 
 .sidebar:hover {
