@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/address', [ProfileController::class, 'storeAddress'])->name('profile.address.store');
+    Route::put('/profile/address/{address}', [ProfileController::class, 'updateAddress'])->name('profile.address.update');
 });
 
 Route::prefix('account')
@@ -83,6 +85,13 @@ Route::prefix('account')
         Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
         Route::patch('/cart/items/{item}', [CartController::class, 'update'])->name('cart.items.update');
         Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
+        // Route::patch('/account/cart/items/{item}',[CartController::class,'  updatequit'])->name('account.cart.items.update');
+        
+        Route::middleware(['auth'])->group(function () {
+        Route::post('/account/cart/items/{item}',
+            [CartItemController::class, 'updatequit']
+        )->name('account.cart.items.update');
+        });
 
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');

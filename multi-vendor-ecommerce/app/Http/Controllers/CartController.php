@@ -80,4 +80,23 @@ class CartController extends Controller
 
         return redirect()->route('account.cart.index')->with('status', 'Item removed from cart.');
     }
+
+    public function updatequit(Request $request, CartItem $item)
+    {
+    $request->validate([
+        'quantity' => 'required|integer|min:1'
+    ]);
+
+    $item->quantity = $request->quantity;
+    $item->total_price = $item->unit_price * $request->quantity;
+    $item->save();
+
+    $subtotal = $item->cart->items()->sum('total_price');
+
+    return response()->json([
+        'quantity'    => $item->quantity,
+        'item_total'  => $item->total_price,
+        'subtotal'    => $subtotal,
+    ]);
+}
 }

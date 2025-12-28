@@ -12,6 +12,7 @@
         $heroProduct = $featuredProducts->first();
     @endphp
 
+    
 
     {{-- HERO AREA --}}
     <section class="mb-6" data-aos="fade-up">
