@@ -623,6 +623,13 @@
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
+                                <x-dropdown-link 
+                                    :href="auth()->user()->role === 'admin' 
+                                        ? route('admin.dashboard') 
+                                        : route('account.dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-dropdown-link>
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <x-dropdown-link :href="route('logout')"

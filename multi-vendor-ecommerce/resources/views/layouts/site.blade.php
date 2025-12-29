@@ -56,7 +56,7 @@
             </header>
 
             <!-- Main content -->
-            <main class="flex-1">
+            <main class="flex-1 container">
                 {{ $slot }}
             </main>
 
