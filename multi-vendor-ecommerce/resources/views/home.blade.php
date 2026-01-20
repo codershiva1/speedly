@@ -24,14 +24,16 @@
     <!-- <div class="bg-gray-50"> -->
         <div style="background: white;">
         <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
-<div class=" mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
-        <section class="max-w-7xl mx-auto  px-4">
+<div class=" mx-auto px-1 sm:px-4 lg:px-4 py-1 space-y-8">
+        <section class="max-w-7xl mx-auto  px-1">
 
-            <div class="flex gap-6">
+            <div class="flex flex-col lg:flex-row gap-3">
 
                 <!-- LEFT: Category Grid -->
-                <div class="w-5/6">
-                    <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-7 gap-4">
+                <div class="w-full lg:w-5/6">
+                    <!-- <div class="grid  grid-cols-4 sm:grid-cols-6 lg:grid-cols-7 gap-4"> -->
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+
 
                         @foreach($topCategories->take(14) as $category)
                             <a href="{{ route('shop.index', ['category' => $category->slug]) }}"
@@ -63,7 +65,7 @@
                 </div>
 
                 <!-- RIGHT: FILTER BOX -->
-                <div class="w-1/6">
+                <div class="w-full lg:w-1/6">
                     <div class="bg-white shadow-md rounded-xl p-4" style="height: 340px;overflow-y: scroll;">
 
                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>

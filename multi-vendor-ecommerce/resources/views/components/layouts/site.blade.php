@@ -529,6 +529,24 @@
                 
 
 
+                    /*mobile bottom menu  Hide bottom navbar by default */
+.mobile-bottom-nav {
+    display: none;
+}
+
+/* Show only on mobile */
+@media (max-width: 768px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+
+    /* Give space so content not hidden behind nav */
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+
             </style>
 
 
@@ -911,7 +929,7 @@
     data-aos="fade-up"
 >
     <!-- All -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
+    <a href="{{ route('shop.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 3h18v18H3z"></path>
         </svg>
@@ -919,7 +937,7 @@
     </a>
 
     <!-- Winter -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2v20M2 12h20M5 5l14 14M5 19l14-14"></path>
         </svg>
@@ -927,7 +945,7 @@
     </a>
 
     <!-- Beauty -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2l4 4-4 4-4-4 4-4z"></path>
         </svg>
@@ -935,7 +953,7 @@
     </a>
 
     <!-- Electronics -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect x="2" y="6" width="20" height="12" rx="2"></rect>
         </svg>
@@ -943,7 +961,7 @@
     </a>
 
     <!-- Fashion -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M6 3l6 3 6-3v6l-6 3-6-3V3z"></path>
         </svg>
@@ -951,7 +969,7 @@
     </a>
 
     <!-- Home / Decor -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9v9H3z"></path>
         </svg>
@@ -959,7 +977,7 @@
     </a>
 
     <!-- Importers -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2l9 4-9 4-9-4 9-4z"></path>
         </svg>
@@ -967,7 +985,7 @@
     </a>
 
     <!-- Fresh -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z"></path>
         </svg>
@@ -975,7 +993,7 @@
     </a>
 
     <!-- Kids -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="7" r="4"></circle>
             <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
@@ -984,7 +1002,7 @@
     </a>
 
     <!-- Super Mall -->
-    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 9h18l-1 11H4L3 9z"></path>
             <path d="M9 9V5a3 3 0 016 0v4"></path>
@@ -1156,6 +1174,63 @@
         <button id="scrollToTopBtn" title="Go to top">
             ↑
         </button>
+
+
+@php
+    $isHome       = request()->routeIs('home');
+    $isShop       = request()->routeIs('shop.*');
+    $isSearch     = request()->is('search*');
+    $isCart       = request()->routeIs('account.cart.*');
+    $isAccount    = request()->routeIs('account.*');
+@endphp
+
+
+        <!-- MOBILE BOTTOM NAVBAR -->
+<nav class="mobile-bottom-nav fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-lg z-[9999]">
+    <div class="flex justify-between px-6 py-2">
+
+        <!-- Home -->
+        <a href="{{ route('home') }}" class="flex flex-col items-center text-xs {{ $isHome ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="bi bi-house-door text-xl"></i>
+            <span>Home</span>
+        </a>
+
+        <!-- Categories -->
+        <a href="{{ route('shop.index') }}" class="flex flex-col items-center text-xs {{ $isShop ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="bi bi-grid text-xl"></i>
+            <span>Categories</span>
+        </a>
+
+        <!-- Search -->
+        <button
+            onclick="window.location.href='/search'"
+            class="flex flex-col items-center text-xs {{ $isSearch ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="bi bi-search text-xl"></i>
+            <span>Search</span>
+        </button>
+
+        <!-- Cart -->
+        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"
+           class="relative flex flex-col items-center text-xs {{ $isCart ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="bi bi-bag text-xl"></i>
+            <span>Cart</span>
+
+            <!-- Cart Count -->
+            <span class="absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                1
+            </span>
+        </a>
+
+        <!-- Profile -->
+        <a href="{{ auth()->check() ? route('account.dashboard') : route('login') }}"
+           class="flex flex-col items-center text-xs {{ $isAccount ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="bi bi-person text-xl"></i>
+            <span>Account</span>
+        </a>
+
+    </div>
+</nav>
+
 
 
         
