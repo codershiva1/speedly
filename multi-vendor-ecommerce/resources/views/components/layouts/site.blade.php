@@ -554,7 +554,7 @@
                 
                 <div class="logo" style="display: flex;gap: 20px;width:325px">
                      <a href="{{ route('home') }}">
-                     <img src="http://localhost/speedly/multi-vendor-ecommerce/storage/uploads/logo/speedly_logo3.png" alt=""></a>
+                     <img src="{{asset('storage/uploads/logo/speedly_logo3.png')}}" alt=""></a>
                     <div class="d-flex flex-column" id="mainlocationHeader" style="margin-top:10px;">
                     <span class="flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:150px">
                         Delivery in 8 minutes
