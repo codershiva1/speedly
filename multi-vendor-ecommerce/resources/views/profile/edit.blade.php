@@ -1,217 +1,208 @@
 @php
-    $isCustomer = auth()->user()->role === 'customer';
+    $user = auth()->user();
+    $isCustomer = $user->role === 'customer';
 @endphp
 
 @if ($isCustomer)
 
-    {{-- ========== CUSTOMER (SITE LAYOUT) ========== --}}
-    <x-layouts.site :title="__('Profile').' | '.config('app.name')">
+<x-layouts.site :title="__('Profile').' | '.config('app.name')">
 
+<div class="py-12">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-    
+<div 
+    x-data="{ tab: 'profile' }"
+    class="grid grid-cols-1 md:grid-cols-4 gap-6"
+>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="bg-white rounded-2xl shadow p-4 space-y-2">
 
-           <section class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+        <button @click="tab='profile'"
+            :class="tab==='profile' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            👤 Profile
+        </button>
 
-            <!-- HEADER -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    Customer Profile
-                </h2>
-                <p class="text-sm text-gray-500">
-                    View and manage your personal information & address
-                </p>
-            </div>
+          <a href="{{ route('dashboard') }}"><button 
+            :class="tab==='dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+          
+            🏠 Dashboard
+        
+        </button></a>
 
-            <!-- BASIC DETAILS -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+         <a href="{{ route('account.orders.index') }}"><button
+            :class="tab==='orders' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            📦 Orders
+        </button></a>
 
-                <div class="bg-gray-50 rounded-xl p-6 space-y-3 text-sm">
-                    <h3 class="font-semibold text-gray-700">👤 Basic Info</h3>
+        <button @click="tab='address'"
+            :class="tab==='address' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            📍 Addresses
+        </button>
 
+         <a href="{{ route('wishlist.index') }}"><button
+            :class="tab==='wishlist' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            ❤️ Wishlist
+        </button></a>
+
+       <a href="{{ route('account.cart.index') }}"> <button
+            :class="tab==='cart' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            
+            🛒 Cart
+           
+        </button> </a>
+
+        <button @click="tab='security'"
+            :class="tab==='security' ? 'bg-indigo-600 text-white' : 'text-gray-700'"
+            class="w-full text-left px-4 py-2 rounded-xl">
+            🔒 Security
+        </button>
+
+    </aside>
+
+    <!-- ================= RIGHT CONTENT ================= -->
+    <main class="md:col-span-3 bg-white rounded-2xl shadow p-6 space-y-8">
+
+        <!-- ================= PROFILE ================= -->
+        <section x-show="tab==='profile'">
+            <h2 class="text-xl font-bold mb-4">Profile Information</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-5 rounded-xl text-sm space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
+                        <span>Name</span>
                         <span class="font-medium">{{ $user->name }}</span>
                     </div>
-
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Email</span>
+                        <span>Email</span>
                         <span class="font-medium">{{ $user->email }}</span>
                     </div>
-
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Phone</span>
+                        <span>Phone</span>
                         <span class="font-medium">{{ $user->phone ?? 'Not added' }}</span>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 rounded-xl p-6 space-y-3 text-sm">
-                    <h3 class="font-semibold text-gray-700">📄 Account Info</h3>
-
+                <div class="bg-gray-50 p-5 rounded-xl text-sm space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">User ID</span>
-                        <span class="font-medium">#{{ $user->id }}</span>
+                        <span>User ID</span>
+                        <span>#{{ $user->id }}</span>
                     </div>
-
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Joined</span>
-                        <span class="font-medium">{{ $user->created_at->format('d M Y') }}</span>
+                        <span>Joined</span>
+                        <span>{{ $user->created_at->format('d M Y') }}</span>
                     </div>
                 </div>
             </div>
 
-            <!-- ADDRESS SECTION -->
-            <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
-
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    📍 Address Details
-                </h3>
-
-                @if($user->address)
-                    <!-- SHOW ADDRESS -->
-                    <div class="mb-4 text-sm text-gray-700 leading-relaxed">
-                        {{ $user->address }}
-                    </div>
-
-                    <button
-                        onclick="document.getElementById('addressForm').classList.toggle('hidden')"
-                        class="text-indigo-600 text-sm font-medium underline">
-                        ✏️ Edit Address
-                    </button>
-                @endif
-
-                <!-- ADD / EDIT ADDRESS FORM -->
-                @foreach($addresses as $address)
-            <div class="border p-4 rounded-xl mb-3">
-
-                <div class="flex justify-between">
-                    <strong>{{ $address->label }}</strong>
-                    @if($address->is_default)
-                        <span class="text-green-600 text-xs font-medium">Default</span>
-                    @endif
-                </div>
-
-                <p class="text-sm mt-1">
-                    {{ $address->name }} ({{ $address->phone }}) <br>
-                    {{ $address->address_line1 }},
-                    {{ $address->city }}, {{ $address->state }} - {{ $address->postal_code }}
-                </p>
-
-                <!-- EDIT BUTTON -->
-                <button onclick="document.getElementById('editForm{{ $address->id }}').classList.toggle('hidden')"
-                    class="text-indigo-600 text-sm underline mt-2">
-                    ✏️ Edit Address
-                </button>
-
-                <!-- EDIT FORM -->
-                <form id="editForm{{ $address->id }}" 
-                    method="POST" 
-                    action="{{ route('profile.address.update', $address->id) }}" 
-                    class="hidden mt-3 space-y-3">
-                    @csrf
-                    @method('PUT')
-
-                    <input type="text" name="label" value="{{ $address->label }}" class="w-full rounded-xl" required>
-                    <input type="text" name="name" value="{{ $address->name }}" class="w-full rounded-xl" required>
-                    <input type="text" name="phone" value="{{ $address->phone }}" class="w-full rounded-xl" required>
-                    <input type="text" name="address_line1" value="{{ $address->address_line1 }}" class="w-full rounded-xl" required>
-                    <input type="text" name="address_line2" value="{{ $address->address_line2 }}" class="w-full rounded-xl">
-                    <input type="text" name="city" value="{{ $address->city }}" class="w-full rounded-xl" required>
-                    <input type="text" name="state" value="{{ $address->state }}" class="w-full rounded-xl" required>
-                    <input type="text" name="postal_code" value="{{ $address->postal_code }}" class="w-full rounded-xl" required>
-
-                    <button class="px-4 py-2 bg-indigo-600 text-white rounded-xl">💾 Update Address</button>
-                </form>
-
+            <div class="mt-6">
+                @include('profile.partials.update-profile-information-form')
             </div>
-            @endforeach
-
-            @if($addresses->isEmpty())
-            <div class="bg-indigo-50 p-6 rounded-xl">
-                <h3 class="font-semibold mb-3">➕ Add New Address</h3>
-
-                <form method="POST" action="{{ route('profile.address.store') }}" class="space-y-3">
-                    @csrf
-                    <input type="text" name="label" placeholder="Home / Office" class="w-full rounded-xl" required>
-                    <input type="text" name="name" placeholder="Receiver Name" class="w-full rounded-xl" required>
-                    <input type="text" name="phone" placeholder="Phone" class="w-full rounded-xl" required>
-                    <input type="text" name="address_line1" placeholder="Address Line 1" class="w-full rounded-xl" required>
-                    <input type="text" name="address_line2" placeholder="Address Line 2" class="w-full rounded-xl">
-                    <input type="text" name="city" placeholder="City" class="w-full rounded-xl" required>
-                    <input type="text" name="state" placeholder="State" class="w-full rounded-xl" required>
-                    <input type="text" name="postal_code" placeholder="Postal Code" class="w-full rounded-xl" required>
-
-                    <button class="px-4 py-2 bg-indigo-600 text-white rounded-xl">💾 Add Address</button>
-                </form>
-            </div>
-            @endif
-            </div>
-
         </section>
 
+        <!-- ================= DASHBOARD ================= -->
+        <section x-show="tab==='dashboard'">
+            <h2 class="text-2xl font-bold mb-2">Welcome, {{ $user->name }} 👋</h2>
+            <p class="text-gray-600">Manage your account & orders</p>
+        </section>
 
-                
+        <!-- ================= ORDERS ================= -->
+        <section x-show="tab==='orders'">
+            <h2 class="text-xl font-bold mb-4">My Orders</h2>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="">
-                        @include('profile.partials.update-profile-information-form')
-                    </div>
+            @forelse($orders ?? [] as $order)
+                <div class="border rounded-xl p-4 mb-3">
+                    <strong>Order #{{ $order->id }}</strong><br>
+                    Amount: ₹{{ $order->total }}
                 </div>
+            @empty
+                <p>No orders found.</p>
+            @endforelse
+        </section>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="">
-                        @include('profile.partials.update-password-form')
-                    </div>
+        <!-- ================= ADDRESSES ================= -->
+        <section x-show="tab==='address'" class="space-y-6">
+            <h2 class="text-xl font-bold">My Addresses</h2>
+
+            @forelse($addresses as $address)
+                <div class="border rounded-xl p-4">
+                    <strong>{{ $address->label }}</strong>
+                    <p class="text-sm mt-1">
+                        {{ $address->name }} ({{ $address->phone }})<br>
+                        {{ $address->address_line1 }},
+                        {{ $address->city }},
+                        {{ $address->state }} - {{ $address->postal_code }}
+                    </p>
                 </div>
+            @empty
+                <p>No address added yet.</p>
+            @endforelse
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        @include('profile.partials.delete-user-form')
-                    </div>
-                </div>
+            <!-- ADD NEW ADDRESS -->
+            <div class="border-t pt-6">
+                <h3 class="font-semibold mb-3">➕ Add New Address</h3>
 
+                <form method="POST"
+                      action="{{ route('profile.address.store') }}"
+                      class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @csrf
+
+                    <input name="label" placeholder="Home / Office" required class="rounded-xl border-gray-300">
+                    <input name="name" placeholder="Receiver Name" required class="rounded-xl border-gray-300">
+                    <input name="phone" placeholder="Phone" required class="rounded-xl border-gray-300">
+                    <input name="address_line1" placeholder="Address Line 1" required class="rounded-xl border-gray-300 md:col-span-2">
+                    <input name="address_line2" placeholder="Address Line 2" class="rounded-xl border-gray-300 md:col-span-2">
+                    <input name="city" placeholder="City" required class="rounded-xl border-gray-300">
+                    <input name="state" placeholder="State" required class="rounded-xl border-gray-300">
+                    <input name="postal_code" placeholder="Postal Code" required class="rounded-xl border-gray-300">
+
+                    <button class="md:col-span-2 bg-indigo-600 text-white py-2 rounded-xl">
+                        💾 Save Address
+                    </button>
+                </form>
             </div>
-        </div>
+        </section>
 
-    </x-layouts.site>
+        <!-- ================= WISHLIST ================= -->
+        <section x-show="tab==='wishlist'">
+            <h2 class="text-xl font-bold">Wishlist</h2>
+            <p>Wishlist items will appear here</p>
+        </section>
+
+        <!-- ================= CART ================= -->
+        <section x-show="tab==='cart'">
+            <h2 class="text-xl font-bold">Cart</h2>
+            <p>Cart items will appear here</p>
+        </section>
+
+        <!-- ================= SECURITY ================= -->
+        <section x-show="tab==='security'" class="space-y-6">
+            @include('profile.partials.update-password-form')
+            @include('profile.partials.delete-user-form')
+        </section>
+
+    </main>
+
+</div>
+</div>
+</div>
+
+</x-layouts.site>
 
 @else
 
-    {{-- ========== ADMIN / VENDOR (APP LAYOUT) ========== --}}
-    <x-app-layout>
-
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Profile') }}
-            </h2>
-        </x-slot>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        @include('profile.partials.update-profile-information-form')
-                    </div>
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        @include('profile.partials.update-password-form')
-                    </div>
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        @include('profile.partials.delete-user-form')
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </x-app-layout>
+<x-layouts.site :title="__('Profile').' | '.config('app.name')">
+    <div class="py-12 max-w-7xl mx-auto space-y-6">
+        @include('profile.partials.update-profile-information-form')
+        @include('profile.partials.update-password-form')
+        @include('profile.partials.delete-user-form')
+    </div>
+</x-layouts.site>
 
 @endif
