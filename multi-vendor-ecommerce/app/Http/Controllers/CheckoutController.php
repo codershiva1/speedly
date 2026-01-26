@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Services\CouponService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,9 @@ class CheckoutController extends Controller
         $cart = $this->getUserCart();
 
         if (! $cart || $cart->items->isEmpty()) {
-            return redirect()->route('account.cart.index')->with('status', 'Your cart is empty.');
+            return redirect()
+                ->route('account.cart.index')
+                ->with('status', 'Your cart is empty.');
         }
 
         $user = auth()->user();
@@ -39,7 +42,9 @@ class CheckoutController extends Controller
         $cart = $this->getUserCart();
 
         if (! $cart || $cart->items->isEmpty()) {
-            return redirect()->route('account.cart.index')->with('status', 'Your cart is empty.');
+            return redirect()
+                ->route('account.cart.index')
+                ->with('status', 'Your cart is empty.');
         }
 
         $data = $request->validate([
@@ -57,23 +62,56 @@ class CheckoutController extends Controller
 
         $subtotal = $cart->items->sum('total_price');
         $discount = 0;
+        $coupon = null;
         $shipping = 0;
-        $total = $subtotal - $discount + $shipping;
+
+        /**
+         * 🔐 RE-VALIDATE COUPON (SECURITY CRITICAL)
+         */
+        if (session()->has('applied_coupon')) {
+            $couponCode = session('applied_coupon.code');
+
+            $result = CouponService::validateCoupon(
+                $couponCode,
+                $subtotal,
+                auth()->id()
+            );
+
+            if (isset($result['error'])) {
+                return redirect()
+                    ->route('account.cart.index')
+                    ->withErrors(['coupon' => $result['error']]);
+            }
+
+            $coupon = $result['coupon'];
+            $discount = CouponService::calculateDiscount($coupon, $subtotal);
+
+        }
+
+        $total = max($subtotal - $discount + $shipping, 0);
 
         DB::beginTransaction();
 
         try {
+            /**
+             * 🧾 CREATE ORDER
+             */
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'order_number' => now()->format('YmdHis') . '-' . strtoupper(Str::random(4)),
                 'status' => 'pending',
                 'payment_status' => 'pending',
                 'payment_method' => 'cod',
+
                 'subtotal_amount' => $subtotal,
                 'discount_amount' => $discount,
                 'shipping_amount' => $shipping,
                 'total_amount' => $total,
+
                 'currency' => 'INR',
+
+                'coupon_id' => $coupon?->id,
+
                 'shipping_name' => $data['shipping_name'],
                 'shipping_email' => $data['shipping_email'],
                 'shipping_phone' => $data['shipping_phone'],
@@ -83,9 +121,13 @@ class CheckoutController extends Controller
                 'shipping_state' => $data['shipping_state'],
                 'shipping_postal_code' => $data['shipping_postal_code'],
                 'shipping_country' => $data['shipping_country'] ?? 'India',
+
                 'notes' => $data['notes'] ?? null,
             ]);
 
+            /**
+             * 📦 ORDER ITEMS
+             */
             foreach ($cart->items as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -98,6 +140,9 @@ class CheckoutController extends Controller
                 ]);
             }
 
+            /**
+             * 💳 PAYMENT RECORD
+             */
             Payment::create([
                 'order_id' => $order->id,
                 'provider' => 'cod',
@@ -107,16 +152,34 @@ class CheckoutController extends Controller
                 'payload' => null,
             ]);
 
+            /**
+             * ✅ MARK COUPON AS USED
+             */
+            if ($coupon) {
+                $coupon->users()->attach(auth()->id(), [
+                    'used_at' => now(),
+                ]);
+            }
+
+            /**
+             * 🧹 CLEAR CART & COUPON SESSION
+             */
             $cart->items()->delete();
             $cart->delete();
+            session()->forget('applied_coupon');
 
             DB::commit();
+
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return redirect()->route('account.checkout.index')->with('status', 'Unable to place order. Please try again.');
+            return redirect()
+                ->route('account.checkout.index')
+                ->with('status', 'Unable to place order. Please try again.');
         }
 
-        return redirect()->route('account.orders.show', $order)->with('status', 'Order placed successfully.');
+        return redirect()
+            ->route('account.orders.show', $order)
+            ->with('status', 'Order placed successfully.');
     }
 }

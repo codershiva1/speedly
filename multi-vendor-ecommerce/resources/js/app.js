@@ -2,6 +2,7 @@ import './bootstrap';
 
 import Alpine from 'alpinejs';
 
+import Swal from 'sweetalert2';
 
 // import './homeslider.js';
 
@@ -125,6 +126,59 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+
+
+document.addEventListener('click', function (e) {
+
+    const btn = e.target.closest('.wishlist-btn');
+    if (!btn) return;
+
+    let productId = btn.dataset.productId;
+    let icon = btn.querySelector('i');
+    const countEl = document.getElementById('wishlist-count');
+
+    let url = window.wishlistToggleUrl.replace(':id', productId);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute('content'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.json();
+    })
+    .then(data => {
+       // 🔥 Update heart icon
+        icon.classList.toggle('text-red-500', data.status === 'added');
+        icon.classList.toggle('text-gray-400', data.status === 'removed');
+
+        // 🔥 Update wishlist count
+        if (countEl) {
+            countEl.innerText = data.count;
+        }
+
+        // Toast
+        Swal.fire({
+            toast: true,
+            icon: 'success',
+            title: data.message,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    })
+   .catch(() => {
+        Swal.fire('Please login to use wishlist');
+    });
+
+});
+
 
 
 

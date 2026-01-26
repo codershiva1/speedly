@@ -8,6 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\Coupon;
+
 
 class CartController extends Controller
 {
@@ -18,12 +20,27 @@ class CartController extends Controller
         ]);
     }
 
-    public function index(): View
+   public function index(): View
     {
         $cart = $this->getUserCart()->load('items.product');
 
-        return view('cart.index', compact('cart'));
+        $subtotal = $cart->items->sum('total_price');
+
+        // ✅ Fetch ONLY eligible coupons
+        $coupons = Coupon::where('is_active', 1)
+            ->where(function ($q) {
+                $q->whereNull('expires_at')
+                ->orWhere('expires_at', '>=', now());
+            })
+            ->where('min_cart_value', '<=', $subtotal)
+            ->whereDoesntHave('users', function ($q) {
+                $q->where('user_id', auth()->id());
+            })
+            ->get();
+
+        return view('cart.index', compact('cart', 'coupons', 'subtotal'));
     }
+
 
     public function store(Request $request): RedirectResponse
     {
@@ -83,20 +100,52 @@ class CartController extends Controller
 
     public function updatequit(Request $request, CartItem $item)
     {
-    $request->validate([
-        'quantity' => 'required|integer|min:1'
-    ]);
+        $request->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
 
-    $item->quantity = $request->quantity;
-    $item->total_price = $item->unit_price * $request->quantity;
-    $item->save();
+        abort_unless($item->cart->user_id === auth()->id(), 403);
 
-    $subtotal = $item->cart->items()->sum('total_price');
+        // 1️⃣ Update item quantity
+        $item->quantity = $request->quantity;
+        $item->total_price = $item->unit_price * $request->quantity;
+        $item->save();
 
-    return response()->json([
-        'quantity'    => $item->quantity,
-        'item_total'  => $item->total_price,
-        'subtotal'    => $subtotal,
-    ]);
-}
+        // 2️⃣ Recalculate subtotal
+        $subtotal = $item->cart->items()->sum('total_price');
+
+        // 3️⃣ Recalculate coupon discount if applied
+        $discount = 0;
+
+        if (session()->has('applied_coupon')) {
+            $couponData = session('applied_coupon');
+            $coupon = \App\Models\Coupon::find($couponData['id']);
+
+            if ($coupon && $coupon->isUsable()) {
+                $discount = \App\Services\CouponService::calculateDiscount($coupon, $subtotal);
+
+                // Update session coupon discount
+                session([
+                    'applied_coupon.discount' => $discount
+                ]);
+            } else {
+                // Remove coupon if invalid
+                session()->forget('applied_coupon');
+            }
+        }
+
+        // 4️⃣ Final total
+        $total = max($subtotal - $discount, 0);
+
+        // 5️⃣ Return updated values
+        return response()->json([
+            'quantity'   => $item->quantity,
+            'item_total' => $item->total_price,
+            'subtotal'   => $subtotal,
+            'discount'   => $discount,
+            'total'      => $total,
+        ]);
+    }
+
+
 }

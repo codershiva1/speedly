@@ -76,6 +76,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function hasInWishlist($productId)
+    {
+        return $this->wishlist()
+            ->where('product_id', $productId)
+            ->exists();
+    }
+
+
     public function defaultAddress()
     {
         return $this->hasOne(\App\Models\Address::class)->where('is_default', 1);

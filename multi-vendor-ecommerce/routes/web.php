@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountOrderController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CouponController as FrontCouponController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
@@ -27,7 +30,7 @@ Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/faq', [PageController::class, 'faq'])->name('pages.faq');
 Route::get('/service', [PageController::class, 'service'])->name('pages.service');
 Route::get('/find-store', [PageController::class, 'findStore'])->name('pages.find-store');
-Route::get('/wishlist', [PageController::class, 'wishlist'])->name('pages.wishlist');
+// Route::get('/wishlist', [PageController::class, 'wishlist'])->name('pages.wishlist');
 Route::get('/blog', [PageController::class, 'blog'])->name('pages.blog');
 
 // ----------new pages --------------
@@ -85,13 +88,14 @@ Route::prefix('account')
         Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
         Route::patch('/cart/items/{item}', [CartController::class, 'update'])->name('cart.items.update');
         Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
-        // Route::patch('/account/cart/items/{item}',[CartController::class,'  updatequit'])->name('account.cart.items.update');
+
         
-        Route::middleware(['auth'])->group(function () {
-        Route::post('/account/cart/items/{item}',
-            [CartItemController::class, 'updatequit']
-        )->name('account.cart.items.update');
-        });
+        Route::post('/cart/items/{item}/ajax',
+        [CartController::class, 'updatequit']
+        )->name('cart.items.update.ajax');
+
+        Route::post('/coupon/apply', [FrontCouponController::class, 'apply'])->name('coupon.apply');
+        Route::post('/coupon/remove', [FrontCouponController::class, 'remove'])->name('coupon.remove');
 
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
@@ -99,6 +103,15 @@ Route::prefix('account')
         Route::get('/orders', [AccountOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [AccountOrderController::class, 'show'])->name('orders.show');
     });
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+});
+
 
 Route::prefix('vendor')
     ->name('vendor.')
@@ -118,6 +131,12 @@ Route::prefix('admin')
         Route::resource('brands', AdminBrandController::class);
         Route::resource('products', AdminProductController::class);
         Route::resource('orders', AdminOrderController::class)->only(['index', 'show']);
-    });
+
+                // ---- Coupon Management ----
+        Route::resource('coupons', CouponController::class);
+        Route::post('/coupons/{coupon}/toggle', [CouponController::class, 'toggle'])
+            ->name('coupons.toggle');
+
+            });
 
 require __DIR__.'/auth.php';

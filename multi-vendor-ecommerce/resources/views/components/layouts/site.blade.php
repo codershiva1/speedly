@@ -607,6 +607,18 @@
 
                 <div class="top-right">
 
+                    <div id="wishlistbtn" class="wishlist-icon">
+                        <a href="{{ route('wishlist.index') }}" class="relative">
+                            <i class="fa fa-heart text-xl"></i>
+
+                            <span id="wishlist-count"
+                                class="absolute -top-2 -right-2 bg-red-500 text-white
+                                        text-xs rounded-full px-1.5 min-w-[18px] text-center">
+                                {{ $wishlistCount }}
+                            </span>
+                        </a>
+
+                    </div>
                     <!-- Cart Icon -->
                     <div id="cartBtn" class="cart-icon">
                         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
@@ -1126,7 +1138,7 @@
                         <div class="space-y-2">
                             <h4 class="text-sm font-semibold">Information</h4>
                             <ul class="space-y-1">
-                                <li><a href="{{ route('pages.wishlist') }}" class="hover:text-amber-400">Wishlist</a></li>
+                                <li><a href="{{ route('wishlist.index') }}" class="hover:text-amber-400">Wishlist</a></li>
                                 <li>
                                     <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="hover:text-amber-400">My account</a>
                                 </li>

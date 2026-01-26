@@ -96,8 +96,8 @@
                             </template>
                         </h2>
 
-                        <!-- Menu Items -->
-                        <ul class="flex flex-col gap-1">
+                        <!-- Menu Items   -->
+                        <ul class="flex flex-col gap-1  yyyugugu">
                             @foreach ($menuGroup['items'] as $itemIndex => $item)
                                 <li>
                                     @if (isset($item['subItems']))

@@ -97,7 +97,12 @@
                     🧾 Order Summary
                 </h3>
 
-                @php $subtotal = $cart->items->sum('total_price'); @endphp
+                @php
+                    $subtotal = $cart->items->sum('total_price');
+                    $discount = session('applied_coupon.discount', 0);
+                    $finalTotal = max($subtotal - $discount, 0);
+                @endphp
+
 
                 <ul class="divide-y text-sm mb-4">
                     @foreach ($cart->items as $item)
@@ -116,15 +121,27 @@
                         <span>Subtotal</span>
                         <span>₹{{ number_format($subtotal, 2) }}</span>
                     </div>
+
+                    @if($discount > 0)
+                        <div class="flex justify-between text-green-700">
+                            <span>Coupon Discount</span>
+                            <span>-₹{{ number_format($discount, 2) }}</span>
+                        </div>
+                    @endif
+
                     <div class="flex justify-between text-gray-500">
                         <span>Shipping</span>
                         <span>Free</span>
                     </div>
+
                     <div class="flex justify-between font-bold text-lg pt-2">
                         <span>Total</span>
-                        <span class="text-indigo-600">₹{{ number_format($subtotal, 2) }}</span>
+                        <span class="text-indigo-600">
+                            ₹{{ number_format($finalTotal, 2) }}
+                        </span>
                     </div>
                 </div>
+
 
                 <div class="mt-4 bg-green-50 border border-green-200 rounded-xl p-3 text-xs text-green-700">
                     💵 Cash on Delivery available <br>

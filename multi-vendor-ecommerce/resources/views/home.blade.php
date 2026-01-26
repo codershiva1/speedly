@@ -306,6 +306,18 @@
                                 {{-- ADD BUTTON --}}
                                
                                     @auth
+
+                                    <button
+                                        class="wishlist-btn"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        <i class="fa fa-heart 
+                                            {{ auth()->check() && auth()->user()->wishlist->contains('product_id', $product->id) 
+                                                ? 'text-red-500' 
+                                                : 'text-gray-400' }}">
+                                        </i>
+                                    </button>
+
                                     <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -314,6 +326,10 @@
                                         </button>
                                     </form>
                                 @else
+                                
+                                    <a href="{{ route('login') }}">
+                                        <i class="fa fa-heart text-gray-400"></i>
+                                    </a>
                                     <a href="{{ route('login') }}"
                                     class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
                                         ADD
@@ -1401,4 +1417,9 @@
             </section>
         </div>
     </div>
+
+ <script>
+    window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
+</script>
+
 </x-layouts.site>
