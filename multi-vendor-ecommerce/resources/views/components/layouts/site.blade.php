@@ -643,7 +643,8 @@
                     <div id="cartBtn" class="cart-icon">
                         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
                             <i class="bi bi-bag" style="font-size:24px;"></i>
-                            <div class="notif">1</div>
+                           <span class="notif" id="cart-count">{{ $cartCount }}</span>
+
                         </a>
                     </div>
 
