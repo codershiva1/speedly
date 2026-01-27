@@ -544,13 +544,33 @@
     body {
         padding-bottom: 70px;
     }
+    
+
+}
+@media (max-width: 768px) {
+    .category-bar {
+        top: 64px;
+    }
+    
+}
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    background: #fff;
+}
+.category-bar {
+    position: sticky;
+    top: 70px; /* header height ke hisab se */
+    z-index: 9999;
+    background: #fff;
 }
 
 
-            </style>
+</style>
 
 
-            <div class="top-bar">
+            <div class="top-bar sticky-header" >
                 
                 <div class="logo" style="display: flex;gap: 20px;width:325px">
                      <a href="{{ route('home') }}">
@@ -612,7 +632,7 @@
                             <i class="fa fa-heart text-xl"></i>
 
                             <span id="wishlist-count"
-                                class="absolute -top-2 -right-2 bg-red-500 text-white
+                                class="absolute -top-4 -right-2 bg-[#ff0000] text-white
                                         text-xs rounded-full px-1.5 min-w-[18px] text-center">
                                 {{ $wishlistCount }}
                             </span>
@@ -623,8 +643,7 @@
                     <div id="cartBtn" class="cart-icon">
                         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
                             <i class="bi bi-bag" style="font-size:24px;"></i>
-                            <!-- <div class="notif">1</div> -->
-                            <span id="cart-count">{{ $cartCount }}</span>
+                            <div class="notif">1</div>
                         </a>
                     </div>
 
@@ -938,7 +957,7 @@
 </div>
 
 <section 
-    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg p-2"
+    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg p-2 category-bar"
     data-aos="fade-up"
 >
     <!-- All -->

@@ -147,6 +147,7 @@ class CartController extends Controller
         ]);
     }
 
+    
 
     public function toggle(Product $product)
 {
