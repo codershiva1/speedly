@@ -180,7 +180,42 @@ document.addEventListener('click', function (e) {
 });
 
 
+document.addEventListener('click', function (e) {
 
+    if (!e.target.classList.contains('cart-btn')) return;
+
+    let btn = e.target;
+    let productId = btn.dataset.productId;
+    let url = window.CartToggleUrl.replace(':id', productId);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        // 🔁 Button UI
+        if (data.status === 'added') {
+            btn.textContent = 'ADDED';
+            btn.classList.remove('text-green-600 hover:bg-green-50');
+            btn.classList.add('bg-green-600','text-white');
+            Swal.fire('Added!', 'Item added to cart', 'success');
+        } else {
+            btn.textContent = 'ADD';
+            btn.classList.remove('bg-green-600','text-white');
+            btn.classList.add('text-green-600');
+            Swal.fire('Removed!', 'Item removed from cart', 'info');
+        }
+
+        // 🔢 Cart count update
+        document.getElementById('cart-count').textContent = data.count;
+    })
+    .catch(err => console.error(err));
+});
 
 window.Alpine = Alpine;
 

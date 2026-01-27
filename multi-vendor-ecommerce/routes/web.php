@@ -89,6 +89,9 @@ Route::prefix('account')
         Route::patch('/cart/items/{item}', [CartController::class, 'update'])->name('cart.items.update');
         Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
 
+        Route::post('/cart/toggle/{product}', [CartController::class, 'toggle'])
+    ->name('cart.toggle');
+
         
         Route::post('/cart/items/{item}/ajax',
         [CartController::class, 'updatequit']

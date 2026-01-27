@@ -318,13 +318,14 @@
                                         </i>
                                     </button>
 
-                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                            ADD
-                                        </button>
-                                    </form>
+                                   <button
+                                        class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-600 text-white' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
+
                                 @else
                                 
                                     <a href="{{ route('login') }}">
@@ -415,13 +416,14 @@
 
                                 {{-- ADD BUTTON --}}
                                 @auth
-                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                            ADD
-                                        </button>
-                                    </form>
+                                    <button
+                                        class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-600 text-white' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
+
                                 @else
                                     <a href="{{ route('login') }}"
                                     class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
@@ -839,13 +841,13 @@
 
                                 {{-- ADD BUTTON --}}
                                @auth
-                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                            ADD
-                                        </button>
-                                    </form>
+                                     <button
+                                        class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-600 text-white' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
                                 @else
                                     <a href="{{ route('login') }}"
                                     class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
@@ -930,13 +932,13 @@
 
                                 {{-- ADD BUTTON --}}
                                 @auth
-                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                            ADD
-                                        </button>
-                                    </form>
+                                     <button
+                                        class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-600 text-white' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
                                 @else
                                     <a href="{{ route('login') }}"
                                     class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
@@ -1278,13 +1280,13 @@
 
                                 {{-- ADD BUTTON --}}
                                 @auth
-                                    <form method="POST" action="{{ route('account.cart.store') }}" class="flex items-center gap-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                            ADD
-                                        </button>
-                                    </form>
+                                     <button
+                                        class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-600 text-white' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
                                 @else
                                     <a href="{{ route('login') }}"
                                     class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
@@ -1420,6 +1422,7 @@
 
  <script>
     window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
+    window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
 </script>
 
 </x-layouts.site>

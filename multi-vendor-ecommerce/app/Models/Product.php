@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\CartItem;
 
 class Product extends Model
 {
@@ -65,6 +66,14 @@ class Product extends Model
     public function wishlistedBy()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+   public function cartItem()
+    {
+        return $this->hasOne(CartItem::class)
+            ->whereHas('cart', function ($q) {
+                $q->where('user_id', auth()->id());
+            });
     }
 
 }

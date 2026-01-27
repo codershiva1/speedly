@@ -148,4 +148,37 @@ class CartController extends Controller
     }
 
 
+    public function toggle(Product $product)
+{
+    $cart = $this->getUserCart();
+
+    $item = $cart->items()
+        ->where('product_id', $product->id)
+        ->first();
+
+    if ($item) {
+        $item->delete();
+
+        return response()->json([
+            'status' => 'removed',
+            'count' => $cart->items()->count(),
+        ]);
+    }
+
+    $unitPrice = $product->discount_price ?? $product->price;
+
+    $cart->items()->create([
+        'product_id' => $product->id,
+        'quantity' => 1,
+        'unit_price' => $unitPrice,
+        'total_price' => $unitPrice,
+    ]);
+
+    return response()->json([
+        'status' => 'added',
+        'count' => $cart->items()->count(),
+    ]);
+}
+
+
 }

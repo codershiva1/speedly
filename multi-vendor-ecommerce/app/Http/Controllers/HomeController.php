@@ -21,8 +21,12 @@ class HomeController extends Controller
             ->take(20)
             ->get();
 
-        $baseProductQuery = Product::with('images', 'category')
-            ->where('status', 'active');
+        $baseProductQuery = Product::with([
+        'images',
+        'category',
+        ...(auth()->check() ? ['cartItem'] : [])
+        ])
+        ->where('status', 'active');
 
         $dealsOfDay = (clone $baseProductQuery)
             ->orderByDesc('discount_price')
