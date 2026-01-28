@@ -332,7 +332,7 @@
                                         <i class="fa fa-heart text-gray-400"></i>
                                     </a>
                                     <a href="{{ route('login') }}"
-                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                    class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
                                         ADD
                                     </a>
                                 @endauth
@@ -426,7 +426,7 @@
 
                                 @else
                                     <a href="{{ route('login') }}"
-                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                    class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
                                         ADD
                                     </a>
                                 @endauth
@@ -850,7 +850,7 @@
                                     </button>
                                 @else
                                     <a href="{{ route('login') }}"
-                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                    class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
                                         ADD
                                     </a>
                                 @endauth
@@ -941,7 +941,7 @@
                                     </button>
                                 @else
                                     <a href="{{ route('login') }}"
-                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                    class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
                                         ADD
                                     </a>
                                 @endauth
@@ -1289,7 +1289,7 @@
                                     </button>
                                 @else
                                     <a href="{{ route('login') }}"
-                                    class="w-full text-center py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                                    class="cart-btn px-4 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
                                         ADD
                                     </a>
                                 @endauth
