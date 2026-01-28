@@ -566,15 +566,52 @@
     background: #fff;
 }
 
+/* ============================= */
+/* MOBILE VIEW ICON HIDE RULES */
+/* ============================= */
+@media (max-width: 768px) {
 
+    /* Wishlist hide */
+    #wishlistbtn,
+    .wishlist-icon {
+        display: none !important;
+    }
+
+    /* Cart hide */
+    #cartBtn,
+    .cart-icon {
+        display: none !important;
+    }
+
+    /* Hero / Banner / Slider hide (homepage banners) */
+    .hero-slider,
+    .home-banner,
+    .main-banner,
+    .slider-banner {
+        display: none !important;
+    }
+}
+@media (max-width: 768px) {
+    .hero-slider,
+    .profile-icon {
+        display: none !important;
+    }
+    .top-mobile-header{
+        width:100% !important;
+    }
+    .logo-image{
+        width:70%;
+
+    }
+}
 </style>
 
 
             <div class="top-bar sticky-header" >
                 
-                <div class="logo" style="display: flex;gap: 20px;width:325px">
+                <div class="logo top-mobile-header" style="display: flex;gap: 20px;width:325px">
                      <a href="{{ route('home') }}">
-                     <img src="{{asset('storage/uploads/logo/speedly_logo3.png')}}" alt=""></a>
+                     <img  class="logo-image" src="{{asset('storage/uploads/logo/speedly_logo3.png')}}" alt=""></a>
                     <div class="d-flex flex-column" id="mainlocationHeader" style="margin-top:10px;">
                     <span class="flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:150px">
                         Delivery in 8 minutes
@@ -655,7 +692,7 @@
 
                             <x-slot name="trigger">
                                 <button
-                                    class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
+                                    class="profile-icon inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
 
                                     <!-- User Icon -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
