@@ -600,10 +600,40 @@
         width:100% !important;
     }
     .logo-image{
-        width:70%;
+        width: 163px;
 
     }
+      .searchbar{
+        display: block !important;
+    }
+    #searchBtn
+    {
+        display:none !important;
+    }
 }
+@media (max-width: 994px) {
+   .searchbar {
+        display: none ;
+
+    }
+    #searchBtn
+    {
+        display:block !important;
+    }
+    
+    
+}
+
+@media (max-width: 768px) {
+     #searchBtn
+    {
+        display:none !important;
+    }
+    .top-bar{
+        gap:5px;
+    }
+}
+
 </style>
 
 
@@ -664,6 +694,12 @@
 
                 <div class="top-right">
 
+                <div id="searchBtn" class="search-icon" style="display:none;">
+                    <a href="{{ route('shop.index') }}">
+                        <i class="bi bi-search" style="font-size:20px;"></i>
+                    </a>
+                </div>
+
                     <div id="wishlistbtn" class="wishlist-icon">
                         <a href="{{ route('wishlist.index') }}" class="relative">
                             <i class="fa fa-heart text-xl"></i>
@@ -679,8 +715,9 @@
                     <!-- Cart Icon -->
                     <div id="cartBtn" class="cart-icon">
                         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
-                            <i class="bi bi-bag" style="font-size:24px;"></i>
-                           <span class="notif" id="cart-count">{{ $cartCount }}</span>
+                            <i class="bi bi-bag" style="font-size:20px;"></i>
+                           <span class="absolute  bg-[#ff0000] text-white
+                                        text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
 
                         </a>
                     </div>
@@ -696,7 +733,7 @@
 
                                     <!-- User Icon -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-8 w-8 text-gray-600"
+                                        class="h-7 w-7 text-gray-600"
                                         viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -1043,7 +1080,7 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9v9H3z"></path>
         </svg>
-        <span>Home / Decor</span>
+        <span>Decor</span>
     </a>
 
     <!-- Importers -->
