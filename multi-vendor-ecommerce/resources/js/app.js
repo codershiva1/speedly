@@ -136,7 +136,7 @@ document.addEventListener('click', function (e) {
 
     let productId = btn.dataset.productId;
     let icon = btn.querySelector('i');
-    const countEl = document.getElementById('wishlist-count');
+    const countEl = document.getElementsByClassName('wishlist-count');
 
     let url = window.wishlistToggleUrl.replace(':id', productId);
 
@@ -154,16 +154,16 @@ document.addEventListener('click', function (e) {
         return res.json();
     })
     .then(data => {
-       // 🔥 Update heart icon
+        // Heart icon
         icon.classList.toggle('text-red-500', data.status === 'added');
         icon.classList.toggle('text-gray-400', data.status === 'removed');
 
-        // 🔥 Update wishlist count
-        if (countEl) {
-            countEl.innerText = data.count;
+        // 🔥 Update ALL wishlist counts
+        const countEls = document.getElementsByClassName('wishlist-count');
+        for (let i = 0; i < countEls.length; i++) {
+            countEls[i].innerText = data.count;
         }
 
-        // Toast
         Swal.fire({
             toast: true,
             icon: 'success',
@@ -182,16 +182,17 @@ document.addEventListener('click', function (e) {
 
 document.addEventListener('click', function (e) {
 
-    if (!e.target.classList.contains('cart-btn')) return;
+    const btn = e.target.closest('.cart-btn');
+    if (!btn) return;
 
-    let btn = e.target;
     let productId = btn.dataset.productId;
     let url = window.CartToggleUrl.replace(':id', productId);
 
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-CSRF-TOKEN': document
+                .querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json'
         }
     })
@@ -201,20 +202,23 @@ document.addEventListener('click', function (e) {
         // 🔁 Button UI
         if (data.status === 'added') {
             btn.textContent = 'ADDED';
-            btn.classList.remove('text-green-600 hover:bg-green-50');
-            btn.classList.add('bg-green-600','text-white');
+            btn.classList.remove('text-green-600', 'hover:bg-green-50');
+            btn.classList.add('bg-green-600', 'text-white');
             Swal.fire('Added!', 'Item added to cart', 'success');
         } else {
             btn.textContent = 'ADD';
-            btn.classList.remove('bg-green-600','text-white');
+            btn.classList.remove('bg-green-600', 'text-white');
             btn.classList.add('text-green-600');
             Swal.fire('Removed!', 'Item removed from cart', 'info');
         }
 
-        // 🔢 Cart count update
-        document.getElementById('cart-count').textContent = data.count;
+        // 🔢 Update ALL cart counters
+        document.querySelectorAll('.cart-count')
+            .forEach(el => el.textContent = data.count);
     })
-    .catch(err => console.error(err));
+    .catch(() => {
+        Swal.fire('Please login to use cart');
+    });
 });
 
 window.Alpine = Alpine;

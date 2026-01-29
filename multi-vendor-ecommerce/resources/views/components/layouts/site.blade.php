@@ -704,8 +704,8 @@
                         <a href="{{ route('wishlist.index') }}" class="relative">
                             <i class="fa fa-heart text-xl"></i>
 
-                            <span id="wishlist-count"
-                                class="absolute -top-4 -right-2 bg-[#ff0000] text-white
+                            <span id="wishlist-count" 
+                                class="wishlist-count absolute -top-4 -right-2 bg-[#ff0000] text-white
                                         text-xs rounded-full px-1.5 min-w-[18px] text-center">
                                 {{ $wishlistCount }}
                             </span>
@@ -716,7 +716,7 @@
                     <div id="cartBtn" class="cart-icon">
                         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
                             <i class="bi bi-bag" style="font-size:20px;"></i>
-                           <span class="absolute  bg-[#ff0000] text-white
+                           <span class="absolute  bg-[#ff0000] text-white cart-count
                                         text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
 
                         </a>
@@ -1286,7 +1286,7 @@
 @php
     $isHome       = request()->routeIs('home');
     $isShop       = request()->routeIs('shop.*');
-    $isSearch     = request()->is('search*');
+    $wishlist     = request()->routeIs('wishlist.*');
     $isCart       = request()->routeIs('account.cart.*');
     $isAccount    = request()->routeIs('account.*');
 @endphp
@@ -1309,12 +1309,34 @@
         </a>
 
         <!-- Search -->
-        <button
+        {{-- <!-- <button
             onclick="window.location.href='/search'"
             class="flex flex-col items-center text-xs {{ $isSearch ? 'text-green-600' : 'text-gray-600' }}">
             <i class="bi bi-search text-xl"></i>
             <span>Search</span>
-        </button>
+        </button> -->  --}}
+
+         <a href="{{ auth()->check() ? route('wishlist.index') : route('login') }}"
+            class="relative flex flex-col items-center text-xs {{ $wishlist ? 'text-green-600' : 'text-gray-600' }}">
+            <i class="fa fa-heart text-xl"></i>
+            <span>Wishlist</span>
+            <span class="wishlist-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {{ $wishlistCount }}
+            </span>
+        </button></a>
+
+         <!-- <div id="wishlistbtn" class="wishlist-icon">
+            <a href="{{ route('wishlist.index') }}" class="relative">
+                <i class="fa fa-heart text-xl"></i>
+
+                <span id="wishlist-count"
+                    class="absolute -top-4 -right-2 bg-[#ff0000] text-white
+                            text-xs rounded-full px-1.5 min-w-[18px] text-center">
+                    {{ $wishlistCount }}
+                </span>
+            </a>
+
+        </div> -->
 
         <!-- Cart -->
         <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"
@@ -1323,8 +1345,8 @@
             <span>Cart</span>
 
             <!-- Cart Count -->
-            <span class="absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                1
+            <span class="cart-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {{ $cartCount }}
             </span>
         </a>
 
