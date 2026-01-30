@@ -4,7 +4,7 @@ const total = 3;
 const ghost = document.querySelector('.ghost-slide');
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
-
+console.log('iam a good boy');
 function changeDot() {
     dots.forEach(d => d.classList.remove('active'));
     dots[current - 1].classList.add('active');
