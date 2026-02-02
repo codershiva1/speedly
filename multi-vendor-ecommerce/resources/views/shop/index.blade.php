@@ -41,8 +41,29 @@
           
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
-                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
                             
+                            {{-- WISHLIST ICON (TOP RIGHT) --}}
+
+                            @auth
+                            <button
+                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
+                                data-product-id="{{ $product->id }}"
+                                aria-label="Add to wishlist"
+                            >
+                                <i class="fa fa-heart
+                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
+                                        ? 'text-red-500'
+                                        : 'text-gray-400' }}">
+                                </i>
+                            </button>
+                            @else
+                            <a href="{{ route('login') }}"
+                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
+                                <i class="fa fa-heart text-gray-400"></i>
+                            </a>
+                            @endauth
+
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
@@ -72,7 +93,7 @@
                             </span>
 
                             <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                     {{ $product->name }}
                                 </p>
 
@@ -100,9 +121,24 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                               
+                                @auth
+
+                                   <button
+                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
+
+                                @else
+                                
+                                    <a href="{{ route('login') }}"
+                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
@@ -227,7 +263,28 @@
 
                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @foreach ($products as $product)
-                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                            
+                           {{-- WISHLIST ICON (TOP RIGHT) --}}
+
+                            @auth
+                            <button
+                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
+                                data-product-id="{{ $product->id }}"
+                                aria-label="Add to wishlist"
+                            >
+                                <i class="fa fa-heart
+                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
+                                        ? 'text-red-500'
+                                        : 'text-gray-400' }}">
+                                </i>
+                            </button>
+                            @else
+                            <a href="{{ route('login') }}"
+                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
+                                <i class="fa fa-heart text-gray-400"></i>
+                            </a>
+                            @endauth
                             
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
@@ -258,7 +315,7 @@
                             </span>
 
                             <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
+                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                     {{ $product->name }}
                                 </p>
 
@@ -286,9 +343,24 @@
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                <button class="px-4 py-1.5 border border-green-600 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-50">
-                                    ADD
-                                </button>
+                               
+                                @auth
+
+                                   <button
+                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                    >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                    </button>
+
+                                @else
+                                
+                                    <a href="{{ route('login') }}"
+                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
+                                        ADD
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach
@@ -300,4 +372,10 @@
             </div>
         </section>
     </div>
+
+    <script>
+        window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
+        window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
+    </script>
+
 </x-layouts.site>

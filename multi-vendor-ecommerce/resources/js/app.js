@@ -202,14 +202,14 @@ document.addEventListener('click', function (e) {
         // 🔁 Button UI
         if (data.status === 'added') {
             btn.textContent = 'ADDED';
-            btn.classList.remove('text-green-600', 'hover:bg-green-50');
-            btn.classList.add('bg-green-600', 'text-white');
-            Swal.fire('Added!', 'Item added to cart', 'success');
+            btn.classList.remove('hover:bg-green-50');
+            btn.classList.add('bg-green-100');
+            // Swal.fire('Added!', 'Item added to cart', 'success');
         } else {
             btn.textContent = 'ADD';
-            btn.classList.remove('bg-green-600', 'text-white');
+            btn.classList.remove('bg-green-100',);
             btn.classList.add('text-green-600');
-            Swal.fire('Removed!', 'Item removed from cart', 'info');
+            // Swal.fire('Removed!', 'Item removed from cart', 'info');
         }
 
         // 🔢 Update ALL cart counters

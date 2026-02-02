@@ -30,12 +30,12 @@
             <div class="flex flex-col lg:flex-row gap-3">
 
                 <!-- LEFT: Category Grid -->
-                <div class="w-full lg:w-5/6">
+                <div class="w-full lg:w-6/6">
                     <!-- <div class="grid  grid-cols-4 sm:grid-cols-6 lg:grid-cols-7 gap-4"> -->
-                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-10 gap-2.5">
 
 
-                        @foreach($topCategories->take(14) as $category)
+                        @foreach($topCategories->take(20) as $category)
                             <a href="{{ route('shop.index', ['category' => $category->slug]) }}"
                             class="group flex flex-col items-center text-center bg-[#F4F7FB] rounded-2xl p-2 shadow-sm 
                                     hover:shadow-md hover:-translate-y-1 transition-all">
@@ -65,7 +65,8 @@
                 </div>
 
                 <!-- RIGHT: FILTER BOX -->
-                <div class="w-full lg:w-1/6">
+                 {{--
+                <!-- <div class="w-full lg:w-1/6">
                     <div class="bg-white shadow-md rounded-xl p-4" style="height: 340px;overflow-y: scroll;">
 
                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>
@@ -88,7 +89,7 @@
                         @endforeach
 
                     </div>
-                </div>
+                </div> -->  --}}
 
             </div>
 
@@ -224,10 +225,6 @@
 
 
 
-
-
-
-
             @if($featuredProducts->isNotEmpty())
             <section>
                 <!-- <div class="flex items-center justify-between mb-4">
@@ -326,7 +323,7 @@
 
                                 {{-- ADD BUTTON --}}
                                
-                                    @auth
+                                @auth
 
                                    <button
                                         class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold

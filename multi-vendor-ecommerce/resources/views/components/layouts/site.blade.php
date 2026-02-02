@@ -31,25 +31,13 @@
     </head>
     <body class="font-sans antialiased bg-gray-50 text-gray-900" >
         <div class="min-h-screen flex flex-col" style="overflow-x: clip;">
-            <!-- Public header -->
-            <!-- <div class="bg-slate-900 text-slate-100 text-[11px]">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-                    <p class="hidden sm:block">Welcome to our multi-vendor marketplace. Free shipping on selected items.</p>
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('pages.find-store') }}" class="hover:text-amber-300">Find a store</a>
-                        <a href="{{ route('pages.service') }}" class="hover:text-amber-300">Customer service</a>
-                        <a href="{{ route('pages.faq') }}" class="hover:text-amber-300">Help &amp; FAQ</a>
-                    </div>
-                </div>
-            </div> -->
            
-
             <style>           
             body { margin: 0; font-family: Arial, sans-serif; }
 
             .top-bar {
                 background: #fff;
-                padding: 0 15px;
+                padding: 6px 15px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -57,21 +45,38 @@
                 gap: 10px; /* space between rows on mobile */
             }
 
+            /* Left section */
+            .top-left {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .location-box {
+                display:flex;
+                flex-direction:column;
+            }
+
+                /* Search center */
+            .search-wrapper {
+                flex: 1;
+                max-width: 500px;
+            }
+
+            .top-right {
+                display: flex;
+                align-items: center;
+                gap: 17px;
+            }
             .logo {
-                width: 150px;
+                width: 300px;
                 font-size: 30px;
                 font-weight: bold;
             }
 
-            /* .menu-toggle {
-                background: #222;
-                color: #fff;
-                padding: 10px 15px;
-                border-radius: 5px;
-                margin-right: 20px;
-                cursor: pointer;
-                font-size: 20px;
-            } */
+            .logo a{
+                min-width:120px;
+            }
 
             .searchbar{
                 padding:5px;
@@ -82,45 +87,108 @@
                 border: none;
             }
 
-            .top-right {
-                display: flex;
-                align-items: center;
-                gap: 25px;
-            }
-
-
-
             #locationHeader{
                 cursor:pointer;
                 /* margin-top:-10px; */
                 gap:14%;
             }
+
+            .mobile-bottom-nav {
+                display: none;
+            }
             /* ========================================================= */
             /*   MOBILE / TABLET VIEW (Below 744px)                       */
             /* ========================================================= */
+            @media (max-width: 920px) {
+                /* LOGO stays on top-left */
+                .top-left {
+                    width: 140px;
+                    flex-wrap: wrap;
+                }
+            
+                .search-wrapper {
+                    max-width: 400px;
+                }
+            }
+
+                        
+            /* Show only on mobile */
+            @media (max-width: 768px) {
+                .mobile-bottom-nav {
+                    display: block;
+                }
+                .wishlist-icon{
+                    display:none;
+                }
+
+                /* Give space so content not hidden behind nav */
+                body {
+                    padding-bottom: 70px;
+                }
+                /* Hero / Banner / Slider hide (homepage banners) */
+                .hero-slider,
+                .home-banner,
+                .main-banner,
+                .slider-banner {
+                    display: none !important;
+                }
+                .hero-slider,
+                /* .profile-icon {
+                    display: none !important;
+                } */
+                .top-mobile-header{
+                    width:50% !important;
+                }
+                .logo-image{
+                    width: 163px;
+                }
+                .top-bar{
+                    gap:5px;
+                }
+                .category-bar {
+                    top: 64px;
+                }
+                
+            }
+
             @media (max-width: 764px) {
 
                 .top-bar {
-                    justify-content: space-between;
-                    align-items: center;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                }
+                /* LOGO stays on top-left */
+                .top-left {
+                    order: 1;
+                    width: 50%;
+                    flex-wrap: nowrap;
                 }
 
+                /* LOCATION moves BELOW logo */
+                .location-box {
+                    /* width: 100%; */
+                    margin-top: 4px;
+                }
+
+                /* SEARCH goes FULL WIDTH below logo+location */
+                .search-wrapper {
+                    order: 3;
+                    width: 100%;
+                    max-width: 100%;
+                    margin-top: 6px;
+                }
+
+                /* TOP RIGHT stays top-right */
+                .top-right {
+                    order: 2;
+                    margin-left: auto;
+                }
+                
                 /* Logo stays left */
                 .logo {
                     order: 1;
                 }
 
-                /* Top-right stays right */
-                .top-right {
-                    order: 2;
-                }
-
-                /* Search Bar wrapper div (your middle parent) */
-                .top-bar > div:nth-child(2) {
-                    order: 3;             /* moves search below */
-                    flex-basis: 100%;     /* full width */
-                    margin-top: 5px;
-                }
 
                 .searchbar{
                     padding-top:0;
@@ -138,6 +206,40 @@
                 justify-content:space-between;
                 }
             }
+
+             /* ----------------------------------------------- */
+            /* RESPONSIVE RULES FOR MAX-WIDTH 744px            */
+            /* ----------------------------------------------- */
+            @media (max-width: 744px) {
+
+                /* Show hamburger */
+                #mobilemenuToggle {
+                    display: block;
+                }
+
+                /* Hide desktop nav-bar */
+                .nav-bar {
+                    display: none !important;
+                }
+            }
+
+            @media (max-width: 475px) {
+                .top-left {
+                    flex-wrap: wrap;
+                    /* width: 40% !important; */
+                }
+
+                .logo a {
+                    width: 120px;
+                    
+                }
+
+                .top-left {
+                    gap: 1px;
+                }
+            }
+
+            
             /* ------------------ */
             /* Hide hamburger by default */
             #mobilemenuToggle {
@@ -201,49 +303,8 @@
             }
 
 
-            /* ----------------------------------------------- */
-            /* RESPONSIVE RULES FOR MAX-WIDTH 744px            */
-            /* ----------------------------------------------- */
-            @media (max-width: 744px) {
-
-                /* Show hamburger */
-                #mobilemenuToggle {
-                    display: block;
-                }
-
-                /* Hide desktop nav-bar */
-                .nav-bar {
-                    display: none !important;
-                }
-            }
-
+           
             /* ---------------------- */
-
-                        /* .top-bar {
-                            background: #fff;
-                            padding: 0 15px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            flex-wrap: wrap;
-                        }
-
-                        .logo { width:150px;font-size: 30px; font-weight: bold; }
-
-                        .menu-toggle {
-                            background: #222;
-                            color: #fff;
-                            padding: 10px 15px;
-                            border-radius: 5px;
-                            margin-right: 20px;
-                            cursor: pointer;
-                            font-size: 20px;
-                        }
-
-                        
-                    #searchInput{
-                        border:none;
-                    } */
             /* ------------------------header menu---------------------------- */
 
                         /* .top-right { display: flex; align-items: center; gap: 25px; } */
@@ -526,33 +587,10 @@
                     .speaker-text {
                         color: #333; /* Darker text for the speaker banner */
                     }
-                
-
 
                     /*mobile bottom menu  Hide bottom navbar by default */
-.mobile-bottom-nav {
-    display: none;
-}
 
-/* Show only on mobile */
-@media (max-width: 768px) {
-    .mobile-bottom-nav {
-        display: block;
-    }
 
-    /* Give space so content not hidden behind nav */
-    body {
-        padding-bottom: 70px;
-    }
-    
-
-}
-@media (max-width: 768px) {
-    .category-bar {
-        top: 64px;
-    }
-    
-}
 .sticky-header {
     position: sticky;
     top: 0;
@@ -566,99 +604,30 @@
     background: #fff;
 }
 
-/* ============================= */
-/* MOBILE VIEW ICON HIDE RULES */
-/* ============================= */
-@media (max-width: 768px) {
-
-    /* Wishlist hide */
-    #wishlistbtn,
-    .wishlist-icon {
-        display: none !important;
-    }
-
-    /* Cart hide */
-    #cartBtn,
-    .cart-icon {
-        display: none !important;
-    }
-
-    /* Hero / Banner / Slider hide (homepage banners) */
-    .hero-slider,
-    .home-banner,
-    .main-banner,
-    .slider-banner {
-        display: none !important;
-    }
-}
-@media (max-width: 768px) {
-    .hero-slider,
-    .profile-icon {
-        display: none !important;
-    }
-    .top-mobile-header{
-        width:100% !important;
-    }
-    .logo-image{
-        width: 163px;
-
-    }
-      .searchbar{
-        display: block !important;
-    }
-    #searchBtn
-    {
-        display:none !important;
-    }
-}
-@media (max-width: 994px) {
-   .searchbar {
-        display: none ;
-
-    }
-    #searchBtn
-    {
-        display:block !important;
-    }
-    
-    
-}
-
-@media (max-width: 768px) {
-     #searchBtn
-    {
-        display:none !important;
-    }
-    .top-bar{
-        gap:5px;
-    }
-}
 
 </style>
 
 
             <div class="top-bar sticky-header" >
                 
-                <div class="logo top-mobile-header" style="display: flex;gap: 20px;width:325px">
-                     <a href="{{ route('home') }}">
-                     <img  class="logo-image" src="{{asset('storage/uploads/logo/speedly_logo3.png')}}" alt=""></a>
-                    <div class="d-flex flex-column" id="mainlocationHeader" style="margin-top:10px;">
-                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:150px">
-                        Delivery in 8 minutes
-                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
-                    </span>
+                <div class="top-left logo top-mobile-header" >
+                    <a href="{{ route('home') }}"><img  class="logo-image" src="{{asset('storage/uploads/logo/speedlylogo4.png')}}" alt=""></a>
+                    <div class="location-box " id="mainlocationHeader">
+                        <span class="delivery-text flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:155px">
+                            Delivery in 8 minutes
+                            <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
+                        </span>
 
-                    <span class="text-muted" style="margin-top:-2px; font-size:15px;">
-                        Laxmangarh, Sikar...
-                        <i class="bi bi-caret-down-fill"></i>
-                    </span>
+                        <span class="location-text text-muted" style="margin-top:-2px; font-size:15px;">
+                            Laxmangarh, Sikar...
+                            <i class="bi bi-caret-down-fill"></i>
+                        </span>
+                    </div>
+                </div>
 
-                </div>
-                   
-                </div>
-                <div style="display:flex; align-items:center;">
+                <div class="search-wrapper">
                     <div class="w-full bg-white searchbar">
-                        <div id="searchBarBox" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
+                        <div id="searchBarBox" onclick="window.location='{{ route('search.index') }}'" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
 
                             <!-- Search Icon -->
                             <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
@@ -693,47 +662,40 @@
                 </div>
 
                 <div class="top-right">
-
-                <div id="searchBtn" class="search-icon" style="display:none;">
-                    <a href="{{ route('shop.index') }}">
-                        <i class="bi bi-search" style="font-size:20px;"></i>
-                    </a>
-                </div>
-
-                    <div id="wishlistbtn" class="wishlist-icon">
-                        <a href="{{ route('wishlist.index') }}" class="relative">
-                            <i class="fa fa-heart text-xl"></i>
-
-                            <span id="wishlist-count" 
-                                class="wishlist-count absolute -top-4 -right-2 bg-[#ff0000] text-white
-                                        text-xs rounded-full px-1.5 min-w-[18px] text-center">
-                                {{ $wishlistCount }}
-                            </span>
-                        </a>
-
-                    </div>
                     <!-- Cart Icon -->
-                    <div id="cartBtn" class="cart-icon">
-                        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
-                            <i class="bi bi-bag" style="font-size:20px;"></i>
-                           <span class="absolute  bg-[#ff0000] text-white cart-count
-                                        text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
+                        <div id="cartBtn" class="cart-icon">
+                            <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
+                                <i class="bi bi-bag" style="font-size:20px;"></i>
+                                <span class="absolute  bg-[#ff0000] text-white cart-count
+                                text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
+                            </a>
+                        </div>
 
-                        </a>
-                    </div>
-
-                    <!-- AUTH CHECK -->
+                   <!-- AUTH CHECK -->
                     @auth
+                        <div id="wishlistbtn" class="wishlist-icon">
+                            <a href="{{ route('wishlist.index') }}" class="relative">
+                                <i class="fa fa-heart text-xl"></i>
+
+                                <span id="wishlist-count" 
+                                    class="wishlist-count absolute -top-4 -right-2 bg-[#ff0000] text-white
+                                            text-xs rounded-full px-1.5 min-w-[18px] text-center">
+                                    {{ $wishlistCount }}
+                                </span>
+                            </a>
+
+                        </div>
+                
                         <!-- ================= Logged In User ================= -->
                         <x-dropdown align="right" width="48">
 
                             <x-slot name="trigger">
                                 <button
-                                    class="profile-icon inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition focus:outline-none">
+                                    class="profile-icon inline-flex items-center gap-2 py-2 transition focus:outline-none">
 
                                     <!-- User Icon -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-7 w-7 text-gray-600"
+                                        class="h-7 w-7 text-lime-600"
                                         viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -768,10 +730,10 @@
 
                     @else
                         <!-- ================= Guest User ================= -->
-                        <a href="{{ route('login') }}"
+                      {{--  <a href="{{ route('login') }}"
                             class="px-4 py-2 rounded-full bg-green-600 text-white font-medium hover:bg-green-700 transition">
                             Login
-                        </a>
+                        </a> --}}
                     @endauth
 
                 </div>
@@ -1031,12 +993,9 @@
     </div>
 </div>
 
-<section 
-    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg p-2 category-bar"
-    data-aos="fade-up"
->
+<section class="flex items-center justify-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar" data-aos="fade-up">
     <!-- All -->
-    <a href="{{ route('shop.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
+    <a href="{{ route('shop.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 3h18v18H3z"></path>
         </svg>
@@ -1044,7 +1003,7 @@
     </a>
 
     <!-- Winter -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2v20M2 12h20M5 5l14 14M5 19l14-14"></path>
         </svg>
@@ -1052,7 +1011,7 @@
     </a>
 
     <!-- Beauty -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2l4 4-4 4-4-4 4-4z"></path>
         </svg>
@@ -1060,7 +1019,7 @@
     </a>
 
     <!-- Electronics -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect x="2" y="6" width="20" height="12" rx="2"></rect>
         </svg>
@@ -1068,7 +1027,7 @@
     </a>
 
     <!-- Fashion -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M6 3l6 3 6-3v6l-6 3-6-3V3z"></path>
         </svg>
@@ -1076,7 +1035,7 @@
     </a>
 
     <!-- Home / Decor -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9v9H3z"></path>
         </svg>
@@ -1084,7 +1043,7 @@
     </a>
 
     <!-- Importers -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2l9 4-9 4-9-4 9-4z"></path>
         </svg>
@@ -1092,7 +1051,7 @@
     </a>
 
     <!-- Fresh -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z"></path>
         </svg>
@@ -1100,7 +1059,7 @@
     </a>
 
     <!-- Kids -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="7" r="4"></circle>
             <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
@@ -1109,13 +1068,35 @@
     </a>
 
     <!-- Super Mall -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M3 9h18l-1 11H4L3 9z"></path>
             <path d="M9 9V5a3 3 0 016 0v4"></path>
         </svg>
         <span>Super Mall</span>
     </a>
+
+    <a href="{{ route('shop.index') }}"class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+        <i class="fa fa-th-large text-sm"></i>
+        <span class="text-xs mt-1">Categories</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['store' => '99']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
+        <i class="fa fa-tags text-sm"></i>
+        <span class="text-xs mt-1">99 Store</span>
+    </a>
+
+    <a href="{{ route('account.cart.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition"> 
+        <i class="fa fa-plus-circle text-sm"></i>
+        <span class="text-xs mt-1">ADD</span>
+    </a>
+
+    <a href="{{ route('account.orders.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition"> 
+        <i class="fa fa-rotate-right text-sm"></i>
+        <span class="text-xs mt-1">Order Again</span>
+    </a>
+
+
 </section>
 
         
@@ -1339,23 +1320,24 @@
         </div> -->
 
         <!-- Cart -->
-        <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"
+     {{-- 
+        <!-- <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"
            class="relative flex flex-col items-center text-xs {{ $isCart ? 'text-green-600' : 'text-gray-600' }}">
             <i class="bi bi-bag text-xl"></i>
-            <span>Cart</span>
+            <span>Cart</span> -->
 
             <!-- Cart Count -->
-            <span class="cart-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+            <!-- <span class="cart-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
                 {{ $cartCount }}
             </span>
-        </a>
+        </a> -->
 
         <!-- Profile -->
-        <a href="{{ auth()->check() ? route('account.dashboard') : route('login') }}"
+      <!-- <a href="{{ auth()->check() ? route('account.dashboard') : route('login') }}"
            class="flex flex-col items-center text-xs {{ $isAccount ? 'text-green-600' : 'text-gray-600' }}">
             <i class="bi bi-person text-xl"></i>
             <span>Account</span>
-        </a>
+        </a> --> --}}
 
     </div>
 </nav>
@@ -1512,7 +1494,7 @@ startTicker();
 // On click → open search page
 document.getElementById("searchBarBox").addEventListener("click", () => {
     stopTicker();
-    window.location.href = "/search";
+    // window.location.href = "/search";
 });
 
 

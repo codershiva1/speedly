@@ -69,6 +69,11 @@ class PageController extends Controller
         return view('pages.terms');
     }
 
+     public function search(): View
+    {
+        return view('search.index');
+    }
+
      public function privacy(): View
     {
         return view('pages.privacy');

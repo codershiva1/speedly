@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VendorStorefrontController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
@@ -41,6 +42,8 @@ Route::get('/shipping', [PageController::class, 'shipping'])->name('pages.shippi
 Route::get('/vendor-agreement', [PageController::class, 'vendor_policy'])->name('pages.vendor-agreement');
 Route::get('/cancellation', [PageController::class, 'cancellation'])->name('pages.cancellation');
 Route::get('/cookie', [PageController::class, 'cookie_policy'])->name('pages.cookie');
+
+Route::get('/search', [PageController::class, 'search'])->name('search.index');
 
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
