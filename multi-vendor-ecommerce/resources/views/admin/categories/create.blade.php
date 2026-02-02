@@ -1,9 +1,16 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Category') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin.app')
+@section('content')
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Add Category</h1>
+
+    </div>
+
+    @if(session('status'))
+        <div class="bg-green-100 text-green-700 p-2 mb-4 rounded">
+            {{ session('status') }}
+        </div>
+    @endif
+   
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
@@ -43,4 +50,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

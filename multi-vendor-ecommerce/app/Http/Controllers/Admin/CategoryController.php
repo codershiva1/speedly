@@ -11,12 +11,29 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index(): View
-    {
-        $categories = Category::with('parent')->orderBy('name')->paginate(15);
+    public function index(Request $request)
+        {
+            // 1. Search term ko request se pakadna
+            $searchTerm = $request->input('search');
 
-        return view('admin.categories.index', compact('categories'));
-    }
+            // 2. Query builder start karna
+            $categories = Category::query()
+                ->with('parent') // Eager loading for performance
+                ->when($searchTerm, function ($query, $searchTerm) {
+                    // Agar search term hai, to name ya parent name se filter karein
+                    return $query->where('name', 'LIKE', "%{$searchTerm}%")
+                                ->orWhereHas('parent', function($q) use ($searchTerm) {
+                                    $q->where('name', 'LIKE', "%{$searchTerm}%");
+                                });
+                })
+                ->latest()
+                ->paginate(10);
+
+            // 3. Search results ko pagination ke saath barkarar rakhna (Important!)
+            $categories->appends(['search' => $searchTerm]);
+
+            return view('admin.categories.index', compact('categories'));
+        }
 
     public function create(): View
     {

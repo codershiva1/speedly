@@ -1,9 +1,25 @@
-<x-app-layout>
+@extends('layouts.admin.app')
+@section('content')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Orders') }}
         </h2>
     </x-slot>
+
+
+     <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Orders</h1>
+        <!-- <a href="{{ route('admin.coupons.create') }}"
+           class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Add Orders
+        </a> -->
+    </div>
+
+    @if(session('status'))
+        <div class="bg-green-100 text-green-700 p-2 mb-4 rounded">
+            {{ session('status') }}
+        </div>
+    @endif
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -49,4 +65,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

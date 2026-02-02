@@ -87,21 +87,21 @@ class MenuHelper
     public static function getOthersItems()
     {
         return [
-            [
-                'icon'  => 'charts',
-                'name'  => 'Charts',
-                'route' => null,
-            ],
-            [
-                'icon'  => 'ui-elements',
-                'name'  => 'UI Elements',
-                'route' => null,
-            ],
-            [
-                'icon'  => 'authentication',
-                'name'  => 'Authentication',
-                'route' => null,
-            ],
+            // [
+            //     'icon'  => 'charts',
+            //     'name'  => 'Charts',
+            //     'route' => null,
+            // ],
+            // [
+            //     'icon'  => 'ui-elements',
+            //     'name'  => 'UI Elements',
+            //     'route' => null,
+            // ],
+            // [
+            //     'icon'  => 'authentication',
+            //     'name'  => 'Authentication',
+            //     'route' => null,
+            // ],
         ];
     }
 
