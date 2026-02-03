@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
 use App\Http\Controllers\Vendor\ProductController as VendorProductController;
 use App\Http\Controllers\Vendor\OrderController as VendorOrderController;
@@ -137,11 +138,24 @@ Route::prefix('admin')
         Route::resource('brands', AdminBrandController::class);
         Route::resource('products', AdminProductController::class);
         Route::resource('orders', AdminOrderController::class)->only(['index', 'show']);
-
+        Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status.update');
                 // ---- Coupon Management ----
         Route::resource('coupons', CouponController::class);
         Route::post('/coupons/{coupon}/toggle', [CouponController::class, 'toggle'])
             ->name('coupons.toggle');
+
+        Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    
+        Route::get('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');      
+          Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
+          Route::get('users/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+          Route::get('users/update', [AdminUserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [AdminUserController::class, 'disableUser'])->name('users.destroy');
+        Route::get('users/store', [AdminUserController::class, 'store'])->name('users.store');
+        Route::get('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+        Route::delete('users/{id}/force-delete', [UserController::class, 'forceDelete'])->name('users.forceDelete');
+
+        
 
             });
 

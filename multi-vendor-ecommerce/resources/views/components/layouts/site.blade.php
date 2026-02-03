@@ -43,7 +43,6 @@
                 justify-content: space-between;
                 flex-wrap: wrap; /* allow wrapping */
                 gap: 10px; /* space between rows on mobile */
-                border-bottom:1px solid #eee;"
             }
 
             /* Left section */
@@ -149,48 +148,6 @@
                 .category-bar {
                     top: 64px;
                 }
-
-                .top-bar * {
-                    color: #ffffff !important;
-                }
-
-                .delivery-text i {
-                    color: #ffd700 !important;
-                }
-
-                .location-text {
-                    opacity: 0.9;
-                }
-
-                /* Search bar stays white */
-                #searchBarBox {
-                    background: #ffffff !important;
-                }
-
-                #searchBarBox i {
-                    color: #6b7280 !important;
-                }
-
-                .mobile-hero-wrapper {
-                    background-image: url("http://localhost/speedly_wind/multi-vendor-ecommerce/storage/uploads/banners/mobileheaderimg.png");
-                    background-size: cover;
-                    background-position: center top;
-                    background-repeat: no-repeat;
-                    overflow: hidden;
-                    padding-bottom: 12px;
-                }
-
-                /* Remove white box feeling */
-                .top-bar {
-                    background: transparent !important;
-                    border-bottom: none !important;
-                }
-
-                .category-bar {
-                    background: transparent !important;
-                    box-shadow: none !important;
-                }
-
                 
             }
 
@@ -638,7 +595,7 @@
     position: sticky;
     top: 0;
     z-index: 10000;
-    /* background: #fff; */
+    background: #fff;
 }
 .category-bar {
     position: sticky;
@@ -650,333 +607,473 @@
 
 </style>
 
-<div class="mobile-hero-wrapper sticky-header">
-    <div class="top-bar sticky-header" >
+
+            <div class="top-bar sticky-header" style="border-bottom:1px solid #eee;">
                 
-        <div class="top-left logo top-mobile-header" >
-            <a href="{{ route('home') }}"><img  class="logo-image" src="{{asset('storage/uploads/logo/speedlylogo4.png')}}" alt=""></a>
-            <div class="location-box " id="mainlocationHeader">
-                <span class="delivery-text flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:155px">
-                     Delivery in 8 minutes
-                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
-                </span>
+                <div class="top-left logo top-mobile-header" >
+                    <a href="{{ route('home') }}"><img  class="logo-image" src="{{asset('storage/uploads/logo/speedlylogo4.png')}}" alt=""></a>
+                    <div class="location-box " id="mainlocationHeader">
+                        <span class="delivery-text flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:155px">
+                            Delivery in 8 minutes
+                            <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
+                        </span>
 
-                <span class="location-text text-muted" style="margin-top:-2px; font-size:15px;">
-                    Laxmangarh, Sikar...
-                    <i class="bi bi-caret-down-fill"></i>
-                </span>
-            </div>
-        </div>
-
-        <div class="search-wrapper">
-            <div class="w-full bg-white searchbar">
-                <div id="searchBarBox" onclick="window.location='{{ route('search.index') }}'" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
-
-                     <!-- Search Icon -->
-                    <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
-
-                    <!-- Animated placeholder -->
-                    <div class="relative w-full overflow-hidden h-6 pointer-events-none" id="placeholderContainer">
-                        <div id="placeholderWrapper" class="relative transition-transform duration-700 ease-out">
-                            <!-- Spans will be added by JS -->
-                        </div>
+                        <span class="location-text text-muted" style="margin-top:-2px; font-size:15px;">
+                            Laxmangarh, Sikar...
+                            <i class="bi bi-caret-down-fill"></i>
+                        </span>
                     </div>
-                    <!-- Search input (clickable but readonly on home page) -->
-                    <input 
-                        id="searchInput"
-                        type="text"
-                        class="bg-transparent focus:outline-none text-gray-700 placeholder-transparent pointer-events-none"
-                        readonly
-                     >
+                </div>
 
-                     <!-- Voice Search -->
-                     <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
-                         <i class="bi bi-mic-fill text-xl"></i>
-                     </button>
+                <div class="search-wrapper">
+                    <div class="w-full bg-white searchbar">
+                        <div id="searchBarBox" onclick="window.location='{{ route('search.index') }}'" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
+
+                            <!-- Search Icon -->
+                            <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
+
+                            <!-- Animated placeholder -->
+                            <div class="relative w-full overflow-hidden h-6 pointer-events-none" id="placeholderContainer">
+                                <div id="placeholderWrapper" class="relative transition-transform duration-700 ease-out">
+                                    <!-- Spans will be added by JS -->
+                                </div>
+                            </div>
+                            <!-- Search input (clickable but readonly on home page) -->
+                            <input 
+                                id="searchInput"
+                                type="text"
+                                class="bg-transparent focus:outline-none text-gray-700 placeholder-transparent pointer-events-none"
+                                readonly
+                            >
+
+                            <!-- Voice Search -->
+                            <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
+                                <i class="bi bi-mic-fill text-xl"></i>
+                            </button>
                             
 
-                      <!-- Image Search -->
-                     <button class="ml-3 text-green-400 hover:text-green-500" title="Image Search">
-                         <i class="bi bi-image-fill text-xl"></i>
-                     </button>
-                 </div>
-            </div>
+                            <!-- Image Search -->
+                            <button class="ml-3 text-green-400 hover:text-green-500" title="Image Search">
+                                <i class="bi bi-image-fill text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
                 
-        </div>
+                </div>
 
-        <div class="top-right">
-            <!-- Cart Icon -->
-                <div id="cartBtn" class="cart-icon">
-                    <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
-                        <i class="bi bi-bag" style="font-size:20px;"></i>
-                        <span class="absolute  bg-[#ff0000] text-white cart-count
-                        text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
-                    </a>
-                 </div>
+                <div class="top-right">
+                    <!-- Cart Icon -->
+                        <div id="cartBtn" class="cart-icon">
+                            <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
+                                <i class="bi bi-bag" style="font-size:20px;"></i>
+                                <span class="absolute  bg-[#ff0000] text-white cart-count
+                                text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
+                            </a>
+                        </div>
 
-             <!-- AUTH CHECK -->
-            @auth
-                <div id="wishlistbtn" class="wishlist-icon">
-                    <a href="{{ route('wishlist.index') }}" class="relative">
-                        <i class="fa fa-heart text-xl"></i>
+                   <!-- AUTH CHECK -->
+                    @auth
+                        <div id="wishlistbtn" class="wishlist-icon">
+                            <a href="{{ route('wishlist.index') }}" class="relative">
+                                <i class="fa fa-heart text-xl"></i>
 
-                        <span id="wishlist-count" 
-                            class="wishlist-count absolute -top-4 -right-2 bg-[#ff0000] text-white
-                                    text-xs rounded-full px-1.5 min-w-[18px] text-center">
-                            {{ $wishlistCount }}
-                        </span>
-                    </a>
+                                <span id="wishlist-count" 
+                                    class="wishlist-count absolute -top-4 -right-2 bg-[#ff0000] text-white
+                                            text-xs rounded-full px-1.5 min-w-[18px] text-center">
+                                    {{ $wishlistCount }}
+                                </span>
+                            </a>
+
+                        </div>
+                
+                        <!-- ================= Logged In User ================= -->
+                        <x-dropdown align="right" width="48">
+
+                            <x-slot name="trigger">
+                                <button
+                                    class="profile-icon inline-flex items-center gap-2 py-2 transition focus:outline-none">
+
+                                    <!-- User Icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-7 w-7 text-lime-600"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a3 3 0 110 6 3 3 0 010-6zm0 12a7.963 7.963 0 01-5.33-2.03c.03-1.77 3.56-2.74 5.33-2.74 1.77 0 5.3.97 5.33 2.74A7.963 7.963 0 0112 20z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link 
+                                    :href="auth()->user()->role === 'admin' 
+                                        ? route('admin.dashboard') 
+                                        : route('account.dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-dropdown-link>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </form>
+                            </x-slot>
+
+                        </x-dropdown>
+
+                    @else
+                        <!-- ================= Guest User ================= -->
+                      {{--  <a href="{{ route('login') }}"
+                            class="px-4 py-2 rounded-full bg-green-600 text-white font-medium hover:bg-green-700 transition">
+                            Login
+                        </a> --}}
+                    @endauth
 
                 </div>
-                
-                <!-- ================= Logged In User ================= -->
-                <x-dropdown align="right" width="48">
 
-                    <x-slot name="trigger">
-                        <button
-                            class="profile-icon inline-flex items-center gap-2 py-2 transition focus:outline-none">
-
-                            <!-- User Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-7 w-7 text-lime-600"
-                                viewBox="0 0 24 24"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a3 3 0 110 6 3 3 0 010-6zm0 12a7.963 7.963 0 01-5.33-2.03c.03-1.77 3.56-2.74 5.33-2.74 1.77 0 5.3.97 5.33 2.74A7.963 7.963 0 0112 20z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <x-dropdown-link 
-                            :href="auth()->user()->role === 'admin' 
-                                ? route('admin.dashboard') 
-                                : route('account.dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-
-                </x-dropdown>
-
-            @else
-                <!-- ================= Guest User ================= -->
-                {{--  <a href="{{ route('login') }}"
-                    class="px-4 py-2 rounded-full bg-green-600 text-white font-medium hover:bg-green-700 transition">
-                    Login
-                </a> --}}
-            @endauth
-
-        </div>
-
-    </div>
+            </div>
        
 
-    <!-- MOBILE MENU POPUP -->
-    <div id="mobileMenu" class="mobile-menu">
-        <div class="mobile-menu-content">
-            <i class="bi bi-x-lg close-menu"></i>
 
-            <!-- Put SAME nav-bar content here -->
-            <div class="mobile-nav-links">
-                <!-- Copy your nav links here -->
+                <!-- LOCATION HEADER -->
+            <!-- <div class="d-flex align-items-center px-4 bg-white" id="locationHeader">
+                <div class="d-flex flex-column" id="mainlocationHeader">
+                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
+                        Delivery in 8 minutes
+                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
+                    </span>
 
-                <div class="mobile-link" data-toggle="shop">
-                    Shop <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-shop">
-                    <a href="#">Left Sidebar</a>
-                    <a href="#">Right Sidebar</a>
-                    <a href="#">Filter Toggle</a>
-                    <a href="#">Off-Sidebar Left</a>
-                    <a href="#">Off-Sidebar Right</a>
-                </div>
+                    <span class="text-muted" style="margin-top:-2px; font-size:15px;">
+                        Laxmangarh, Sikar...
+                        <i class="bi bi-caret-down-fill"></i>
+                    </span>
 
-                <div class="mobile-link" data-toggle="categories">
-                    Categories <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-categories">
-                    <a href="#">Men</a>
-                    <a href="#">Women</a>
-                    <a href="#">Kids</a>
-                </div>
+                </div> -->
+                <!-- ----------- -->
 
-                <div class="mobile-link" data-toggle="products">
-                    Products <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-products">
-                    <a href="#">New Arrivals</a>
-                    <a href="#">Trending</a>
-                    <a href="#">Discounted</a>
-                </div>
+                <!-- <div class="" id="mobilemenuToggle" ><i class="bi bi-list"></i></div>  -->
 
-                <div class="mobile-link" data-toggle="features">
-                    Features <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-features">
-                    <a href="#">Free Shipping</a>
-                    <a href="#">Premium Service</a>
-                </div>
+                <!-- <div class="nav-bar">
+                 
 
-                <div class="mobile-link" data-toggle="pages">
-                    Pages <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-pages">
-                    <a href="{{ route('pages.about') }}">About Us</a>
-                    <a href="#">Contact Us</a>
-                    <a href="{{ route('pages.service') }}">Service</a>
-                    <a href="{{ route('pages.find-store') }}">Find a Store</a>
-                    <a href="{{ route('pages.faq') }}">FAQ's</a>
-                    <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
-                    <a href="{{ route('pages.terms') }}">Terms & Conditions</a>
-                </div>
-
-                <div class="mobile-link" data-toggle="blog">
-                    Blog <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="mobile-dropdown" id="drop-blog">
-                    <a href="#">Latest Posts</a>
-                    <a href="#">Tech Updates</a>
-                </div>
-
-            </div>
-                    
-        </div>
-    </div>
-
-    <!-- LOCATION POPUP -->
-    <div class="modal fade" id="locationModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-4" style="border-radius:12px;">
-                
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="m-0 fw-semibold">Change Location</h5>
-                    <i class="fa-solid fa-xmark" data-bs-dismiss="modal" style="cursor:pointer;"></i>
-                </div>
-
-                <div class="d-flex align-items-center gap-3">
-
-                    <!-- Detect My Location Button -->
-                    <button class="btn btn-success px-4 py-2 fw-semibold" id="detectLocationBtn" style="border-radius:10px;">
-                        Detect my location
-                    </button>
-
-                    <!-- OR Divider -->
-                    <div class="d-flex flex-column align-items-center text-muted fw-semibold">
-                        <span>OR</span>
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Shop <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu-content">
+                            <div class="menu-column">
+                                <h3 class="menu-title">CATEGORY PAGE LAYOUT</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Left Sidebar</a></li>
+                                    <li><a href="#">Right Sidebar</a></li>
+                                    <li><a href="#">Filter Toggle</a></li>
+                                    <li><a href="#">Off-Sidebar Left</a></li>
+                                    <li><a href="#">Off-Sidebar Right</a></li>
+                                    <li class="separator"></li>
+                                    <li><a href="#">Shop - Column 3</a></li>
+                                    <li><a href="#">Shop - Column 4</a></li>
+                                    <li><a href="#">Shop - Column 5</a></li>
+                                    <li><a href="#">Shop - Column 6</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-column">
+                                <h3 class="menu-title">PRODUCT PAGE LAYOUT</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Product - Default</a></li>
+                                    <li><a href="#">Product - Sticky</a></li>
+                                    <li><a href="#">Product - Masonry</a></li>
+                                </ul>
+                                <h3 class="menu-title product-gallery-title">PRODUCT GALLERY</h3>
+                                <ul class="menu-list">
+                                    <li><a href="#">Product - Left Gallery</a></li>
+                                    <li><a href="#">Product - Right Gallery</a></li>
+                                    <li><a href="#">Product - Bottom Gallery</a></li>
+                                    <li><a href="#">Product - No Gallery</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-column menu-banners">
+                                <a href="#">
+                                    <div class="menu-banner smartphone-banner">
+                                        <span class="banner-text">Branded</span>
+                                        <span class="banner-text-large">Smart Phone</span>
+                                    </div>
+                                </a>
+                                <a href="#">
+                                    <div class="menu-banner speaker-banner">
+                                        <span class="banner-text-large speaker-text">BEOPLAY</span>
+                                        <span class="banner-text speaker-text">Home Speaker</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Search Box -->
-                    <input 
-                        type="text"
-                        class="form-control py-2"
-                        placeholder="search delivery location"
-                        style="border-radius:12px; min-width:220px;"
-                    >
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Categories <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Men</a>
+                            <a href="#">Women</a>
+                            <a href="#">Kids</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Products <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">New Arrivals</a>
+                            <a href="#">Trending</a>
+                            <a href="#">Discounted</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Features <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Free Shipping</a>
+                            <a href="#">Premium Service</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Pages <i class="bi bi-caret-down-fill"></i>
+                        </div>
+
+                                            
+                        <div class="dropdown-menu" id="pagesdropdown-menu">
+                            <div>
+                                <a href="{{ route('pages.about') }}" class="hover:text-amber-400">About Us</a>
+                                <a href="#" class="hover:text-amber-400">Contact Us</a>
+                                <a href="{{ route('pages.service') }}" class="hover:text-amber-400">Service</a>
+                                <a href="{{ route('pages.find-store') }}" class="hover:text-amber-400">Find a Store</a>
+                                <a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a>
+                                <a href="{{ route('pages.privacy') }}" class="hover:text-amber-400">Privacy Policy</a>
+                            </div>
+                            <div>
+                                <a href="{{ route('pages.terms') }}" class="hover:text-amber-400">Terms & Conditions</a>
+                                <a href="{{ route('pages.return-refund') }}" class="hover:text-amber-400">Return & Refund Policy</a>
+                                <a href="{{ route('pages.shipping') }}" class="hover:text-amber-400">Shipping Policy</a>
+                                <a href="{{ route('pages.cookie') }}" class="hover:text-amber-400">Cookie Policy</a>
+                                <a href="{{ route('pages.vendor-agreement') }}" class="hover:text-amber-400">Vendor Agreement</a>
+                                <a href="{{ route('pages.cancellation') }}" class="hover:text-amber-400">Cancellation</a>
+                            </div>        
+                        </div>
+                    </div>
+
+                    <div class="nav-link dropdown">
+                        <div class="menu-button">
+                            Blog <i class="bi bi-caret-down-fill"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#">Latest Posts</a>
+                            <a href="#">Tech Updates</a>
+                        </div>
+                    </div>
+                  
+                </div> -->
+            <!-- </div> -->
+
+<!-- MOBILE MENU POPUP -->
+<div id="mobileMenu" class="mobile-menu">
+    <div class="mobile-menu-content">
+        <i class="bi bi-x-lg close-menu"></i>
+
+        <!-- Put SAME nav-bar content here -->
+        <div class="mobile-nav-links">
+            <!-- Copy your nav links here -->
+
+            <div class="mobile-link" data-toggle="shop">
+                Shop <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-shop">
+                <a href="#">Left Sidebar</a>
+                <a href="#">Right Sidebar</a>
+                <a href="#">Filter Toggle</a>
+                <a href="#">Off-Sidebar Left</a>
+                <a href="#">Off-Sidebar Right</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="categories">
+                Categories <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-categories">
+                <a href="#">Men</a>
+                <a href="#">Women</a>
+                <a href="#">Kids</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="products">
+                Products <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-products">
+                <a href="#">New Arrivals</a>
+                <a href="#">Trending</a>
+                <a href="#">Discounted</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="features">
+                Features <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-features">
+                <a href="#">Free Shipping</a>
+                <a href="#">Premium Service</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="pages">
+                Pages <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-pages">
+                <a href="{{ route('pages.about') }}">About Us</a>
+                <a href="#">Contact Us</a>
+                <a href="{{ route('pages.service') }}">Service</a>
+                <a href="{{ route('pages.find-store') }}">Find a Store</a>
+                <a href="{{ route('pages.faq') }}">FAQ's</a>
+                <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
+                <a href="{{ route('pages.terms') }}">Terms & Conditions</a>
+            </div>
+
+            <div class="mobile-link" data-toggle="blog">
+                Blog <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="mobile-dropdown" id="drop-blog">
+                <a href="#">Latest Posts</a>
+                <a href="#">Tech Updates</a>
+            </div>
+
+        </div>
+                
+    </div>
+</div>
+
+<!-- LOCATION POPUP -->
+<div class="modal fade" id="locationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4" style="border-radius:12px;">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="m-0 fw-semibold">Change Location</h5>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal" style="cursor:pointer;"></i>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- Detect My Location Button -->
+                <button class="btn btn-success px-4 py-2 fw-semibold" id="detectLocationBtn" style="border-radius:10px;">
+                    Detect my location
+                </button>
+
+                <!-- OR Divider -->
+                <div class="d-flex flex-column align-items-center text-muted fw-semibold">
+                    <span>OR</span>
                 </div>
 
+                <!-- Search Box -->
+                <input 
+                    type="text"
+                    class="form-control py-2"
+                    placeholder="search delivery location"
+                    style="border-radius:12px; min-width:220px;"
+                >
             </div>
+
         </div>
     </div>
-
-    <section class="flex items-center justify-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar" data-aos="fade-up">
-        <!-- All -->
-        <a href="{{ route('shop.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">🛍️</span>
-            <span>All</span>
-        </a>
-
-        <!-- Winter -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">❄️</span>
-            <span>Winter</span>
-        </a>
-
-        <!-- Beauty -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
-            <span class="text-lg">💄</span>
-            <span>Beauty</span>
-        </a>
-
-        <!-- Electronics -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
-            <span class="text-lg">🎧</span>
-            <span>Electronics</span>
-        </a>
-
-        <!-- Fashion -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
-            <span class="text-lg">👗</span>
-            <span>Fashion</span>
-        </a>
-
-        <!-- Home / Decor -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
-            <span class="text-lg">🏠</span>
-            <span>Decor</span>
-        </a>
-
-        <!-- Importers -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center  px-3 py-1 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
-            <span class="text-lg">🚢</span>
-            <span>Importers</span>
-        </a>
-
-        <!-- Fresh -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
-            <span class="text-lg">🍎</span>
-            <span>Fresh</span>
-        </a>
-
-        <!-- Kids -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
-            <span class="text-lg">🧸</span>
-            <span>Kids</span>
-        </a>
-
-        <!-- Super Mall -->
-        <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
-            <span class="text-lg">🏬</span>
-            <span>Super Mall</span>
-        </a>
-
-        <a href="{{ route('shop.index') }}"class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">🗂️</span>
-            <span class="text-xs mt-1">Categories</span>
-        </a>
-
-        <a href="{{ route('shop.index', ['store' => '99']) }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
-            <span class="text-lg">🏷️</span>
-            <span class="text-xs mt-1">99 Store</span>
-        </a>
-
-        <a href="{{ route('account.cart.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition"> 
-            <span class="text-lg">📢</span>
-            <span class="text-xs">Ads</span>
-        </a>
-
-        <a href="{{ route('account.orders.index') }}" class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition"> 
-            <span class="text-lg">🔁</span>
-            <span class="text-xs mt-1">Order Again</span>
-        </a>
-
-
-    </section>
-
-    <!-- BANNER WILL MOVE HERE (later step) -->
 </div>
+
+<section 
+    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-3 py-2 category-bar justify-content-between"
+    data-aos="fade-up" 
+>
+    <!-- All -->
+
+    
+    <a href="{{ route('shop.index') }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🛍️
+        </div>
+        <span class="text-xs font-bold text-gray-900 border-b-2 border-black pb-0.5">All</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🧥
+        </div>
+        <span class="text-xs font-medium text-gray-700">Winter</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            💄
+        </div>
+        <span class="text-xs font-medium text-gray-700">Beauty</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🎧
+        </div>
+        <span class="text-xs font-medium text-gray-700">Electronics</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            👗
+        </div>
+        <span class="text-xs font-medium text-gray-700">Fashion</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🏠
+        </div>
+        <span class="text-xs font-medium text-gray-700">Decor</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🚢
+        </div>
+        <span class="text-xs font-medium text-gray-700">Importers</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🍎
+        </div>
+        <span class="text-xs font-medium text-gray-700">Fresh</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🧸
+        </div>
+        <span class="text-xs font-medium text-gray-700">Kids</span>
+    </a>
+
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🏢
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Super Mall</span>
+    </a>
+
+
+</section>
+
+
         
 
         <!-- NAVIGATION BAR -->

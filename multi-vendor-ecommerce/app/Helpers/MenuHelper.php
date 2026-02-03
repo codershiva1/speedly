@@ -36,6 +36,12 @@ class MenuHelper
             ],
 
             [
+                'icon'  => 'users',
+                'name'  => 'users',
+                'route' => 'admin.users.index'
+            ],
+
+            [
                 'icon'  => 'calendar',
                 'name'  => 'Calendar',
                 'route' => null, // not implemented yet
@@ -131,6 +137,12 @@ class MenuHelper
             'dashboard' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3 12l2-2m0 0l7-7 7 7m-9 2v8m4-8v8m5-3h-3"/>
+            </svg>',
+
+            'users' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5.121 17.804A4 4 0 0112 15a4 4 0 016.879 2.804M12 12a4 4 0 100-8 4 4 0 000 8z"/>
             </svg>',
 
             'calendar' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
