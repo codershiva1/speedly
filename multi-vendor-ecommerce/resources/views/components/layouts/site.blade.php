@@ -83,7 +83,8 @@
 
             }
 
-            #searchInput {
+            #mainSearchInput {
+                color:black;
                 border: none;
             }
 
@@ -171,9 +172,9 @@
                     box-shadow: none !important;
                 }
 
-                .top-bar * {
+                /* .top-bar * {
                     color: #ffffff !important;
-                }
+                } */
 
                 .delivery-text i {
                     color: #ffd700 !important;
@@ -668,9 +669,17 @@
                     </div>
                 </div>
 
+                @php
+                    $isSearchPage = request()->routeIs('search.index');
+                @endphp
+
                 <div class="search-wrapper">
                     <div class="w-full searchbar">
-                        <div id="searchBarBox" onclick="window.location='{{ route('search.index') }}'" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
+                        <div id="searchBarBox" 
+                        @unless($isSearchPage)
+                            onclick="window.location='{{ route('search.index') }}'"
+                        @endunless
+                         class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
 
                             <!-- Search Icon -->
                             <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
@@ -682,13 +691,15 @@
                                 </div>
                             </div>
                             <!-- Search input (clickable but readonly on home page) -->
+                             {{--  placeholder="{{ $isSearchPage ? 'Search for fruits, snacks, milk…' : '' }}"  --}}
                             <input 
-                                id="searchInput"
+                                id="mainSearchInput"
                                 type="text"
-                                class="bg-transparent focus:outline-none text-gray-700 placeholder-transparent pointer-events-none"
-                                readonly
+                                class="bg-transparent focus:outline-none text-gray-700 w-full
+                                {{ $isSearchPage ? '' : 'pointer-events-none' }}"
+                                {{ $isSearchPage ? '' : 'readonly' }}
+                                {{ $isSearchPage ? 'autofocus' : '' }}
                             >
-
                             <!-- Voice Search -->
                             <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
                                 <i class="bi bi-mic-fill text-xl"></i>

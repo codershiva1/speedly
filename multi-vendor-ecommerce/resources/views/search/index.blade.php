@@ -2,18 +2,6 @@
 
 <div class=" mx-auto px-1 sm:px-4 lg:px-4 py-1 space-y-8">
 
-    {{-- SEARCH INPUT --}}
-    <div class="flex items-center bg-gray-100 rounded-full px-4 py-3 sticky top-16 z-30">
-        <i class="bi bi-search text-gray-500 mr-3"></i>
-        <input
-            id="mainSearchInput"
-            type="text"
-            autofocus
-            placeholder="Search for fruits, snacks, milk..."
-            class="w-full bg-transparent focus:outline-none text-gray-800"
-        >
-    </div>
-
     {{-- RESULTS --}}
     <div id="searchResults" class="mt-6 space-y-8"></div>
 
