@@ -148,12 +148,11 @@ Route::prefix('admin')
     
         Route::get('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');      
           Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
-          Route::get('users/edit', [AdminUserController::class, 'edit'])->name('users.edit');
-          Route::get('users/update', [AdminUserController::class, 'update'])->name('users.update');
-        Route::delete('users/{user}', [AdminUserController::class, 'disableUser'])->name('users.destroy');
-        Route::get('users/store', [AdminUserController::class, 'store'])->name('users.store');
-        Route::get('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
-        Route::delete('users/{id}/force-delete', [UserController::class, 'forceDelete'])->name('users.forceDelete');
+          Route::get('users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::put('users/update/{user}', [AdminUserController::class, 'update'])->name('users.update');        Route::delete('users/{user}', [AdminUserController::class, 'disableUser'])->name('users.destroy');
+        Route::post('users/store', [AdminUserController::class, 'store'])->name('users.store');
+        Route::get('users/{id}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
+        Route::delete('users/{id}/force-delete', [AdminUserController::class, 'forceDelete'])->name('users.forceDelete');
 
         
 

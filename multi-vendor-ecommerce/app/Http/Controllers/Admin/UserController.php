@@ -45,14 +45,14 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $userData = [
+            $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'image_url' => null, // Default value yahan set karein
         ];
 
-        // Image upload logic
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();  
             $request->image->move(public_path('uploads/users'), $imageName);
@@ -61,16 +61,19 @@ class UserController extends Controller
 
         User::create($userData);
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User created!');
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
+        $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id) 
     {
+        $user = User::findOrFail($id); // User manually find karein
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -94,7 +97,7 @@ class UserController extends Controller
 
         $user->update($data);
         
-        return back()->with('success', 'User updated successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');
     }
 
     // Toggle Active/Inactive

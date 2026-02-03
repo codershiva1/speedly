@@ -6,7 +6,7 @@
         <h2 class="text-2xl font-bold text-gray-800">Manage Users</h2>
          <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition">
             <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2.5"></path></svg>
-            + Add New User
+            Add New User
         </a>
     </div>
 
