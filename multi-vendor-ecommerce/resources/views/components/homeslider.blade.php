@@ -17,8 +17,8 @@
     .mobile-banner {
         display: block;
         position: relative;
-        margin: 10px;
-        border-radius: 14px;
+        /* margin: 10px; */
+        /* border-radius: 14px; */
         overflow: hidden;
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     }
@@ -107,7 +107,7 @@
 
 <div class="mobile-banner">
     <img 
-        src="https://i.pinimg.com/736x/74/d5/d4/74d5d412b22267897b74fefe60f5c28c.jpg" 
+        src="{{asset('storage/uploads/banners/mobilebannerimg.png')}}" 
         alt="banner"
     >
     <div class="mobile-banner-content">
