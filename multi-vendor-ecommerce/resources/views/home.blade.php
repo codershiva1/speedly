@@ -65,7 +65,7 @@
                 </div>
 
                 <!-- RIGHT: FILTER BOX -->
-                <div class="w-full lg:w-1/6">
+                <!-- <div class="w-full lg:w-1/6">
                     <div class="bg-white shadow-md rounded-xl p-4" style="height: 340px;overflow-y: scroll;">
 
                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>
@@ -88,7 +88,7 @@
                         @endforeach
 
                     </div>
-                </div>
+                </div> -->
 
             </div>
 

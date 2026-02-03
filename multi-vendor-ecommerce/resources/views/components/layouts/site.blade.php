@@ -994,90 +994,83 @@
 </div>
 
 <section 
-    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg p-2 category-bar"
-    data-aos="fade-up"
+    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-3 py-2 category-bar justify-content-between"
+    data-aos="fade-up" 
 >
     <!-- All -->
-    <a href="{{ route('shop.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 3h18v18H3z"></path>
-        </svg>
-        <span>All</span>
+
+    
+    <a href="{{ route('shop.index') }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🛍️
+        </div>
+        <span class="text-xs font-bold text-gray-900 border-b-2 border-black pb-0.5">All</span>
     </a>
 
-    <!-- Winter -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2v20M2 12h20M5 5l14 14M5 19l14-14"></path>
-        </svg>
-        <span>Winter</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🧥
+        </div>
+        <span class="text-xs font-medium text-gray-700">Winter</span>
     </a>
 
-    <!-- Beauty -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2l4 4-4 4-4-4 4-4z"></path>
-        </svg>
-        <span>Beauty</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            💄
+        </div>
+        <span class="text-xs font-medium text-gray-700">Beauty</span>
     </a>
 
-    <!-- Electronics -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-        </svg>
-        <span>Electronics</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🎧
+        </div>
+        <span class="text-xs font-medium text-gray-700">Electronics</span>
     </a>
 
-    <!-- Fashion -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M6 3l6 3 6-3v6l-6 3-6-3V3z"></path>
-        </svg>
-        <span>Fashion</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            👗
+        </div>
+        <span class="text-xs font-medium text-gray-700">Fashion</span>
     </a>
 
-    <!-- Home / Decor -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 12l9-9 9 9v9H3z"></path>
-        </svg>
-        <span>Decor</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🏠
+        </div>
+        <span class="text-xs font-medium text-gray-700">Decor</span>
     </a>
 
-    <!-- Importers -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2l9 4-9 4-9-4 9-4z"></path>
-        </svg>
-        <span>Importers</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🚢
+        </div>
+        <span class="text-xs font-medium text-gray-700">Importers</span>
     </a>
 
-    <!-- Fresh -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z"></path>
-        </svg>
-        <span>Fresh</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🍎
+        </div>
+        <span class="text-xs font-medium text-gray-700">Fresh</span>
     </a>
 
-    <!-- Kids -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="12" cy="7" r="4"></circle>
-            <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
-        </svg>
-        <span>Kids</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🧸
+        </div>
+        <span class="text-xs font-medium text-gray-700">Kids</span>
     </a>
 
-    <!-- Super Mall -->
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 9h18l-1 11H4L3 9z"></path>
-            <path d="M9 9V5a3 3 0 016 0v4"></path>
-        </svg>
-        <span>Super Mall</span>
+    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
+        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+            🏢
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Super Mall</span>
     </a>
+
+
 </section>
 
 
