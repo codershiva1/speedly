@@ -148,6 +148,49 @@
                 .category-bar {
                     top: 64px;
                 }
+
+                 .mobile-hero-wrapper {
+                    background-image: url("http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/banners/mobileheaderimg.png");
+                    background-size: cover;
+                    background-position: center top;
+                    background-repeat: no-repeat;
+
+                    /* border-radius: 0 0 18px 18px; */
+                    overflow: hidden;
+                    padding-bottom: 12px;
+                }
+
+                /* Remove white box feeling */
+                .top-bar {
+                    background: transparent !important;
+                    border-bottom: none !important;
+                }
+
+                .category-bar {
+                    background: transparent !important;
+                    box-shadow: none !important;
+                }
+
+                .top-bar * {
+                    color: #ffffff !important;
+                }
+
+                .delivery-text i {
+                    color: #ffd700 !important;
+                }
+
+                .location-text {
+                    opacity: 0.9;
+                }
+
+                /* Search bar stays white */
+                #searchBarBox {
+                    background: #ffffff !important;
+                }
+
+                #searchBarBox i {
+                    color: #6b7280 !important;
+                }
                 
             }
 
@@ -595,7 +638,7 @@
     position: sticky;
     top: 0;
     z-index: 10000;
-    background: #fff;
+    /* background: #fff; */
 }
 .category-bar {
     position: sticky;
@@ -607,7 +650,7 @@
 
 </style>
 
-
+<div class="mobile-hero-wrapper sticky-header">
             <div class="top-bar sticky-header" style="border-bottom:1px solid #eee;">
                 
                 <div class="top-left logo top-mobile-header" >
@@ -626,7 +669,7 @@
                 </div>
 
                 <div class="search-wrapper">
-                    <div class="w-full bg-white searchbar">
+                    <div class="w-full searchbar">
                         <div id="searchBarBox" onclick="window.location='{{ route('search.index') }}'" class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
 
                             <!-- Search Icon -->
@@ -741,337 +784,221 @@
             </div>
        
 
+    <!-- MOBILE MENU POPUP -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-content">
+            <i class="bi bi-x-lg close-menu"></i>
 
-                <!-- LOCATION HEADER -->
-            <!-- <div class="d-flex align-items-center px-4 bg-white" id="locationHeader">
-                <div class="d-flex flex-column" id="mainlocationHeader">
-                    <span class="flex items-center gap-1 text-sm font-semibold text-gray-700">
-                        Delivery in 8 minutes
-                    <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
-                    </span>
+            <!-- Put SAME nav-bar content here -->
+            <div class="mobile-nav-links">
+                <!-- Copy your nav links here -->
 
-                    <span class="text-muted" style="margin-top:-2px; font-size:15px;">
-                        Laxmangarh, Sikar...
-                        <i class="bi bi-caret-down-fill"></i>
-                    </span>
-
-                </div> -->
-                <!-- ----------- -->
-
-                <!-- <div class="" id="mobilemenuToggle" ><i class="bi bi-list"></i></div>  -->
-
-                <!-- <div class="nav-bar">
-                 
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Shop <i class="bi bi-caret-down-fill"></i>
-                        </div>
-                        <div class="dropdown-menu-content">
-                            <div class="menu-column">
-                                <h3 class="menu-title">CATEGORY PAGE LAYOUT</h3>
-                                <ul class="menu-list">
-                                    <li><a href="#">Left Sidebar</a></li>
-                                    <li><a href="#">Right Sidebar</a></li>
-                                    <li><a href="#">Filter Toggle</a></li>
-                                    <li><a href="#">Off-Sidebar Left</a></li>
-                                    <li><a href="#">Off-Sidebar Right</a></li>
-                                    <li class="separator"></li>
-                                    <li><a href="#">Shop - Column 3</a></li>
-                                    <li><a href="#">Shop - Column 4</a></li>
-                                    <li><a href="#">Shop - Column 5</a></li>
-                                    <li><a href="#">Shop - Column 6</a></li>
-                                </ul>
-                            </div>
-                            <div class="menu-column">
-                                <h3 class="menu-title">PRODUCT PAGE LAYOUT</h3>
-                                <ul class="menu-list">
-                                    <li><a href="#">Product - Default</a></li>
-                                    <li><a href="#">Product - Sticky</a></li>
-                                    <li><a href="#">Product - Masonry</a></li>
-                                </ul>
-                                <h3 class="menu-title product-gallery-title">PRODUCT GALLERY</h3>
-                                <ul class="menu-list">
-                                    <li><a href="#">Product - Left Gallery</a></li>
-                                    <li><a href="#">Product - Right Gallery</a></li>
-                                    <li><a href="#">Product - Bottom Gallery</a></li>
-                                    <li><a href="#">Product - No Gallery</a></li>
-                                </ul>
-                            </div>
-                            <div class="menu-column menu-banners">
-                                <a href="#">
-                                    <div class="menu-banner smartphone-banner">
-                                        <span class="banner-text">Branded</span>
-                                        <span class="banner-text-large">Smart Phone</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="menu-banner speaker-banner">
-                                        <span class="banner-text-large speaker-text">BEOPLAY</span>
-                                        <span class="banner-text speaker-text">Home Speaker</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Categories <i class="bi bi-caret-down-fill"></i>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="#">Men</a>
-                            <a href="#">Women</a>
-                            <a href="#">Kids</a>
-                        </div>
-                    </div>
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Products <i class="bi bi-caret-down-fill"></i>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="#">New Arrivals</a>
-                            <a href="#">Trending</a>
-                            <a href="#">Discounted</a>
-                        </div>
-                    </div>
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Features <i class="bi bi-caret-down-fill"></i>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="#">Free Shipping</a>
-                            <a href="#">Premium Service</a>
-                        </div>
-                    </div>
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Pages <i class="bi bi-caret-down-fill"></i>
-                        </div>
-
-                                            
-                        <div class="dropdown-menu" id="pagesdropdown-menu">
-                            <div>
-                                <a href="{{ route('pages.about') }}" class="hover:text-amber-400">About Us</a>
-                                <a href="#" class="hover:text-amber-400">Contact Us</a>
-                                <a href="{{ route('pages.service') }}" class="hover:text-amber-400">Service</a>
-                                <a href="{{ route('pages.find-store') }}" class="hover:text-amber-400">Find a Store</a>
-                                <a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a>
-                                <a href="{{ route('pages.privacy') }}" class="hover:text-amber-400">Privacy Policy</a>
-                            </div>
-                            <div>
-                                <a href="{{ route('pages.terms') }}" class="hover:text-amber-400">Terms & Conditions</a>
-                                <a href="{{ route('pages.return-refund') }}" class="hover:text-amber-400">Return & Refund Policy</a>
-                                <a href="{{ route('pages.shipping') }}" class="hover:text-amber-400">Shipping Policy</a>
-                                <a href="{{ route('pages.cookie') }}" class="hover:text-amber-400">Cookie Policy</a>
-                                <a href="{{ route('pages.vendor-agreement') }}" class="hover:text-amber-400">Vendor Agreement</a>
-                                <a href="{{ route('pages.cancellation') }}" class="hover:text-amber-400">Cancellation</a>
-                            </div>        
-                        </div>
-                    </div>
-
-                    <div class="nav-link dropdown">
-                        <div class="menu-button">
-                            Blog <i class="bi bi-caret-down-fill"></i>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="#">Latest Posts</a>
-                            <a href="#">Tech Updates</a>
-                        </div>
-                    </div>
-                  
-                </div> -->
-            <!-- </div> -->
-
-<!-- MOBILE MENU POPUP -->
-<div id="mobileMenu" class="mobile-menu">
-    <div class="mobile-menu-content">
-        <i class="bi bi-x-lg close-menu"></i>
-
-        <!-- Put SAME nav-bar content here -->
-        <div class="mobile-nav-links">
-            <!-- Copy your nav links here -->
-
-            <div class="mobile-link" data-toggle="shop">
-                Shop <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-shop">
-                <a href="#">Left Sidebar</a>
-                <a href="#">Right Sidebar</a>
-                <a href="#">Filter Toggle</a>
-                <a href="#">Off-Sidebar Left</a>
-                <a href="#">Off-Sidebar Right</a>
-            </div>
-
-            <div class="mobile-link" data-toggle="categories">
-                Categories <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-categories">
-                <a href="#">Men</a>
-                <a href="#">Women</a>
-                <a href="#">Kids</a>
-            </div>
-
-            <div class="mobile-link" data-toggle="products">
-                Products <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-products">
-                <a href="#">New Arrivals</a>
-                <a href="#">Trending</a>
-                <a href="#">Discounted</a>
-            </div>
-
-            <div class="mobile-link" data-toggle="features">
-                Features <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-features">
-                <a href="#">Free Shipping</a>
-                <a href="#">Premium Service</a>
-            </div>
-
-            <div class="mobile-link" data-toggle="pages">
-                Pages <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-pages">
-                <a href="{{ route('pages.about') }}">About Us</a>
-                <a href="#">Contact Us</a>
-                <a href="{{ route('pages.service') }}">Service</a>
-                <a href="{{ route('pages.find-store') }}">Find a Store</a>
-                <a href="{{ route('pages.faq') }}">FAQ's</a>
-                <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
-                <a href="{{ route('pages.terms') }}">Terms & Conditions</a>
-            </div>
-
-            <div class="mobile-link" data-toggle="blog">
-                Blog <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="mobile-dropdown" id="drop-blog">
-                <a href="#">Latest Posts</a>
-                <a href="#">Tech Updates</a>
-            </div>
-
-        </div>
-                
-    </div>
-</div>
-
-<!-- LOCATION POPUP -->
-<div class="modal fade" id="locationModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-4" style="border-radius:12px;">
-            
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="m-0 fw-semibold">Change Location</h5>
-                <i class="fa-solid fa-xmark" data-bs-dismiss="modal" style="cursor:pointer;"></i>
-            </div>
-
-            <div class="d-flex align-items-center gap-3">
-
-                <!-- Detect My Location Button -->
-                <button class="btn btn-success px-4 py-2 fw-semibold" id="detectLocationBtn" style="border-radius:10px;">
-                    Detect my location
-                </button>
-
-                <!-- OR Divider -->
-                <div class="d-flex flex-column align-items-center text-muted fw-semibold">
-                    <span>OR</span>
+                <div class="mobile-link" data-toggle="shop">
+                    Shop <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-shop">
+                    <a href="#">Left Sidebar</a>
+                    <a href="#">Right Sidebar</a>
+                    <a href="#">Filter Toggle</a>
+                    <a href="#">Off-Sidebar Left</a>
+                    <a href="#">Off-Sidebar Right</a>
                 </div>
 
-                <!-- Search Box -->
-                <input 
-                    type="text"
-                    class="form-control py-2"
-                    placeholder="search delivery location"
-                    style="border-radius:12px; min-width:220px;"
-                >
-            </div>
+                <div class="mobile-link" data-toggle="categories">
+                    Categories <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-categories">
+                    <a href="#">Men</a>
+                    <a href="#">Women</a>
+                    <a href="#">Kids</a>
+                </div>
 
+                <div class="mobile-link" data-toggle="products">
+                    Products <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-products">
+                    <a href="#">New Arrivals</a>
+                    <a href="#">Trending</a>
+                    <a href="#">Discounted</a>
+                </div>
+
+                <div class="mobile-link" data-toggle="features">
+                    Features <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-features">
+                    <a href="#">Free Shipping</a>
+                    <a href="#">Premium Service</a>
+                </div>
+
+                <div class="mobile-link" data-toggle="pages">
+                    Pages <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-pages">
+                    <a href="{{ route('pages.about') }}">About Us</a>
+                    <a href="#">Contact Us</a>
+                    <a href="{{ route('pages.service') }}">Service</a>
+                    <a href="{{ route('pages.find-store') }}">Find a Store</a>
+                    <a href="{{ route('pages.faq') }}">FAQ's</a>
+                    <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
+                    <a href="{{ route('pages.terms') }}">Terms & Conditions</a>
+                </div>
+
+                <div class="mobile-link" data-toggle="blog">
+                    Blog <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown" id="drop-blog">
+                    <a href="#">Latest Posts</a>
+                    <a href="#">Tech Updates</a>
+                </div>
+
+            </div>
+                    
         </div>
     </div>
+
+    <!-- LOCATION POPUP -->
+    <div class="modal fade" id="locationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4" style="border-radius:12px;">
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="m-0 fw-semibold">Change Location</h5>
+                    <i class="fa-solid fa-xmark" data-bs-dismiss="modal" style="cursor:pointer;"></i>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <!-- Detect My Location Button -->
+                    <button class="btn btn-success px-4 py-2 fw-semibold" id="detectLocationBtn" style="border-radius:10px;">
+                        Detect my location
+                    </button>
+
+                    <!-- OR Divider -->
+                    <div class="d-flex flex-column align-items-center text-muted fw-semibold">
+                        <span>OR</span>
+                    </div>
+
+                    <!-- Search Box -->
+                    <input 
+                        type="text"
+                        class="form-control py-2"
+                        placeholder="search delivery location"
+                        style="border-radius:12px; min-width:220px;"
+                    >
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+   <section
+        class="flex items-center justify-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar"
+        data-aos="fade-up"
+    >
+
+        <!-- All -->
+        <a href="{{ route('shop.index') }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
+            <span class="text-lg">🧾</span>
+            <span class="text-xs">All</span>
+        </a>
+
+        <!-- Winter -->
+        <a href="{{ route('shop.index', ['category' => 'winter']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+            <span class="text-lg">❄️</span>
+            <span class="text-xs">Winter</span>
+        </a>
+
+        <!-- Beauty -->
+        <a href="{{ route('shop.index', ['category' => 'beauty']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
+            <span class="text-lg">💄</span>
+            <span class="text-xs">Beauty</span>
+        </a>
+
+        <!-- Electronics -->
+        <a href="{{ route('shop.index', ['category' => 'electronics']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
+            <span class="text-lg">📱</span>
+            <span class="text-xs">Electronics</span>
+        </a>
+
+        <!-- Fashion -->
+        <a href="{{ route('shop.index', ['category' => 'fashion']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
+            <span class="text-lg">👗</span>
+            <span class="text-xs">Fashion</span>
+        </a>
+
+        <!-- Home / Decor -->
+        <a href="{{ route('shop.index', ['category' => 'decor']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
+            <span class="text-lg">🏠</span>
+            <span class="text-xs">Decor</span>
+        </a>
+
+        <!-- Importers -->
+        <a href="{{ route('shop.index', ['category' => 'importers']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
+            <span class="text-lg">🚢</span>
+            <span class="text-xs">Importers</span>
+        </a>
+
+        <!-- Fresh -->
+        <a href="{{ route('shop.index', ['category' => 'fresh']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
+            <span class="text-lg">🍎</span>
+            <span class="text-xs">Fresh</span>
+        </a>
+
+        <!-- Kids -->
+        <a href="{{ route('shop.index', ['category' => 'kids']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
+            <span class="text-lg">🧸</span>
+            <span class="text-xs">Kids</span>
+        </a>
+
+        <!-- Super Mall -->
+        <a href="{{ route('shop.index', ['category' => 'super-mall']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
+            <span class="text-lg">🏬</span>
+            <span class="text-xs">Super Mall</span>
+        </a>
+
+        <!-- Categories -->
+        <a href="{{ route('shop.index') }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+            <span class="text-lg">🗂️</span>
+            <span class="text-xs">Categories</span>
+        </a>
+
+        <!-- 99 Store -->
+        <a href="{{ route('shop.index', ['store' => '99']) }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
+            <span class="text-lg">🏷️</span>
+            <span class="text-xs">99 Store</span>
+        </a>
+
+        <!-- Add -->
+        <a href="{{ route('account.cart.index') }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
+            <span class="text-lg">📢</span>
+            <span class="text-xs">Ads</span>
+        </a>
+
+
+        <!-- Order Again -->
+        <a href="{{ route('account.orders.index') }}"
+        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
+            <span class="text-lg">🔁</span>
+            <span class="text-xs">Order Again</span>
+        </a>
+
+    </section>
+
+
 </div>
-
-<section 
-    class="flex items-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-3 py-2 category-bar justify-content-between"
-    data-aos="fade-up" 
->
-    <!-- All -->
-
-    
-    <a href="{{ route('shop.index') }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🛍️
-        </div>
-        <span class="text-xs font-bold text-gray-900 border-b-2 border-black pb-0.5">All</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🧥
-        </div>
-        <span class="text-xs font-medium text-gray-700">Winter</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            💄
-        </div>
-        <span class="text-xs font-medium text-gray-700">Beauty</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🎧
-        </div>
-        <span class="text-xs font-medium text-gray-700">Electronics</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            👗
-        </div>
-        <span class="text-xs font-medium text-gray-700">Fashion</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🏠
-        </div>
-        <span class="text-xs font-medium text-gray-700">Decor</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🚢
-        </div>
-        <span class="text-xs font-medium text-gray-700">Importers</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🍎
-        </div>
-        <span class="text-xs font-medium text-gray-700">Fresh</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🧸
-        </div>
-        <span class="text-xs font-medium text-gray-700">Kids</span>
-    </a>
-
-    <a href="{{ route('shop.index', ['category' => 'personal-care']) }}" class="flex flex-col items-center gap-1 group min-w-[70px]">
-        <div class=" flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-            🏢
-        </div>
-        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Super Mall</span>
-    </a>
-
-
-</section>
 
 
         

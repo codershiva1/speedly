@@ -18,7 +18,7 @@
         display: block;
         position: relative;
         /* margin: 10px; */
-        /* border-radius: 14px; */
+        border-radius:0px 0 25px 25px;
         overflow: hidden;
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     }
