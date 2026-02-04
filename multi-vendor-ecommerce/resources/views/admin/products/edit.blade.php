@@ -23,7 +23,7 @@
             
             <div class="lg:col-span-2 space-y-6">
                 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
                     <h3 class="text-lg font-bold text-gray-800 mb-4">General Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">

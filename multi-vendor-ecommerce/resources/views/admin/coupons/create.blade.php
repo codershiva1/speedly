@@ -21,7 +21,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
                     <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white p-8 shadow-sm border border-gray-100 rounded-3xl">
+                        <div class="bg-white  shadow-sm border border-gray-100 rounded-3xl">
                             <h3 class="text-lg font-bold text-gray-800 mb-6 border-b border-gray-50 pb-4">Coupon Configuration</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <div class="bg-white p-8 shadow-sm border border-gray-100 rounded-3xl">
+                        <div class="bg-white  shadow-sm border border-gray-100 rounded-3xl">
                             <h3 class="text-lg font-bold text-gray-800 mb-6">Usage & Conditions</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>

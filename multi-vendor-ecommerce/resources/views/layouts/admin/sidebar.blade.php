@@ -32,8 +32,13 @@
         }
     }"
     :class="{
-        'w-[290px]': $store.sidebar.isExpanded || $store.sidebar.isMobileOpen || $store.sidebar.isHovered,
-        'w-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+        // Width Logic: auto if expanded/hovered/mobile-open, otherwise fixed width
+        'w-auto': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen,
+        'w-20': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen,
+
+        // Position Logic: 
+        // On mobile: show/hide based on isMobileOpen
+        // On desktop (xl): always show (translate-x-0)
         'translate-x-0': $store.sidebar.isMobileOpen,
         '-translate-x-full xl:translate-x-0': !$store.sidebar.isMobileOpen
     }"
@@ -51,7 +56,7 @@
     </div>
 
     <!-- Navigation -->
-    <div class="flex flex-col overflow-y-auto no-scrollbar">
+    <div class="flex flex-col z-9999 overflow-y-auto no-scrollbar">
         <nav class="mb-6">
             <div class="flex flex-col gap-4">
 
@@ -159,5 +164,5 @@
 <!-- Mobile Overlay -->
 <div x-show="$store.sidebar.isMobileOpen"
      @click="$store.sidebar.setMobileOpen(false)"
-     class="fixed inset-0 z-50 bg-gray-900/50">
+     class="fixed ">
 </div>

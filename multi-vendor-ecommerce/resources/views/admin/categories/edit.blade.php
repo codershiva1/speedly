@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 ">
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
             <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Edit Category</h1>
@@ -21,7 +21,7 @@
             
             <div class="lg:col-span-2 space-y-6">
                 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Category Details</h2>
                     
                     <div class="space-y-4">

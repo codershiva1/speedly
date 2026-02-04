@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('content')
-<div class="p-8 bg-gray-50 min-h-screen">
+<div class="p-4 bg-gray-50 min-h-screen">
     <div class="max-w-4xl mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Create New User</h2>
