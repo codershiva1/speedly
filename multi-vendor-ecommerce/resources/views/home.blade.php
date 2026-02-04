@@ -1517,6 +1517,40 @@
         </div>
     </div>
 
+    @if($cartCount > 0)
+        <div id="floating-cart"
+            onclick="window.location='{{ route('account.cart.index') }}'"
+            class="floatingcart fixed bottom-20 left-1/4 -translate-x-1/2
+                    bg-green-600 text-white
+                    rounded-full
+                    px-3 py-2.5
+                    flex items-center gap-2
+                    shadow-2xl
+                    cursor-pointer
+                    z-50
+                    transition-all duration-300"
+        >
+
+            <!-- Cart Icon -->
+            <i class="bi bi-cart3 text-xl"></i>
+
+            <!-- Item count -->
+            <span class="text-sm font-semibold ">
+                <span class="cart-count">{{ $cartCount }}</span>
+                 items
+            </span>
+
+            <!-- Divider -->
+            <span class="h-4 w-px bg-green-300"></span>
+
+            <!-- Total -->
+            <span class="text-sm font-bold ">
+                ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
+            </span>
+
+        </div>
+    @endif
+
  <script>
     window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
     window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";

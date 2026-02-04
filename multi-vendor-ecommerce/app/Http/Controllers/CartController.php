@@ -163,6 +163,7 @@ class CartController extends Controller
         return response()->json([
             'status' => 'removed',
             'count' => $cart->items()->count(),
+            'amount' => $cart->items->sum('total_price'),
         ]);
     }
 
@@ -178,6 +179,7 @@ class CartController extends Controller
     return response()->json([
         'status' => 'added',
         'count' => $cart->items()->count(),
+        'amount' => $cart->items->sum('total_price'),
     ]);
 }
 

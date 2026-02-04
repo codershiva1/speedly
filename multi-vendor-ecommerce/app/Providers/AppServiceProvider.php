@@ -32,18 +32,31 @@ class AppServiceProvider extends ServiceProvider
        });
 
 
-       View::composer('*', function ($view) {
+        /* =========================
+           Cart Count + Cart Total
+        ========================== */
+        View::composer('*', function ($view) {
             $cartCount = 0;
+            $cartTotal = 0;
 
             if (auth()->check()) {
                 $cart = Cart::where('user_id', auth()->id())
-                    ->withCount('items')
+                    ->with(['items']) // IMPORTANT
                     ->first();
 
-                $cartCount = $cart?->items_count ?? 0;
+                if ($cart) {
+                    // Number of cart rows
+                    $cartCount = $cart->items->count();
+
+                    // Sum of stored total_price column
+                    $cartTotal = $cart->items->sum('total_price');
+                }
             }
 
-            $view->with('cartCount', $cartCount);
+            $view->with([
+                'cartCount' => $cartCount,
+                'cartTotal' => $cartTotal,
+            ]);
         });
     }
 }

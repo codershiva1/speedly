@@ -133,6 +133,9 @@
                 .slider-banner {
                     display: none !important;
                 }
+                .profile-icon svg ,.cart-icon,.category-bar .text-xs,.delivery-text,.location-text {
+                    color:#fff;
+                }
                 .hero-slider,
                 /* .profile-icon {
                     display: none !important;
@@ -648,6 +651,13 @@
     background: #fff;
 }
 
+/* ===============floting cart=========== */
+#floating-cart {
+    max-width: calc(100% - 24px);
+    /* backdrop-filter: blur(2px); */
+    background-color: rgb(66 180 29 / 78%);
+}
+
 
 </style>
 
@@ -662,7 +672,7 @@
                             <i class="bi bi-lightning-charge-fill text-yellow-500"></i>
                         </span>
 
-                        <span class="location-text text-muted" style="margin-top:-2px; font-size:15px;">
+                        <span class="location-text text-gray-700" style="margin-top:-2px; font-size:15px;">
                             Laxmangarh, Sikar...
                             <i class="bi bi-caret-down-fill"></i>
                         </span>
@@ -749,7 +759,7 @@
 
                                     <!-- User Icon -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-7 w-7 text-lime-600"
+                                        class="h-7 w-7 text-lime-600 "
                                         viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -985,7 +995,7 @@
         </a>
 
         <!-- 99 Store -->
-        <a href="{{ route('shop.index', ['store' => '99']) }}"
+        <a href="{{ route('stores.show', 99) }}"
         class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
             <span class="text-lg">🏷️</span>
             <span class="text-xs">99 Store</span>
@@ -1183,6 +1193,10 @@
     $wishlist     = request()->routeIs('wishlist.*');
     $isCart       = request()->routeIs('account.cart.*');
     $isAccount    = request()->routeIs('account.*');
+
+    $is99    = request()->routeIs('stores.show.*');
+    $isAds    = request()->routeIs('account.*');
+
 @endphp
 
 
@@ -1200,6 +1214,20 @@
         <a href="{{ route('shop.index') }}" class="flex flex-col items-center text-xs {{ $isShop ? 'text-green-600' : 'text-gray-600' }}">
             <i class="bi bi-grid text-xl"></i>
             <span>Categories</span>
+        </a>
+
+         <!-- 99 Store -->
+        <a href="{{ route('stores.show', 99) }}"
+        class="flex flex-col items-center text-xs {{ $is99 ? 'text-green-600' : 'text-gray-600' }}">
+            <span class="text-lg">🏷️</span>
+            <span class="text-xs">99 Store</span>
+        </a>
+
+        <!-- Add -->
+        <a href="{{ route('account.cart.index') }}"
+        class="flex flex-col items-center text-xs {{ $isAds ? 'text-green-600' : 'text-gray-600' }}">
+            <span class="text-lg">📢</span>
+            <span class="text-xs">Ads</span>
         </a>
 
         <!-- Search -->

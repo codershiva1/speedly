@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VendorStorefrontController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -46,6 +47,7 @@ Route::get('/cookie', [PageController::class, 'cookie_policy'])->name('pages.coo
 
 Route::get('/search', [PageController::class, 'search'])->name('search.index');
 
+Route::get('/stores/{price}', [StoreController::class, 'show'])->whereNumber('price')->name('stores.show');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/product/{slug}', [ShopController::class, 'show'])->name('shop.show');

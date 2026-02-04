@@ -213,8 +213,15 @@ document.addEventListener('click', function (e) {
         }
 
         // 🔢 Update ALL cart counters
-        document.querySelectorAll('.cart-count')
-            .forEach(el => el.textContent = data.count);
+        document.querySelectorAll('.cart-count').forEach(el => el.textContent = data.count);
+
+        const floatingcart = document.querySelector('.floatingcart');
+        if (floatingcart) {
+            floatingcart.style.display = data.count <= 0 ? "none" : "block";
+        }
+
+             // 🔢 Update ALL cart counters
+        document.querySelectorAll('.cartTotal').forEach(el => el.textContent = data.amount);
     })
     .catch(() => {
         Swal.fire('Please login to use cart');
