@@ -76,4 +76,11 @@ class Product extends Model
             });
     }
 
+    public function ads()
+    {
+        return $this->hasMany(Ad::class, 'target_id')
+            ->where('target_type', 'product');
+    }
+
+
 }

@@ -37,4 +37,11 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function ads()
+    {
+        return $this->hasMany(Ad::class, 'target_id')
+            ->where('target_type', 'category');
+    }
+
 }

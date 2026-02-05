@@ -1,4 +1,4 @@
-<x-layouts.site :title="__('Search')">
+<x-layouts.site :title="__('₹'.$price.' Store')">
 
     {{-- STORE SEARCH BAR --}}
     <div class="sticky top-16 bg-white z-20 px-4 py-2 border-b">
@@ -26,20 +26,48 @@
         </p>
     </div>
 
-    {{-- PRODUCTS GROUPED BY PARENT CATEGORY --}}
+    {{-- PRODUCTS / ADS GROUPED --}}
     @foreach($products as $parentCategory => $items)
-        <section class="px-4 py-5 bg-white">
-            {{-- CATEGORY TITLE --}}
-            <div class="flex items-center justify-between mb-3">
-                <span class="font-semibold text-gray-900" style="font-size:20px;">
-                    {{ $parentCategory }}
-                </span>
-            </div>
 
-            {{-- PRODUCT GRID --}}
+        {{-- SKIP ADS GROUP TITLE --}}
+        @if($parentCategory !== '__ads__')
+            <section class="px-4 py-5 bg-white">
+
+                {{-- CATEGORY TITLE --}}
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-semibold text-gray-900 text-xl">
+                        {{ $parentCategory }}
+                    </span>
+                </div>
+        @else
+            <section class="px-4 py-3 bg-white">
+        @endif
+
+            {{-- GRID --}}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                @foreach ($items as $product)
-                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+
+                @foreach($items as $item)
+
+                    {{-- ================= SPONSORED AD ================= --}}
+                    @if(!empty($item->is_ad) && $item->is_ad)
+
+                        @php $product = $item->target; @endphp
+
+                        <div class="relative bg-white rounded-xl border-2 border-yellow-400 p-2 flex flex-col">
+
+                            {{-- Sponsored badge --}}
+                            <span class="absolute top-2 left-2 z-10 bg-yellow-400 text-white text-xs font-semibold px-2 py-0.5 rounded">
+                                Sponsored
+                            </span>
+
+                    {{-- ================= NORMAL PRODUCT ================= --}}
+                    @else
+
+                        @php $product = $item; @endphp
+
+                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+
+                    @endif
 
                         {{-- WISHLIST --}}
                         @auth
@@ -47,15 +75,11 @@
                                 class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
                                 data-product-id="{{ $product->id }}"
                             >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
+                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }}"></i>
                             </button>
                         @else
                             <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
+                               class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
                                 <i class="fa fa-heart text-gray-400"></i>
                             </a>
                         @endauth
@@ -63,16 +87,11 @@
                         {{-- PRODUCT IMAGE --}}
                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                             <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                                @php
-                                    $img = $product->images->first();
-                                @endphp
-
+                                @php $img = $product->images->first(); @endphp
                                 @if ($img)
-                                    <img
-                                        src="{{ asset('storage/' . $img->path) }}"
-                                        class="w-full h-full object-contain"
-                                        alt="{{ $product->name }}"
-                                    >
+                                    <img src="{{ asset('storage/'.$img->path) }}"
+                                         class="w-full h-full object-contain"
+                                         alt="{{ $product->name }}">
                                 @else
                                     <span class="text-gray-400 text-xs">No Image</span>
                                 @endif
@@ -92,7 +111,6 @@
                             <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                 {{ $product->name }}
                             </p>
-
                             @if($product->size)
                                 <p class="text-sm text-gray-500 mt-1">
                                     {{ $product->size }}
@@ -106,7 +124,6 @@
                                 <span class="text-base font-bold text-gray-900">
                                     ₹{{ $product->price }}
                                 </span>
-
                                 @if ($product->discount_price)
                                     <span class="line-through text-xs text-gray-400">
                                         ₹{{ $product->discount_price }}
@@ -124,11 +141,12 @@
                                 </button>
                             @else
                                 <a href="{{ route('login') }}"
-                                class="px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">
+                                   class="px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">
                                     ADD
                                 </a>
                             @endauth
                         </div>
+
                     </div>
                 @endforeach
             </div>
@@ -142,43 +160,32 @@
         </div>
     @endif
 
+    {{-- FLOATING CART --}}
     @if($cartCount > 0)
-            <div id="floating-cart"
-                onclick="window.location='{{ route('account.cart.index') }}'"
-                class="floatingcart fixed bottom-20 left-1/4 -translate-x-1/2
-                        bg-green-600 text-white
-                        rounded-full
-                        px-3 py-2.5
-                        flex items-center gap-2
-                        shadow-2xl
-                        cursor-pointer
-                        z-50
-                        transition-all duration-300"
-            >
+        <div id="floating-cart"
+             onclick="window.location='{{ route('account.cart.index') }}'"
+             class="floatingcart fixed bottom-20 left-1/2 -translate-x-1/2
+                    bg-green-600 text-white rounded-full
+                    px-4 py-2.5 flex items-center gap-2
+                    shadow-2xl cursor-pointer z-50">
 
-                <!-- Cart Icon -->
-                <i class="bi bi-cart3 text-xl"></i>
+            <i class="bi bi-cart3 text-xl"></i>
 
-                <!-- Item count -->
-                <span class="text-sm font-semibold ">
-                    <span class="cart-count">{{ $cartCount }}</span>
-                    items
-                </span>
+            <span class="text-sm font-semibold">
+                <span class="cart-count">{{ $cartCount }}</span> items
+            </span>
 
-                <!-- Divider -->
-                <span class="h-4 w-px bg-green-300"></span>
+            <span class="h-4 w-px bg-green-300"></span>
 
-                <!-- Total -->
-                <span class="text-sm font-bold ">
-                    ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
-                </span>
-
-            </div>
-        @endif
+            <span class="text-sm font-bold">
+                ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
+            </span>
+        </div>
+    @endif
 
     <script>
         window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
-        window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
+        window.CartToggleUrl     = "{{ route('account.cart.toggle', ':id') }}";
     </script>
 
 </x-layouts.site>
