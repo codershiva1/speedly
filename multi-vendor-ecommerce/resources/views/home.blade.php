@@ -305,7 +305,7 @@
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
+                            <div class="mt-2 flex items-center justify-between">
                                 
                                 {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
@@ -425,7 +425,7 @@
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
+                            <div class="mt-2 flex items-center justify-between">
                                 
                                 {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
@@ -873,7 +873,7 @@
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
+                            <div class="mt-2 flex items-center justify-between">
                                 
                                 {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
@@ -987,7 +987,7 @@
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
+                            <div class="mt-2 flex items-center justify-between">
                                 
                                 {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
@@ -1358,7 +1358,7 @@
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
+                            <div class="mt-2 flex items-center justify-between">
                                 
                                 {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
@@ -1520,11 +1520,11 @@
     @if($cartCount > 0)
         <div id="floating-cart"
             onclick="window.location='{{ route('account.cart.index') }}'"
-            class="floatingcart fixed bottom-20 left-1/4 -translate-x-1/2
+            class="floatingcart fixed bottom-20 left-2/4 -translate-x-1/2
                     bg-green-600 text-white
                     rounded-full
                     px-3 py-2.5
-                    flex items-center gap-2
+                    flex items-center gap-3
                     shadow-2xl
                     cursor-pointer
                     z-50
@@ -1532,22 +1532,27 @@
         >
 
             <!-- Cart Icon -->
-            <i class="bi bi-cart3 text-xl"></i>
-
+            <!-- <i class="bi bi-cart3 text-xl"></i> -->
             <!-- Item count -->
-            <span class="text-sm font-semibold ">
-                <span class="cart-count">{{ $cartCount }}</span>
-                 items
-            </span>
+             <div class="relative">
+                <i class="bi bi-bag-check-fill text-2xl"></i>
+                <span class="absolute -top-2 -right-2 bg-white text-green-600 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
+                    {{ $cartCount }}
+                </span>
+            </div>
 
             <!-- Divider -->
             <span class="h-4 w-px bg-green-300"></span>
 
             <!-- Total -->
-            <span class="text-sm font-bold ">
-                ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
-            </span>
+             <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-tighter opacity-80 leading-none">View Cart</span>
+                <span class="text-sm font-bold ">
+                    ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
+                </span>
+            </div>
 
+            <i class="bi bi-chevron-right text-xs opacity-50"></i>
         </div>
     @endif
 

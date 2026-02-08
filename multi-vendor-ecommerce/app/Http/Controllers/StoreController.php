@@ -10,81 +10,46 @@ use Illuminate\Http\Request;
 class StoreController extends Controller
 {
     public function show(Request $request, int $price)
-    {
-        $search = $request->q;
+{
+    $search = $request->q;
 
-        // 🔹 Normal Products
-        $products = Product::with([
-            'category.parent',
-            'images',
-            'cartItem' => function ($q) {
-                $q->whereHas('cart', function ($cart) {
-                    $cart->where('user_id', auth()->id());
-                });
-            }
-        ])
-        ->where('status', 'active')
-        ->where('price', '<=', $price)
-        ->when($search, function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%");
-        })
+    // 1. Products grouped by category
+    $groupedProducts = Product::with([
+        'category.parent',
+        'images',
+        'cartItem' => function ($q) {
+            $q->whereHas('cart', function ($cart) {
+                $cart->where('user_id', auth()->id());
+            });
+        }
+    ])
+    ->where('status', 'active')
+    ->where('price', '<=', $price)
+    ->when($search, function ($q) use ($search) {
+        $q->where('name', 'like', "%{$search}%");
+    })
+    ->get()
+    ->groupBy(function ($item) {
+        return optional($item->category->parent)->name ?? 'Other';
+    });
+
+    // 2. Separate Banners for the Top Slider
+    $topBanners = Ad::active()
+        ->whereHas('adPlacement', fn($q) => $q->where('key', 'store_top_banner'))
         ->get();
 
-        // 🔹 Store Inline Ads
-        $placement = AdPlacement::where('key', 'store_inline')->first();
+    // 3. Separate Sponsored Products (to be injected between categories)
+    $inlineAds = Ad::active()
+        ->whereHas('adPlacement', fn($q) => $q->where('key', 'store_inline'))
+        ->with(['target.images', 'target.cartItem'])
+        ->get();
 
-        $ads = collect();
-        if ($placement) {
-            $ads = Ad::active()
-                ->where('ad_placement_id', $placement->id)
-                ->with(['target.images'])
-                ->orderByDesc('priority')
-                ->get();
-        }
-
-        // 🔹 Merge ads with products (every 6 items)
-        $finalItems = $this->mergeAds($products, $ads, 6);
-
-        // 🔹 Group by parent category (ads stay inline)
-        $grouped = $finalItems->groupBy(function ($item) {
-            if (!empty($item->is_ad)) {
-                return '__ads__'; // ads not grouped
-            }
-            return optional($item->category->parent)->name ?? 'Other';
-        });
-
-        return view('stores.show', [
-            'price'    => $price,
-            'products' => $grouped,
-            'search'   => $search,
-        ]);
-    }
-
-    /**
-     * Inject ads into product list
-     */
-    private function mergeAds($products, $ads, int $interval = 6)
-    {
-        if ($ads->isEmpty()) {
-            return $products;
-        }
-
-        $result  = collect();
-        $adIndex = 0;
-
-        foreach ($products->values() as $index => $product) {
-
-            if ($index > 0 && $index % $interval === 0 && isset($ads[$adIndex])) {
-                $ad = $ads[$adIndex];
-                $ad->is_ad = true;
-                $result->push($ad);
-                $adIndex++;
-            }
-
-            $product->is_ad = false;
-            $result->push($product);
-        }
-
-        return $result;
-    }
+    return view('stores.show', [
+        'price'           => $price,
+        'products'        => $groupedProducts,
+        'topBanners'      => $topBanners,
+        'inlineAds'       => $inlineAds,
+        'search'          => $search,
+    ]);
+}
 }

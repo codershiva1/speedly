@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -23,20 +25,19 @@ class Ad extends Model
 
     /* ===================== Relationships ===================== */
 
-    public function placement()
+    public function adPlacement()
     {
-        return $this->belongsTo(AdPlacement::class);
+        return $this->belongsTo(AdPlacement::class, 'ad_placement_id');
     }
 
     /* ===================== Dynamic Target ===================== */
 
+   /**
+     * Dynamic ad target (safe)
+     */
     public function target()
     {
-        return match ($this->target_type) {
-            'product'  => $this->belongsTo(Product::class, 'target_id'),
-            'category' => $this->belongsTo(Category::class, 'target_id'),
-            default    => null,
-        };
+        return $this->morphTo();
     }
 
     /* ===================== Scopes ===================== */

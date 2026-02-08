@@ -99,7 +99,7 @@
         </div>
 
         <!-- RIGHT -->
-        <div class="lg:sticky lg:top-6 h-fit">
+        <div class="lg:sticky lg:top-20 h-fit">
             <div class="bg-white rounded-xl shadow p-4 sm:p-6">
 
                 <h2 class="font-bold mb-3 sm:mb-4">Price Details</h2>

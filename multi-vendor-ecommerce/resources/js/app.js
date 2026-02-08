@@ -217,7 +217,7 @@ document.addEventListener('click', function (e) {
 
         const floatingcart = document.querySelector('.floatingcart');
         if (floatingcart) {
-            floatingcart.style.display = data.count <= 0 ? "none" : "block";
+            floatingcart.style.display = data.count <= 0 ? "none" : "flex";
         }
 
              // 🔢 Update ALL cart counters
