@@ -913,7 +913,7 @@
     </div>
 
    <section
-        class="flex items-center justify-center gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar"
+        class="flex items-center justify-around gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar"
         data-aos="fade-up"
     >
 
