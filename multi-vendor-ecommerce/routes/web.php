@@ -25,8 +25,12 @@ use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController
 use App\Http\Controllers\Vendor\ProductController as VendorProductController;
 use App\Http\Controllers\Vendor\OrderController as VendorOrderController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Vendor\SearchController as AdminSearchController;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Product;
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 // Static content pages used in header/footer
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
@@ -149,16 +153,33 @@ Route::prefix('admin')
         Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
     
               
-          Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
-          Route::get('users/edit', [AdminUserController::class, 'edit'])->name('users.edit');
-          Route::get('users/update', [AdminUserController::class, 'update'])->name('users.update');
+        Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
+        Route::get('users/edit/{id}', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::put('users/update/{id}', [AdminUserController::class, 'update'])->name('users.update');
         Route::delete('users/{user}', [AdminUserController::class, 'disableUser'])->name('users.destroy');
-        Route::get('users/store', [AdminUserController::class, 'store'])->name('users.store');
+        Route::post('users/store', [AdminUserController::class, 'store'])->name('users.store');
         Route::get('users/{id}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
         Route::delete('users/{id}/force-delete', [AdminUserController::class, 'forceDelete'])->name('users.forceDelete');
 
-        
+        Route::get('/admin/search', [AdminSearchController::class, 'globalSearch'])->name('search');
+        Route::get('/admin/notifications', function () {
+            $recentUsers = User::where('created_at', '>=', now()->subHours(24))->latest()->get();
+            $recentOrders = Order::where('status', 'pending')->latest()->get();
+            $lowStockProducts = Product::where('stock_quantity', '<=', 5)->latest()->get();
 
-            });
+            
+            $totalCount = $recentUsers->count() + $recentOrders->count() + $lowStockProducts->count();
+            //  return view('admin.notifications.index');
+           
+            return view('admin.notifications.index'
+              , compact(
+                'recentUsers', 
+                'recentOrders', 
+                'lowStockProducts', 
+                'totalCount'
+            ));
+        })->name('notifications.index');
+
+        });
 
 require __DIR__.'/auth.php';

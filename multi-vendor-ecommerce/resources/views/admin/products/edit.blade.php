@@ -53,35 +53,88 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Product Gallery</h3>
-                    
-                    @if ($product->images->count())
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        @foreach ($product->images as $image)
-                            <div class="relative group">
-                                <img src="{{ asset('storage/'.$image->path) }}" class="w-full h-32 object-cover rounded-xl border border-gray-100">
-                                <div class="absolute inset-0 bg-black bg-opacity-40 rounded-xl opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                    <label class="cursor-pointer bg-red-500 p-2 rounded-full text-white">
-                                        <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" class="hidden">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                                    </label>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <p class="text-[10px] text-gray-400 mb-4">* Hover and click trash icon to mark for deletion.</p>
-                    @endif
-
-                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors">
-                        <input id="images" name="images[]" type="file" class="hidden" multiple onchange="updateFileList(this)">
-                        <label for="images" class="cursor-pointer">
-                            <svg class="w-10 h-10 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"></path></svg>
-                            <span class="mt-2 block text-sm font-semibold text-indigo-600">Add more images</span>
-                        </label>
-                    </div>
-                    <div id="file-list" class="mt-3 text-xs text-gray-500 italic"></div>
+                <div>
+                    <x-input-label for="price" value="Price" />
+                    <x-text-input
+                        id="price"
+                        name="price"
+                        type="number"
+                        step="0.01"
+                        class="mt-1 block w-full"
+                        value="{{ old('price', $product->price) }}"
+                        required
+                    />
                 </div>
+
+                <div>
+                    <x-input-label for="discount_price" value="Discount Price" />
+                    <x-text-input
+                        id="discount_price"
+                        name="discount_price"
+                        type="number"
+                        step="0.01"
+                        class="mt-1 block w-full"
+                        value="{{ old('discount_price', $product->discount_price) }}"
+                    />
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Product Gallery</h3>
+                
+                <div id="image-preview-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    @foreach ($product->images as $image)
+                        <div class="relative group" id="existing-img-{{ $image->id }}">
+                            <img src="{{ asset('storage/'.$image->path) }}" class="w-full h-32 object-cover rounded-xl border border-gray-100">
+                            <div class="absolute inset-0 bg-black bg-opacity-40 rounded-xl opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <label class="cursor-pointer bg-red-500 p-2 rounded-full text-white shadow-lg transform hover:scale-110 transition">
+                                    <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" class="hidden" onchange="toggleOverlay(this, 'existing-img-{{ $image->id }}')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </label>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-indigo-400 transition-all cursor-pointer bg-gray-50 group" onclick="document.getElementById('images').click()">
+                    <input id="images" name="images[]" type="file" class="hidden" multiple accept="image/*" onchange="previewImages(this)">
+                    <svg class="w-10 h-10 mx-auto text-gray-400 group-hover:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"></path></svg>
+                    <span class="mt-2 block text-sm font-semibold text-indigo-600">Click to upload new images</span>
+                    <p class="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</p>
+                </div>
+            </div>
+
+            <script>
+                // Nayi select ki hui images ka preview dikhane ke liye
+                function previewImages(input) {
+                    const container = document.getElementById('image-preview-container');
+                    if (input.files) {
+                        Array.from(input.files).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const div = document.createElement('div');
+                                div.className = 'relative animate-pulse';
+                                div.innerHTML = `
+                                    <img src="${e.target.result}" class="w-full h-32 object-cover rounded-xl border-2 border-indigo-200 shadow-sm">
+                                    <span class="absolute top-1 right-1 bg-indigo-600 text-white text-[8px] px-2 py-1 rounded-full uppercase">New</span>
+                                `;
+                                container.appendChild(div);
+                                setTimeout(() => div.classList.remove('animate-pulse'), 500);
+                            }
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                }
+
+                // Delete mark karne par visual feedback
+                function toggleOverlay(checkbox, elementId) {
+                    const el = document.getElementById(elementId);
+                    if(checkbox.checked) {
+                        el.classList.add('opacity-30', 'grayscale');
+                    } else {
+                        el.classList.remove('opacity-30', 'grayscale');
+                    }
+                }
+            </script>
             </div>
 
             <div class="space-y-6">

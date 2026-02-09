@@ -7,6 +7,7 @@ use App\Models\{Product, Category, Brand, ProductImage};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -38,26 +39,78 @@ class ProductController extends Controller
     }
 
     // 3. Save New Product
-    public function store(Request $request)
-    {
-        $data = $this->validateProduct($request);
-        $data['slug'] = Str::slug($request->name);
-        $data['vendor_id'] = auth()->id(); // Current Admin/Vendor ID
+   public function store(Request $request)
+        {
+            DB::beginTransaction();
 
-        // Handling Boolean Checkboxes (is_featured, etc.)
-        $data['is_featured'] = $request->has('is_featured') ? 1 : 0;
-        $data['is_trending'] = $request->has('is_trending') ? 1 : 0;
-        $data['is_new'] = $request->has('is_new') ? 1 : 0;
+            try {
+                // 1️⃣ Validation
+                $request->validate([
+                    'name' => 'required|max:255',
+                    'sku' => 'required|unique:products,sku',
+                    'category_id' => 'required|exists:categories,id',
+                    'price' => 'required|numeric|min:0',
+                    'discount_price' => 'nullable|numeric|min:0',
+                    'stock_quantity' => 'required|integer|min:0',
+                    'status' => 'required|in:active,draft,inactive',
+                    'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+                ]);
 
-        $product = Product::create($data);
+                // 2️⃣ Prepare data
+                $data = [
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name),
+                    'sku' => $request->sku,
+                    'price' => $request->price,
+                    'discount_price' => $request->discount_price,
+                    'stock_quantity' => $request->stock_quantity,
+                    'category_id' => $request->category_id,
+                    'brand_id' => $request->brand_id,
+                    'status' => $request->status,
+                    'description' => $request->description,
+                    'short_description' => $request->short_description,
+                    'is_featured' => $request->has('is_featured'),
+                    'is_trending' => $request->has('is_trending'),
+                    'updated_by' => auth()->id(),
+                ];
 
-        // Multiple Images Upload
-        if ($request->hasFile('images')) {
-            $this->uploadImages($product, $request->file('images'));
+                // 3️⃣ Create product
+                $product = Product::create($data);
+
+                // 4️⃣ Upload Images (ROOT public)
+                if ($request->hasFile('images')) {
+                    $lastSortOrder = 0; // new product, no previous images
+                    $folderPath = public_path('storage/uploads/products/' . $product->id);
+
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+
+                    foreach ($request->file('images') as $index => $file) {
+                        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $file->move($folderPath, $fileName);
+
+                        $product->images()->create([
+                            'path' => 'uploads/products/' . $product->id . '/' . $fileName,
+                            'is_primary' => ($lastSortOrder == 0 && $index == 0) ? 1 : 0,
+                            'sort_order' => $lastSortOrder + $index + 1,
+                        ]);
+                    }
+                }
+
+                DB::commit();
+
+                return redirect()
+                    ->route('admin.products.index')
+                    ->with('success', 'Product created successfully');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return back()
+                    ->withInput()
+                    ->with('error', 'Something went wrong: ' . $e->getMessage());
+            }
         }
-
-        return redirect()->route('admin.products.index')->with('status', 'Product Added!');
-    }
 
     // 4. Show Edit Form
     public function edit(Product $product)
@@ -69,22 +122,81 @@ class ProductController extends Controller
     }
 
     // 5. Update Product
-    public function update(Request $request, Product $product)
+   public function update(Request $request, Product $product)
     {
-        $data = $this->validateProduct($request, $product->id);
-        $data['slug'] = Str::slug($request->name);
-        
-        $data['is_featured'] = $request->has('is_featured') ? 1 : 0;
-        $data['is_trending'] = $request->has('is_trending') ? 1 : 0;
-        $data['is_new'] = $request->has('is_new') ? 1 : 0;
+        // 1. Validation
+        $request->validate([
+            'name' => 'required|max:255',
+            'sku' => 'required|unique:products,sku,' . $product->id,
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|integer',
+            'status' => 'required|in:active,draft,inactive',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
 
-        $product->update($data);
+        DB::beginTransaction();
+        try {
+            // 2. Main Data Update
+            $product->update([
+                'name'           => $request->name,
+                'slug'           => Str::slug($request->name),
+                'sku'            => $request->sku,
+                'price'          => $request->price,
+                'discount_price' => $request->discount_price,
+                'stock_quantity' => $request->stock_quantity,
+                'category_id'    => $request->category_id,
+                'brand_id'       => $request->brand_id,
+                'status'         => $request->status,
+                'description'    => $request->description,
+                'short_description' => $request->short_description,
+                'is_featured'    => $request->has('is_featured'),
+                'is_trending'    => $request->has('is_trending'),
+                'updated_by'     => auth()->id(),
+            ]);
 
-        if ($request->hasFile('images')) {
-            $this->uploadImages($product, $request->file('images'));
+            // 3. Delete Selected Images
+            if ($request->filled('delete_images')) {
+                $imagesToDelete = ProductImage::whereIn('id', $request->delete_images)->get();
+                foreach ($imagesToDelete as $img) {
+                    Storage::disk('public')->delete($img->path);
+                    $img->delete();
+                }
+            }
+
+            // 4. Upload New Images
+            if ($request->hasFile('images')) {
+
+                $lastSortOrder = $product->images()->max('sort_order') ?? 0;
+                $folderPath = public_path('storage/uploads/products/' . $product->id);
+
+                // folder exist nahi karta to banao
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+
+                foreach ($request->file('images') as $index => $file) {
+
+                    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                    // 🔥 DIRECT public me move
+                    $file->move($folderPath, $fileName);
+
+                    $product->images()->create([
+                        'path'       => 'uploads/products/' . $product->id . '/' . $fileName,
+                        'is_primary' => ($lastSortOrder == 0 && $index == 0) ? 1 : 0,
+                        'sort_order' => $lastSortOrder + $index + 1,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.products.index')->with('success', 'Product and Gallery updated!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Update failed: ' . $e->getMessage());
         }
-
-        return redirect()->route('admin.products.index')->with('status', 'Product Updated!');
     }
 
     // 6. Delete Product
@@ -105,7 +217,7 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
-            'sku' => 'required|unique:products,sku,'.$id,
+            'sku' => 'required|unique:products,sku,' . $product->id,
             'price' => 'required|numeric',
             'discount_price' => 'nullable|numeric',
             'stock_quantity' => 'required|integer',

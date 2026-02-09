@@ -22,7 +22,8 @@
                             <span class="text-indigo-700 font-black font-mono text-sm tracking-wider uppercase">{{ $coupon->code }}</span>
                         </div>
                         <form action="{{ route('admin.coupons.toggle', $coupon) }}" method="POST">
-                            @csrf @method('PATCH')
+                            @csrf 
+                            {{-- @method('PATCH') ko hata diya --}}
                             <button type="submit" class="w-11 h-6 {{ $coupon->is_active ? 'bg-green-500' : 'bg-gray-200' }} rounded-full relative transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <span class="absolute top-1 {{ $coupon->is_active ? 'right-1' : 'left-1' }} w-4 h-4 bg-white rounded-full shadow-sm transition-all duration-200"></span>
                             </button>
