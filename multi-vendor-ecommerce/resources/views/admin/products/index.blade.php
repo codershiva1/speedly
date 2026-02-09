@@ -44,7 +44,7 @@
                             <td class="px-6 py-4">
                                 <div class="h-12 w-12 overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
                                     @if($product->images->first())
-                                        <img src="{{ asset('storage/' . $product->images->first()->path) }}" class="h-full w-full object-cover">
+                                        <img src="{{ asset('storage/' . $product->primaryImage->path) }}" class="h-full w-full object-cover">
                                     @else
                                         <div class="flex h-full w-full items-center justify-center text-[8px] text-gray-400">NO IMG</div>
                                     @endif

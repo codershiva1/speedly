@@ -14,10 +14,16 @@ class ProductController extends Controller
     // 1. List all products with Search
     public function index(Request $request)
     {
-        $products = Product::with(['category', 'brand'])
-            ->when($request->search, function($q) use ($request) {
-                $q->where('name', 'LIKE', "%{$request->search}%")
-                  ->orWhere('sku', 'LIKE', "%{$request->search}%");
+        $products = Product::with([
+                'category',
+                'brand',
+                'primaryImage' // 🔥 MAIN IMAGE
+            ])
+            ->when($request->search, function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    $query->where('name', 'LIKE', "%{$request->search}%")
+                        ->orWhere('sku', 'LIKE', "%{$request->search}%");
+                });
             })
             ->latest()
             ->paginate(15);
@@ -39,78 +45,102 @@ class ProductController extends Controller
     }
 
     // 3. Save New Product
-   public function store(Request $request)
-        {
-            DB::beginTransaction();
+  public function store(Request $request)
+    {
+        // 1️⃣ Validation: Sabhi fields jo DB mein NOT NULL hain yahan hone chahiye
+        $request->validate([
+            'name' => 'required|max:255',
+            'sku' => 'required|unique:products,sku',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'status' => 'required|in:active,draft,inactive',
+            'main_image' => '|image|max:2048',
+            'images.*' => 'nullable|image|max:2048',
+        ]);
 
-            try {
-                // 1️⃣ Validation
-                $request->validate([
-                    'name' => 'required|max:255',
-                    'sku' => 'required|unique:products,sku',
-                    'category_id' => 'required|exists:categories,id',
-                    'price' => 'required|numeric|min:0',
-                    'discount_price' => 'nullable|numeric|min:0',
-                    'stock_quantity' => 'required|integer|min:0',
-                    'status' => 'required|in:active,draft,inactive',
-                    'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+        DB::beginTransaction();
+
+        try {
+            // 2️⃣ Data Prepare (Ensure all fillable keys are handled)
+            $product = Product::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'sku' => $request->sku,
+                'price' => $request->price,
+                'discount_price' => $request->discount_price,
+                'stock_quantity' => $request->stock_quantity,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'vendor_id' => auth()->id(), // 🔥 Ye missing tha shayad!
+                'status' => $request->status,
+                'description' => $request->description,
+                'short_description' => $request->short_description,
+                'is_featured' => $request->has('is_featured'),
+                'is_trending' => $request->has('is_trending'),
+            ]);
+
+            $subFolder = "uploads/products/{$product->id}";
+
+            // 3️⃣ Main Image Upload
+            if ($request->hasFile('main_image')) {
+                $path = $request->file('main_image')->store($subFolder, 'public');
+                $product->images()->create([
+                    'path' => $path,
+                    'is_primary' => 1,
+                    'sort_order' => 0,
                 ]);
+            }
 
-                // 2️⃣ Prepare data
-                $data = [
-                    'name' => $request->name,
-                    'slug' => Str::slug($request->name),
-                    'sku' => $request->sku,
-                    'price' => $request->price,
-                    'discount_price' => $request->discount_price,
-                    'stock_quantity' => $request->stock_quantity,
-                    'category_id' => $request->category_id,
-                    'brand_id' => $request->brand_id,
-                    'status' => $request->status,
-                    'description' => $request->description,
-                    'short_description' => $request->short_description,
-                    'is_featured' => $request->has('is_featured'),
-                    'is_trending' => $request->has('is_trending'),
-                    'updated_by' => auth()->id(),
-                ];
+            // 4️⃣ Gallery Images Upload
+            if ($request->hasFile('main_image')) {
 
-                // 3️⃣ Create product
-                $product = Product::create($data);
+                // 🔴 OLD MAIN IMAGE REMOVE (DB + FILE)
+                $oldMain = $product->images()
+                    ->where('is_primary', 1)
+                    ->first();
 
-                // 4️⃣ Upload Images (ROOT public)
-                if ($request->hasFile('images')) {
-                    $lastSortOrder = 0; // new product, no previous images
-                    $folderPath = public_path('storage/uploads/products/' . $product->id);
+                if ($oldMain) {
+                    $oldPath = public_path('storage/' . $oldMain->path);
 
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0777, true);
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
                     }
 
-                    foreach ($request->file('images') as $index => $file) {
-                        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                        $file->move($folderPath, $fileName);
-
-                        $product->images()->create([
-                            'path' => 'uploads/products/' . $product->id . '/' . $fileName,
-                            'is_primary' => ($lastSortOrder == 0 && $index == 0) ? 1 : 0,
-                            'sort_order' => $lastSortOrder + $index + 1,
-                        ]);
-                    }
+                    $oldMain->delete();
                 }
 
-                DB::commit();
+                // 📂 Folder Path
+                $folderPath = public_path('storage/uploads/products/' . $product->id);
 
-                return redirect()
-                    ->route('admin.products.index')
-                    ->with('success', 'Product created successfully');
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
 
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return back()
-                    ->withInput()
-                    ->with('error', 'Something went wrong: ' . $e->getMessage());
+                // 🆕 Upload New Main Image
+                $file = $request->file('main_image');
+                $fileName = uniqid('main_') . '.' . $file->getClientOriginalExtension();
+
+                $file->move($folderPath, $fileName);
+
+                // ✅ SAVE AS PRIMARY IMAGE
+                $product->images()->create([
+                    'path'       => 'uploads/products/' . $product->id . '/' . $fileName,
+                    'is_primary' => 1,   // 🔥 ALWAYS PRIMARY
+                    'sort_order' => 0,
+                ]);
             }
+
+            DB::commit();
+            return redirect()->route('admin.products.index')->with('success', 'Done!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // 🔥 Sabse important: Ye aapko batayega ki error asal mein hai kya
+            return back()->withInput()->with('error', 'SQL Error: ' . $e->getMessage());
         }
+    }
 
     // 4. Show Edit Form
     public function edit(Product $product)
@@ -124,7 +154,7 @@ class ProductController extends Controller
     // 5. Update Product
    public function update(Request $request, Product $product)
     {
-        // 1. Validation
+        // 1️⃣ Validation
         $request->validate([
             'name' => 'required|max:255',
             'sku' => 'required|unique:products,sku,' . $product->id,
@@ -132,70 +162,130 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer',
             'status' => 'required|in:active,draft,inactive',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+
+            // MAIN IMAGE (optional on update)
+            'main_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            // GALLERY
+            'images' => 'nullable|array|max:4',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            'delete_images' => 'nullable|array',
         ]);
 
         DB::beginTransaction();
+
         try {
-            // 2. Main Data Update
+
+            // 2️⃣ Update product basic info
             $product->update([
-                'name'           => $request->name,
-                'slug'           => Str::slug($request->name),
-                'sku'            => $request->sku,
-                'price'          => $request->price,
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'sku' => $request->sku,
+                'price' => $request->price,
                 'discount_price' => $request->discount_price,
                 'stock_quantity' => $request->stock_quantity,
-                'category_id'    => $request->category_id,
-                'brand_id'       => $request->brand_id,
-                'status'         => $request->status,
-                'description'    => $request->description,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'status' => $request->status,
+                'description' => $request->description,
                 'short_description' => $request->short_description,
-                'is_featured'    => $request->has('is_featured'),
-                'is_trending'    => $request->has('is_trending'),
-                'updated_by'     => auth()->id(),
+                'is_featured' => $request->has('is_featured'),
+                'is_trending' => $request->has('is_trending'),
+                'updated_by' => auth()->id(),
             ]);
 
-            // 3. Delete Selected Images
+            $folderPath = public_path('storage/uploads/products/' . $product->id);
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+
+            // 3️⃣ Delete selected images
             if ($request->filled('delete_images')) {
-                $imagesToDelete = ProductImage::whereIn('id', $request->delete_images)->get();
-                foreach ($imagesToDelete as $img) {
-                    Storage::disk('public')->delete($img->path);
+                $images = ProductImage::whereIn('id', $request->delete_images)->get();
+
+                foreach ($images as $img) {
+                    if (file_exists(public_path('storage/' . $img->path))) {
+                        unlink(public_path('storage/' . $img->path));
+                    }
                     $img->delete();
                 }
             }
 
-            // 4. Upload New Images
-            if ($request->hasFile('images')) {
+            // 4️⃣ MAIN IMAGE UPDATE
+            if ($request->hasFile('main_image')) {
 
-                $lastSortOrder = $product->images()->max('sort_order') ?? 0;
+                // 🔴 OLD MAIN IMAGE REMOVE (DB + FILE)
+                $oldMain = $product->images()
+                    ->where('is_primary', 1)
+                    ->first();
+
+                if ($oldMain) {
+                    $oldPath = public_path('storage/' . $oldMain->path);
+
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
+                    }
+
+                    $oldMain->delete();
+                }
+
+                // 📂 Folder Path
                 $folderPath = public_path('storage/uploads/products/' . $product->id);
 
-                // folder exist nahi karta to banao
                 if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0777, true);
+                    mkdir($folderPath, 0755, true);
                 }
+
+                // 🆕 Upload New Main Image
+                $file = $request->file('main_image');
+                $fileName = uniqid('main_') . '.' . $file->getClientOriginalExtension();
+
+                $file->move($folderPath, $fileName);
+
+                // ✅ SAVE AS PRIMARY IMAGE
+                $product->images()->create([
+                    'path'       => 'uploads/products/' . $product->id . '/' . $fileName,
+                    'is_primary' => 1,   // 🔥 ALWAYS PRIMARY
+                    'sort_order' => 0,
+                ]);
+            }
+
+            // 5️⃣ GALLERY IMAGE LIMIT CHECK
+            $existingGalleryCount = $product->images()->where('is_primary', 0)->count();
+            $newGalleryCount = $request->hasFile('images') ? count($request->file('images')) : 0;
+
+            if (($existingGalleryCount + $newGalleryCount) > 4) {
+                throw new \Exception('Maximum 4 gallery images allowed.');
+            }
+
+            // 6️⃣ Upload new gallery images
+            if ($request->hasFile('images')) {
+
+                $lastSortOrder = $product->images()->max('sort_order') ?? 1;
 
                 foreach ($request->file('images') as $index => $file) {
 
                     $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-
-                    // 🔥 DIRECT public me move
                     $file->move($folderPath, $fileName);
 
                     $product->images()->create([
-                        'path'       => 'uploads/products/' . $product->id . '/' . $fileName,
-                        'is_primary' => ($lastSortOrder == 0 && $index == 0) ? 1 : 0,
+                        'path' => 'uploads/products/' . $product->id . '/' . $fileName,
+                        'is_primary' => 0,
                         'sort_order' => $lastSortOrder + $index + 1,
                     ]);
                 }
             }
 
             DB::commit();
-            return redirect()->route('admin.products.index')->with('success', 'Product and Gallery updated!');
+
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Product updated successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Update failed: ' . $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 

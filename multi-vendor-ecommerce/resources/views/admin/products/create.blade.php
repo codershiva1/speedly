@@ -72,6 +72,28 @@
                         </div>
                     </div>
                 </div>
+
+                 {{-- Main Image Section --}}
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex justify-between">
+                            Main Image <span class="text-red-500">* Required</span>
+                        </h3>
+                        <input type="file" name="main_image" accept="image/*" required
+                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        <x-input-error :messages="$errors->get('main_image')" class="mt-2" />
+                    </div>
+
+                    {{-- Gallery Images Section --}}
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
+                            Gallery Images (Max 4)
+                        </h3>
+                        <input id="images" name="images[]" type="file" multiple accept="image/*"
+                            onchange="updateFileList(this)"
+                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+                        <p id="file-list" class="mt-2 text-xs text-indigo-600 font-medium"></p>
+                        <x-input-error :messages="$errors->get('images')" class="mt-2" />
+                    </div>
             </div>
 
             <div class="space-y-6">
@@ -118,17 +140,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">Gallery</h3>
-                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-indigo-400 transition-colors">
-                        <input id="images" name="images[]" type="file" class="hidden" multiple onchange="updateFileList(this)">
-                        <label for="images" class="cursor-pointer">
-                            <svg class="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                            <span class="mt-2 block text-xs font-semibold text-indigo-600">Click to upload images</span>
-                        </label>
-                    </div>
-                    <div id="file-list" class="mt-3 text-[10px] text-gray-500 italic">No files selected</div>
-                </div>
+               
             </div>
         </div>
     </form>

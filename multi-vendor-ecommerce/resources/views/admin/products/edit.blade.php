@@ -15,188 +15,198 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data" class="space-y-8">
-        @csrf
-        @method('PUT')
+    <form method="POST"
+      action="{{ route('admin.products.update', $product) }}"
+      enctype="multipart/form-data"
+      class="space-y-8">
+    @csrf
+    @method('PUT')
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="lg:col-span-2 space-y-6">
-                
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">General Information</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <x-input-label for="name" :value="__('Product Name')" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full rounded-xl border-gray-200" :value="old('name', $product->name)" required />
-                        </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                        <div>
-                            <x-input-label for="sku" :value="__('SKU')" />
-                            <x-text-input id="sku" name="sku" type="text" class="mt-1 block w-full rounded-xl border-gray-200" :value="old('sku', $product->sku)" required />
-                        </div>
+        {{-- LEFT SIDE --}}
+        <div class="lg:col-span-2 space-y-6">
 
-                        <div>
-                            <x-input-label for="stock_quantity" :value="__('Current Stock')" />
-                            <x-text-input id="stock_quantity" name="stock_quantity" type="number" class="mt-1 block w-full rounded-xl border-gray-200" :value="old('stock_quantity', $product->stock_quantity)" required />
-                        </div>
+            {{-- BASIC INFO --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <h3 class="text-lg font-bold mb-4">General Information</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <x-input-label value="Product Name"/>
+                        <x-text-input name="name" value="{{ old('name',$product->name) }}" required/>
                     </div>
 
-                    <div class="mt-6">
-                        <x-input-label for="short_description" :value="__('Short Description')" />
-                        <textarea id="short_description" name="short_description" rows="2" class="mt-1 block w-full border-gray-200 rounded-xl shadow-sm">{{ old('short_description', $product->short_description) }}</textarea>
+                    <div>
+                        <x-input-label value="SKU"/>
+                        <x-text-input name="sku" value="{{ old('sku',$product->sku) }}" required/>
                     </div>
 
-                    <div class="mt-6">
-                        <x-input-label for="description" :value="__('Full Description')" />
-                        <textarea id="description" name="description" rows="5" class="mt-1 block w-full border-gray-200 rounded-xl shadow-sm">{{ old('description', $product->description) }}</textarea>
+                    <div>
+                        <x-input-label value="Stock"/>
+                        <x-text-input type="number" name="stock_quantity"
+                                      value="{{ old('stock_quantity',$product->stock_quantity) }}" required/>
                     </div>
                 </div>
 
-                <div>
-                    <x-input-label for="price" value="Price" />
-                    <x-text-input
-                        id="price"
-                        name="price"
-                        type="number"
-                        step="0.01"
-                        class="mt-1 block w-full"
-                        value="{{ old('price', $product->price) }}"
-                        required
-                    />
+                <div class="mt-4">
+                    <x-input-label value="Short Description"/>
+                    <textarea name="short_description"
+                              class="w-full rounded-xl border-gray-200">{{ old('short_description',$product->short_description) }}</textarea>
                 </div>
 
-                <div>
-                    <x-input-label for="discount_price" value="Discount Price" />
-                    <x-text-input
-                        id="discount_price"
-                        name="discount_price"
-                        type="number"
-                        step="0.01"
-                        class="mt-1 block w-full"
-                        value="{{ old('discount_price', $product->discount_price) }}"
-                    />
+                <div class="mt-4">
+                    <x-input-label value="Full Description"/>
+                    <textarea name="description"
+                              rows="4"
+                              class="w-full rounded-xl border-gray-200">{{ old('description',$product->description) }}</textarea>
                 </div>
+            </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Product Gallery</h3>
-                
-                <div id="image-preview-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    @foreach ($product->images as $image)
-                        <div class="relative group" id="existing-img-{{ $image->id }}">
-                            <img src="{{ asset('storage/'.$image->path) }}" class="w-full h-32 object-cover rounded-xl border border-gray-100">
-                            <div class="absolute inset-0 bg-black bg-opacity-40 rounded-xl opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <label class="cursor-pointer bg-red-500 p-2 rounded-full text-white shadow-lg transform hover:scale-110 transition">
-                                    <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" class="hidden" onchange="toggleOverlay(this, 'existing-img-{{ $image->id }}')">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                                </label>
-                            </div>
+            {{-- PRICING --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <h3 class="text-lg font-bold mb-4">Pricing</h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <x-input-label value="Price"/>
+                        <x-text-input type="number" step="0.01"
+                                      name="price"
+                                      value="{{ old('price',$product->price) }}" required/>
+                    </div>
+
+                    <div>
+                        <x-input-label value="Discount Price"/>
+                        <x-text-input type="number" step="0.01"
+                                      name="discount_price"
+                                      value="{{ old('discount_price',$product->discount_price) }}"/>
+                    </div>
+                </div>
+            </div>
+
+            {{-- MAIN IMAGE --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <h3 class="font-bold mb-4">Main Image</h3>
+
+                @php
+                    $mainImage = $product->images->where('is_primary',1)->first();
+                @endphp
+
+                @if($mainImage)
+                    <img src="{{ asset('storage/'.$mainImage->path) }}"
+                         class="w-40 h-40 object-cover rounded-xl mb-3">
+                          <label class="flex items-center gap-2 mt-2 text-sm text-red-600 cursor-pointer">
+                    <input type="checkbox" name="delete_main_image" value="1">
+                    Remove main image
+                </label>
+                @endif
+
+                <input type="file"
+                       name="main_image"
+                       accept="image/*"
+                       class="block w-full text-sm">
+                <p class="text-xs text-gray-400 mt-1">Replacing this will remove old main image</p>
+            </div>
+
+            {{-- GALLERY --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <h3 class="font-bold mb-4">Gallery Images (Max 4)</h3>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                    @foreach($product->images->where('is_primary',0) as $image)
+                        <div class="relative">
+                            <img src="{{ asset('storage/'.$image->path) }}"
+                                 class="w-full h-32 object-cover rounded-xl border">
+
+                            <input type="checkbox"
+                                name="delete_images[]"
+                                value="{{ $image->id }}"
+                                class="hidden peer">
+
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="checkbox"
+                                    name="delete_images[]"
+                                    value="{{ $image->id }}"
+                                    class="w-4 h-4 text-red-600 border-gray-300 rounded">
+                                <span class="text-red-600 font-medium">
+                                    Remove
+                                </span>
+                            </label>
                         </div>
                     @endforeach
                 </div>
 
-                <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-indigo-400 transition-all cursor-pointer bg-gray-50 group" onclick="document.getElementById('images').click()">
-                    <input id="images" name="images[]" type="file" class="hidden" multiple accept="image/*" onchange="previewImages(this)">
-                    <svg class="w-10 h-10 mx-auto text-gray-400 group-hover:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"></path></svg>
-                    <span class="mt-2 block text-sm font-semibold text-indigo-600">Click to upload new images</span>
-                    <p class="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</p>
+                <input type="file"
+                       name="images[]"
+                       multiple
+                       accept="image/*"
+                       class="block w-full text-sm">
+
+                <p class="text-xs text-gray-400 mt-1">
+                    You can upload remaining images up to max 4
+                </p>
+            </div>
+        </div>
+
+        {{-- RIGHT SIDE --}}
+        <div class="space-y-6">
+
+            {{-- STATUS --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <h3 class="text-sm font-bold uppercase mb-4 text-gray-400">Publishing</h3>
+
+                <select name="status" class="w-full rounded-xl border-gray-200">
+                    <option value="active" @selected($product->status=='active')>Active</option>
+                    <option value="draft" @selected($product->status=='draft')>Draft</option>
+                    <option value="inactive" @selected($product->status=='inactive')>Inactive</option>
+                </select>
+
+                <div class="mt-4 space-y-2">
+                    <label class="flex justify-between">
+                        <span>Featured</span>
+                        <input type="checkbox" name="is_featured" value="1"
+                               @checked($product->is_featured)>
+                    </label>
+
+                    <label class="flex justify-between">
+                        <span>Trending</span>
+                        <input type="checkbox" name="is_trending" value="1"
+                               @checked($product->is_trending)>
+                    </label>
+                </div>
+
+                <button class="mt-6 w-full bg-indigo-600 text-white py-3 rounded-xl">
+                    Update Product
+                </button>
+            </div>
+
+            {{-- CATEGORY / BRAND --}}
+            <div class="bg-white p-6 rounded-2xl shadow border">
+                <x-input-label value="Category"/>
+                <select name="category_id" class="w-full rounded-xl border-gray-200" required>
+                    @foreach($categories as $id=>$name)
+                        <option value="{{ $id }}" @selected($product->category_id==$id)>
+                            {{ $name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <div class="mt-4">
+                    <x-input-label value="Brand"/>
+                    <select name="brand_id" class="w-full rounded-xl border-gray-200">
+                        <option value="">None</option>
+                        @foreach($brands as $id=>$name)
+                            <option value="{{ $id }}" @selected($product->brand_id==$id)>
+                                {{ $name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
-            <script>
-                // Nayi select ki hui images ka preview dikhane ke liye
-                function previewImages(input) {
-                    const container = document.getElementById('image-preview-container');
-                    if (input.files) {
-                        Array.from(input.files).forEach(file => {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                const div = document.createElement('div');
-                                div.className = 'relative animate-pulse';
-                                div.innerHTML = `
-                                    <img src="${e.target.result}" class="w-full h-32 object-cover rounded-xl border-2 border-indigo-200 shadow-sm">
-                                    <span class="absolute top-1 right-1 bg-indigo-600 text-white text-[8px] px-2 py-1 rounded-full uppercase">New</span>
-                                `;
-                                container.appendChild(div);
-                                setTimeout(() => div.classList.remove('animate-pulse'), 500);
-                            }
-                            reader.readAsDataURL(file);
-                        });
-                    }
-                }
-
-                // Delete mark karne par visual feedback
-                function toggleOverlay(checkbox, elementId) {
-                    const el = document.getElementById(elementId);
-                    if(checkbox.checked) {
-                        el.classList.add('opacity-30', 'grayscale');
-                    } else {
-                        el.classList.remove('opacity-30', 'grayscale');
-                    }
-                }
-            </script>
-            </div>
-
-            <div class="space-y-6">
-                <div class="sticky top-24 space-y-6"> <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">Publishing</h3>
-                        
-                        <div class="mb-6">
-                            <x-input-label for="status" :value="__('Product Status')" />
-                            <select id="status" name="status" class="w-full mt-1 border-gray-200 rounded-xl focus:ring-indigo-500">
-                                <option value="active" {{ (isset($product) && $product->status == 'active') ? 'selected' : '' }}>Active</option>
-                                <option value="draft" {{ (isset($product) && $product->status == 'draft') ? 'selected' : '' }}>Draft</option>
-                                <option value="inactive" {{ (isset($product) && $product->status == 'inactive') ? 'selected' : '' }}>Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-3 mb-6 p-4 bg-gray-50 rounded-xl">
-                            <label class="flex items-center justify-between cursor-pointer">
-                                <span class="text-sm font-medium text-gray-700">Featured Product</span>
-                                <input type="checkbox" name="is_featured" value="1" {{ (isset($product) && $product->is_featured) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600">
-                            </label>
-                            <label class="flex items-center justify-between cursor-pointer">
-                                <span class="text-sm font-medium text-gray-700">Trending Now</span>
-                                <input type="checkbox" name="is_trending" value="1" {{ (isset($product) && $product->is_trending) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600">
-                            </label>
-                        </div>
-
-                        <x-primary-button class="w-full justify-center py-3 bg-indigo-600 hover:bg-indigo-700 shadow-lg rounded-xl">
-                            {{ isset($product) ? __('Update Product') : __('Create Product') }}
-                        </x-primary-button>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">Organize</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <x-input-label for="category_id" :value="__('Category')" />
-                                <select id="category_id" name="category_id" class="mt-1 block w-full border-gray-200 rounded-xl focus:ring-indigo-500" required>
-                                    <option value="">Select Category</option>
-                                    @foreach ($categories as $id => $name)
-                                        <option value="{{ $id }}" {{ (isset($product) && $product->category_id == $id) ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <x-input-label for="brand_id" :value="__('Brand')" />
-                                <select id="brand_id" name="brand_id" class="mt-1 block w-full border-gray-200 rounded-xl focus:ring-indigo-500">
-                                    <option value="">None</option>
-                                    @foreach ($brands as $id => $name)
-                                        <option value="{{ $id }}" {{ (isset($product) && $product->brand_id == $id) ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> </div>
         </div>
-    </form>
+    </div>
+</form>
 </div>
 
 <script>

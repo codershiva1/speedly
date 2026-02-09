@@ -82,5 +82,11 @@ class Product extends Model
             ->where('target_type', 'product');
     }
 
+    
+
+    public function primaryImage()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', 1);
+    }
 
 }
