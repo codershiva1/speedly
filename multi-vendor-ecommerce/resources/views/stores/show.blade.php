@@ -1,184 +1,132 @@
-<x-layouts.site :title="__('Search')">
+<x-layouts.site :title="__('₹'.$price.' Store')">
 
-    {{-- STORE SEARCH BAR --}}
-    <div class="sticky top-16 bg-white z-20 px-4 py-2 border-b">
-        <form method="GET">
-            <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
-                <i class="bi bi-search text-gray-500 mr-3"></i>
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ $search }}"
-                    placeholder="Search in ₹{{ $price }} store"
-                    class="w-full bg-transparent focus:outline-none text-sm"
-                >
-            </div>
-        </form>
-    </div>
-
-    {{-- STORE TITLE --}}
-    <div class="px-4 pt-4">
-        <h1 class="text-xl font-bold text-gray-900">
-            ₹{{ $price }} Store
-        </h1>
-        <p class="text-sm text-gray-500 mt-1">
-            All products under ₹{{ $price }}
-        </p>
-    </div>
-
-    {{-- PRODUCTS GROUPED BY PARENT CATEGORY --}}
-    @foreach($products as $parentCategory => $items)
-        <section class="px-4 py-5 bg-white">
-            {{-- CATEGORY TITLE --}}
-            <div class="flex items-center justify-between mb-3">
-                <span class="font-semibold text-gray-900" style="font-size:20px;">
-                    {{ $parentCategory }}
-                </span>
-            </div>
-
-            {{-- PRODUCT GRID --}}
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                @foreach ($items as $product)
-                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
-
-                        {{-- WISHLIST --}}
-                        @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                        @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                        @endauth
-
-                        {{-- PRODUCT IMAGE --}}
-                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                            <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                                @php
-                                    $img = $product->images->first();
-                                @endphp
-
-                                @if ($img)
-                                    <img
-                                        src="{{ asset('storage/' . $img->path) }}"
-                                        class="w-full h-full object-contain"
-                                        alt="{{ $product->name }}"
-                                    >
-                                @else
-                                    <span class="text-gray-400 text-xs">No Image</span>
-                                @endif
-                            </div>
-                        </a>
-
-                        {{-- DELIVERY TAG --}}
-                        <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                            </svg>
-                            8 MINS
-                        </span>
-
-                        {{-- PRODUCT INFO --}}
-                        <div class="mt-2 flex-1">
-                            <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                {{ $product->name }}
-                            </p>
-
-                            @if($product->size)
-                                <p class="text-sm text-gray-500 mt-1">
-                                    {{ $product->size }}
-                                </p>
-                            @endif
-                        </div>
-
-                        {{-- PRICE & ADD --}}
-                        <div class="mt-3 flex items-center justify-between">
-                            <div class="flex flex-col leading-tight">
-                                <span class="text-base font-bold text-gray-900">
-                                    ₹{{ $product->price }}
-                                </span>
-
-                                @if ($product->discount_price)
-                                    <span class="line-through text-xs text-gray-400">
-                                        ₹{{ $product->discount_price }}
-                                    </span>
-                                @endif
-                            </div>
-
-                            @auth
-                                <button
-                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                    {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                    data-product-id="{{ $product->id }}"
-                                >
-                                    {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                </button>
-                            @else
-                                <a href="{{ route('login') }}"
-                                class="px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">
-                                    ADD
-                                </a>
-                            @endauth
-                        </div>
+   {{-- PREMIUM BANNER SLIDER --}}
+    @if($topBanners->isNotEmpty() && !$search)
+        <div class="px-4 py-2">
+            {{-- Flex container ensuring no wrapping and forced spacing --}}
+            <div class="flex gap-2 overflow-x-auto no-scrollbar snap-x snap-mandatory">
+                @foreach($topBanners as $banner)
+                    {{-- 
+                    1. min-w-[calc(50%-4px)]: Forces exactly 2 banners per row (minus half the gap).
+                    2. max-h-[120px]: Prevents the banner from becoming "huge" vertically.
+                    3. aspect-video: Maintains a professional cinematic ratio.
+                    --}}
+                    <div class="min-w-[calc(50%-4px)] md:min-w-[calc(48.33%-8px)] h-58 md:h-40 bg-gray-100 rounded-xl overflow-hidden snap-start flex-shrink-0 border border-gray-100 shadow-sm">
+                        <img src="{{ asset('storage/'.$banner->banner_image) }}" 
+                            class="w-full h-full object-cover" 
+                            alt="Promotion">
                     </div>
                 @endforeach
             </div>
-        </section>
-    @endforeach
-
-    {{-- EMPTY STATE --}}
-    @if($products->isEmpty())
-        <div class="text-center py-10 text-gray-500">
-            No products found in ₹{{ $price }} store.
         </div>
     @endif
 
-    @if($cartCount > 0)
-            <div id="floating-cart"
-                onclick="window.location='{{ route('account.cart.index') }}'"
-                class="floatingcart fixed bottom-20 left-1/4 -translate-x-1/2
-                        bg-green-600 text-white
-                        rounded-full
-                        px-3 py-2.5
-                        flex items-center gap-2
-                        shadow-2xl
-                        cursor-pointer
-                        z-50
-                        transition-all duration-300"
-            >
+    <div class="flex items-center justify-between w-full bg-white/90 px-5 py-1">
+        <div class="px-5 ">
+            <h1 class="text-2xl font-black text-gray-900 italic tracking-tight">₹{{ $price }} <span class="text-green-600">Store</span></h1>
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Quality items under budget</p>
+        </div>
+            {{-- MODERN STICKY SEARCH --}}
+        <div class="sticky top-20 bg-white/90 backdrop-blur-md z-30 px-4  border-b border-gray-100">
+            <form method="GET">
+                <div class="flex items-center bg-gray-100 rounded-2xl px-4 py-2.5 border border-transparent focus-within:border-green-500 focus-within:bg-white transition-all duration-300">
+                    <i class="bi bi-search text-gray-400 mr-3"></i>
+                    <input type="text" name="q" value="{{ $search }}" placeholder="Search in ₹{{ $price }} store" class="w-full bg-transparent focus:outline-none text-sm font-medium">
+                </div>
+            </form>
+        </div>
 
-                <!-- Cart Icon -->
-                <i class="bi bi-cart3 text-xl"></i>
+    </div>
 
-                <!-- Item count -->
-                <span class="text-sm font-semibold ">
-                    <span class="cart-count">{{ $cartCount }}</span>
-                    items
+    {{-- PRODUCT LISTINGS --}}
+    @php $sectionIndex = 0; @endphp
+
+    @foreach($products as $categoryName => $items)
+        <section class="px-4 py-3">
+            <div class="flex items-center justify-between mb-3 px-1">
+                <h2 class="font-extrabold text-gray-800 text-xl tracking-tight">{{ $categoryName }}</h2>
+                <div class="h-px flex-1 bg-gray-100 mx-4"></div>
+                <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">{{ $items->count() }} Items</span>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                @foreach($items as $product)
+                    @include('partials.product-card', ['product' => $product, 'isAd' => false])
+                @endforeach
+            </div>
+        </section>
+
+        {{-- SPONSORED BREAK (Injected after every 2 categories) --}}
+        @php $sectionIndex++; @endphp
+        @if($sectionIndex % 2 == 0 && $inlineAds->isNotEmpty())
+            <div class="my-1 py-4 bg-gradient-to-b from-gray-50 to-white border-y border-gray-100">
+                <div class="px-5 mb-6 flex justify-between items-end">
+                    <div>
+                        <span class="bg-amber-100 text-amber-700 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter shadow-sm">Promoted</span>
+                        <h3 class="text-xl font-black text-gray-800 mt-1">Featured For You</h3>
+                    </div>
+                </div>
+                
+                {{-- SPONSORED BREAK --}}
+                <div class="flex gap-4 overflow-x-auto px-5 no-scrollbar">
+                    @foreach($inlineAds->shuffle()->take(6) as $ad)
+                        {{-- FIX: Added flex-shrink-0 and a fixed max-width --}}
+                        <div class="min-w-[170px] md:min-w-[200px] flex-shrink-0 max-w-[200px]">
+                            @include('partials.product-card', ['product' => $ad->target, 'isAd' => true])
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    @endforeach
+
+    {{-- FLOATING CART (Keep your original functionality) --}}
+     @if($cartCount > 0)
+        <div id="floating-cart"
+            onclick="window.location='{{ route('account.cart.index') }}'"
+            class="floatingcart fixed bottom-20 left-2/4 -translate-x-1/2
+                    bg-green-600 text-white
+                    rounded-full
+                    px-3 py-2.5
+                    flex items-center gap-3
+                    shadow-2xl
+                    cursor-pointer
+                    z-50
+                    transition-all duration-300"
+        >
+
+            <!-- Cart Icon -->
+            <!-- <i class="bi bi-cart3 text-xl"></i> -->
+            <!-- Item count -->
+             <div class="relative">
+                <i class="bi bi-bag-check-fill text-2xl"></i>
+                <span class="absolute -top-2 -right-2 bg-white text-green-600 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
+                    {{ $cartCount }}
                 </span>
+            </div>
 
-                <!-- Divider -->
-                <span class="h-4 w-px bg-green-300"></span>
+            <!-- Divider -->
+            <span class="h-4 w-px bg-green-300"></span>
 
-                <!-- Total -->
+            <!-- Total -->
+             <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-tighter opacity-80 leading-none">View Cart</span>
                 <span class="text-sm font-bold ">
                     ₹<span class="cartTotal">{{ number_format($cartTotal) }}</span>
                 </span>
-
             </div>
-        @endif
+
+            <i class="bi bi-chevron-right text-xs opacity-50"></i>
+        </div>
+    @endif
 
     <script>
         window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
-        window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
+        window.CartToggleUrl     = "{{ route('account.cart.toggle', ':id') }}";
     </script>
 
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </x-layouts.site>

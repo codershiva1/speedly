@@ -115,6 +115,7 @@ Route::prefix('account')
 
         Route::get('/orders', [AccountOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [AccountOrderController::class, 'show'])->name('orders.show');
+        Route::post('/orders/{order}/reorder', [AccountOrderController::class, 'reorder'])->name('orders.reorder');
     });
 
 

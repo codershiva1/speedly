@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,13 @@ class AppServiceProvider extends ServiceProvider
             $view->with('wishlistCount', $wishlistCount);
        });
 
+
+        Relation::enforceMorphMap([
+            'product'  => \App\Models\Product::class,
+            'category' => \App\Models\Category::class,
+            // future:
+            // 'store' => \App\Models\Store::class,
+        ]);
 
         /* =========================
            Cart Count + Cart Total
