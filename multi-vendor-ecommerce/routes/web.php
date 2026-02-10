@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
 use App\Http\Controllers\Vendor\ProductController as VendorProductController;
 use App\Http\Controllers\Vendor\OrderController as VendorOrderController;
+use App\Http\Controllers\OfferController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Vendor\SearchController as AdminSearchController;
 use App\Models\User;
@@ -61,6 +62,12 @@ Route::post('/product/{product:slug}/reviews', [ProductReviewController::class, 
 
 Route::get('/vendors', [VendorStorefrontController::class, 'index'])->name('vendors.index');
 Route::get('/vendors/{slug}', [VendorStorefrontController::class, 'show'])->name('vendors.show');
+
+// The main deals page
+Route::get('/offers', [OfferController::class, 'index'])->name('offers.index');
+// The click tracker (tracks then redirects to the product/category)
+Route::get('/offers/click/{ad}', [OfferController::class, 'trackClick'])->name('offers.click');
+
 
 Route::get('/dashboard', function () {
     $user = auth()->user();

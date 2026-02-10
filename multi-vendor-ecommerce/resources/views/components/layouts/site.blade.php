@@ -1002,7 +1002,7 @@
         </a>
 
         <!-- Add -->
-        <a href="{{ route('account.cart.index') }}"
+        <a href="{{ route('offers.index') }}"
         class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
             <span class="text-lg">📢</span>
             <span class="text-xs">Ads</span>
