@@ -93,7 +93,7 @@
                 @endphp
 
                 @if($mainImage)
-                    <img src="{{ asset('storage/'.$mainImage->path) }}"
+                    <img src="{{ asset('public/storage/'.$mainImage->path) }}"
                          class="w-40 h-40 object-cover rounded-xl mb-3">
                           <label class="flex items-center gap-2 mt-2 text-sm text-red-600 cursor-pointer">
                     <input type="checkbox" name="delete_main_image" value="1">
@@ -115,7 +115,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     @foreach($product->images->where('is_primary',0) as $image)
                         <div class="relative">
-                            <img src="{{ asset('storage/'.$image->path) }}"
+                            <img src="{{ asset('public/storage/'.$image->path) }}"
                                  class="w-full h-32 object-cover rounded-xl border">
 
                             <input type="checkbox"

@@ -68,13 +68,11 @@ $productDetails = [
 
                         <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                             @php $primaryImage = $product->images->first(); @endphp
-                            @if ($primaryImage)
-                                <img src="https://speedlymart.com/storage/uploads/categories/3/image1.avif"
-                                    alt="{{ $product->name }}"
-                                    class="w-full h-full object-cover">
-                            @else
-                                <span class="text-gray-400 text-sm">No Image</span>
-                            @endif
+                            
+                            <img src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
+                                alt="{{ $product->name }}"
+                                class="w-full h-full object-cover">
+                            
                         </div>
 
                         @if ($product->discount_price)
@@ -320,13 +318,11 @@ $productDetails = [
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    @if ($img)
-                                        <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/da/cms-assets/cms/product/77a1f36d-1024-4d57-bbb1-190c016c134f.png" 
-                                            class="w-full h-full object-contain" 
-                                            alt="{{ $product->name }}">
-                                    @else
-                                        <span class="text-gray-400 text-xs">No Image</span>
-                                    @endif
+                                   
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                        class="w-full h-full object-contain" 
+                                        alt="{{ $product->name }}">
+                                    
                                 </div>
                             </a>
 
@@ -419,13 +415,11 @@ $productDetails = [
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    @if ($img)
-                                        <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/da/cms-assets/cms/product/c299d4a9-8e07-4660-a510-f973dcd2cadf.png" 
-                                            class="w-full h-full object-contain" 
-                                            alt="{{ $product->name }}">
-                                    @else
-                                        <span class="text-gray-400 text-xs">No Image</span>
-                                    @endif
+                                    
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                        class="w-full h-full object-contain" 
+                                        alt="{{ $product->name }}">
+                                   
                                 </div>
                             </a>
 
@@ -520,13 +514,11 @@ $productDetails = [
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    @if ($img)
-                                        <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/da/cms-assets/cms/product/2d87e7e0-d84b-4049-bb76-7962e83d9281.png" 
-                                            class="w-full h-full object-contain" 
-                                            alt="{{ $product->name }}">
-                                    @else
-                                        <span class="text-gray-400 text-xs">No Image</span>
-                                    @endif
+                                    
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                        class="w-full h-full object-contain" 
+                                        alt="{{ $product->name }}">
+                                    
                                 </div>
                             </a>
 

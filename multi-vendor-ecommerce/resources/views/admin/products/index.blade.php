@@ -44,7 +44,7 @@
                             <td class="px-6 py-4">
                                 <div class="h-12 w-12 overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
                                     @if($product->images->first())
-                                        <img src="{{ asset('storage/' . $product->primaryImage->path) }}" class="h-full w-full object-cover">
+                                        <img src="{{ asset('public/storage/' . $product->primaryImage->path) }}" class="h-full w-full object-cover">
                                     @else
                                         <div class="flex h-full w-full items-center justify-center text-[8px] text-gray-400">NO IMG</div>
                                     @endif
@@ -103,7 +103,7 @@
                     <div class="flex items-start gap-4">
                         <div class="h-20 w-20 flex-shrink-0 rounded-xl border border-gray-100 bg-gray-50 overflow-hidden">
                             @if($product->images->first())
-                                <img src="{{ asset('app/public/products/' . $product->images->first()->path) }}" class="h-full w-full object-cover">
+                                <img src="{{ asset('public/storage/' . $product->images->first()->path) }}" class="h-full w-full object-cover">
                             @else
                                 <div class="flex h-full w-full items-center justify-center text-[10px] text-gray-400">NO IMAGE</div>
                             @endif

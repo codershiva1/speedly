@@ -98,7 +98,7 @@
                     @if($category->image)
                         <div class="mb-4">
                             <p class="text-xs text-gray-500 mb-2">Current Image:</p>
-                            <img src="{{ asset('storage/' . $category->image) }}" class="w-full h-40 object-cover rounded-lg border border-gray-200 shadow-sm">
+                            <img src="{{ asset('public/storage/' . $category->image) }}" class="w-full h-40 object-cover rounded-lg border border-gray-200 shadow-sm">
                         </div>
                     @endif
 

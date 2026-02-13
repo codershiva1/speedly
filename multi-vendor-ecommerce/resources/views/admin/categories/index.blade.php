@@ -52,7 +52,7 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 @if($category->image)
-                                    <img class="h-12 w-12 rounded-lg object-cover border border-gray-100 shadow-sm" src="{{ asset('storage/'.$category->image) }}">
+                                    <img class="h-12 w-12 rounded-lg object-cover border border-gray-100 shadow-sm" src="{{ asset('public/storage/'.$category->image) }}">
                                 @else
                                     <div class="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -98,7 +98,7 @@
                 <div class="p-4 flex items-start gap-4">
                     <div class="h-16 w-16 flex-shrink-0">
                         @if($category->image)
-                            <img class="h-16 w-16 rounded-xl object-cover border border-gray-100" src="{{ asset('storage/'.$category->image) }}">
+                            <img class="h-16 w-16 rounded-xl object-cover border border-gray-100" src="{{ asset('public/storage/'.$category->image) }}">
                         @else
                             <div class="h-16 w-16 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300 border border-dashed border-gray-200">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>

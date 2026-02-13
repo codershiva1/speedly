@@ -69,18 +69,12 @@
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php 
                                         $img = $product->images->first(); 
-                                        $fullPath = $img 
-                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
-                                            : null;
                                     @endphp
 
-                                    @if ($img)
-                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
-                                            class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
-                                    @else
-                                        <span class="text-gray-400 text-xs">No Image</span>
-                                    @endif
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                        class="w-full h-full object-contain"
+                                        alt="{{ $product->name }}" style="object-fit: fill;">
+                                   
                                 </div>
                             </a>
 
@@ -291,18 +285,13 @@
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php 
                                         $img = $product->images->first(); 
-                                        $fullPath = $img 
-                                            ? 'http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/' . $img->path 
-                                            : null;
                                     @endphp
 
-                                    @if ($img)
-                                        <img src="http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/categories/3/image1.avif" 
-                                            class="w-full h-full object-contain"
-                                            alt="{{ $product->name }}" style="object-fit: fill;">
-                                    @else
-                                        <span class="text-gray-400 text-xs">No Image</span>
-                                    @endif
+                                   
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                        class="w-full h-full object-contain"
+                                        alt="{{ $product->name }}" style="object-fit: fill;">
+                                   
                                 </div>
                             </a>
 

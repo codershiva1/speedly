@@ -28,20 +28,46 @@ class HomeController extends Controller
         ])
         ->where('status', 'active');
 
-        $dealsOfDay = (clone $baseProductQuery)
-            ->orderByDesc('discount_price')
-            ->take(10)
+        // -----------------
+
+        // --- THE 5 VARIETY SECTIONS ---
+
+        // SECTION 1: Mega Flash Deals (Sorted by highest savings amount)
+        $megaDeals = (clone $baseProductQuery)
+            ->whereNotNull('discount_price')
+            ->selectRaw('*, (price - discount_price) as total_savings')
+            ->orderByDesc('total_savings')
+            ->take(6)
             ->get();
 
+        // SECTION 2: New Arrivals (Freshness)
         $newProducts = (clone $baseProductQuery)
             ->latest()
             ->take(10)
             ->get();
 
+        // SECTION 3: Trending Now (Social Proof - using view_count or random popularity)
+        // If you don't have a view_count column yet, inRandomOrder() acts as a "Discovery" section
+        $trendingProducts = (clone $baseProductQuery)
+            ->where('is_featured', false) // Differentiate from featured
+            ->inRandomOrder() 
+            ->take(8)
+            ->get();
+
+        // SECTION 4: Handpicked Featured (Curated by Admin)
         $featuredProducts = (clone $baseProductQuery)
             ->where('is_featured', true)
             ->take(10)
             ->get();
+
+        // SECTION 5: Budget Store (Under ₹199 - High Conversion)
+        $budgetStore = (clone $baseProductQuery)
+            ->where('price', '<', 199)
+            ->take(6)
+            ->get();
+        // ---------------------
+
+       
 
         $latestNews = [
             [
@@ -73,9 +99,11 @@ class HomeController extends Controller
         return view('home', [
             'categories' => $categories,
             'topCategories' => $topCategories,
-            'dealsOfDay' => $dealsOfDay,
+            'megaDeals' => $megaDeals,
             'newProducts' => $newProducts,
+            'trendingProducts' => $trendingProducts,
             'featuredProducts' => $featuredProducts,
+            'budgetStore' => $budgetStore,
             'latestNews' => $latestNews,
         ]);
     }
