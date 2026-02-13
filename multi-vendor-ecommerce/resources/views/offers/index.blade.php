@@ -1,17 +1,17 @@
 <x-layouts.site title="Offers Hub | Speedly Savings">
-<div class="bg-[#f0f4f2] min-h-screen pb-32">
+<div class="bg-[#0b3d21] min-h-screen pb-32" style="background-image: radial-gradient(#fff 0.1px, transparent 1px);background-size: 30px 30px;">
     
    
 
     {{-- 2. CINEMATIC HEADER SECTION --}}
-    <div class="relative bg-[#0b3d21] pt-2 pb-36 px-6 overflow-hidden">
+    <div class="relative bg-[#0b3d21] pt-2 pb-24 px-6 overflow-hidden">
         {{-- Animated background pattern --}}
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
         
         <div class="max-w-7xl mx-auto relative z-10 flex flex-col  justify-between gap-3 w-full">
 
                {{-- 1. STICKY GLASSMORPHISM STATS BAR --}}
-            <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100 py-3 shadow-sm">
+            <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100 py-1 shadow-sm">
                 <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <span class="flex h-2 w-2 rounded-full bg-red-500 animate-ping"></span>
@@ -31,13 +31,13 @@
 
             <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-12 w-full">
                 <div class="text-center md:text-left">
-                    <div class="inline-flex items-center gap-2 bg-green-500/20 text-green-300 text-[10px] font-black px-4 py-1.5 rounded-full mb-6 border border-green-500/30">
+                    <div class="inline-flex items-center gap-2 bg-green-500/20 text-green-300 text-[10px] font-black px-4 py-1.5 rounded-full mb-1.5 border border-green-500/30">
                         <i class="bi bi-stars"></i> EXCLUSIVE MEMBER ACCESS
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black text-white italic tracking-tighter leading-[0.85]">
+                    <h1 class="text-2xl md:text-3xl font-black text-white italic tracking-tighter leading-[0.85]">
                         THE <span class="text-transparent" style="-webkit-text-stroke: 1.5px #4ade80;">BIG</span><br>SAVINGS
                     </h1>
-                    <p class="text-green-100/70 mt-2 font-medium text-lg max-w-md">
+                    <p class="text-green-100/70 mt-1 font-medium text-lg max-w-md">
                         Hand-picked premium deals across Fashion, Fresh, and Electronics. Updated every 60 minutes.
                     </p>
                 </div>
@@ -45,7 +45,7 @@
                 {{-- Premium Card Widget --}}
                 <div class="relative group">
                     <div class="absolute -inset-1 bg-gradient-to-r from-green-400 to-yellow-400 rounded-[3rem] blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                    <div class="relative bg-[#154d2e] p-8 rounded-[2.5rem] border border-white/10 shadow-2xl">
+                    <div class="relative bg-[#154d2e] px-8 py-2 rounded-[2.5rem] border border-white/10 shadow-2xl">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="h-12 w-12 rounded-2xl bg-yellow-400 flex items-center justify-center text-2xl">
                                 💰
@@ -55,7 +55,7 @@
                                 <p class="text-2xl font-black text-white italic">₹2.5 Lakhs+</p>
                             </div>
                         </div>
-                        <button class="w-full bg-white text-green-900 font-black py-4 rounded-2xl text-xs uppercase tracking-widest hover:bg-green-400 hover:text-white transition-all">
+                        <button class="w-full bg-white text-green-900 font-black py-2 rounded-2xl text-xs uppercase tracking-widest hover:bg-green-400 hover:text-white transition-all">
                             Upgrade to VIP
                         </button>
                     </div>
@@ -68,14 +68,14 @@
         
         {{-- 3. HERO SLIDER SECTION (off_hero) --}}
         @if(isset($placements['off_hero']))
-        <div class="mb-20">
-            <div class="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4">
+        <div class="mb-10">
+            <div class="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory ">
                 @foreach($placements['off_hero']->ads as $ad)
-                <a href="{{ route('offers.click', $ad) }}" class="min-w-[90%] md:min-w-[55%] aspect-[21/9] bg-white rounded-[3.5rem] overflow-hidden shadow-2xl snap-center relative block group border-[6px] border-white">
+                <a href="{{ route('offers.click', $ad) }}" class="min-w-[90%] md:min-w-[32%] aspect-[21/9] bg-white rounded-[2rem] overflow-hidden shadow-2xl snap-center relative block group border-[2px] border-white">
                     <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-12 flex flex-col justify-end">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-4 flex flex-col justify-end">
                         <div class="translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                            <h2 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none mb-2">{{ $ad->title }}</h2>
+                            <h2 class="text-1xl md:text-2xl font-black text-white italic uppercase tracking-tighter leading-none mb-2">{{ $ad->title }}</h2>
                             <div class="flex items-center gap-3">
                                 <span class="bg-yellow-400 text-black text-[10px] font-black px-4 py-1 rounded-full uppercase">Claim Now</span>
                                 <span class="text-white/60 text-xs font-bold">Limited time only</span>
@@ -90,25 +90,25 @@
 
         {{-- 4. FLASH DEALS GRID (off_grid) --}}
         @if(isset($placements['off_grid']))
-        <div class="mb-24">
+        <div class="mb-10">
             <div class="flex items-center justify-between mb-10 px-6">
                 <div>
-                    <h3 class="text-4xl font-black text-gray-900 italic tracking-tighter">Flash <span class="text-green-600">Frenzy</span></h3>
+                    <h3 class="text-4xl font-black text-white italic tracking-tighter">Flash <span class="text-green-600">Frenzy</span></h3>
                     <p class="text-xs text-gray-400 font-bold uppercase mt-1">Supercharged discounts for the next few hours</p>
                 </div>
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                 @foreach($placements['off_grid']->ads as $ad)
-                <a href="{{ route('offers.click', $ad) }}" class="bg-white p-3 rounded-[2.5rem] shadow-xl hover:shadow-green-200 hover:-translate-y-3 transition-all group border border-white">
-                    <div class="aspect-square rounded-[2rem] overflow-hidden mb-4 relative shadow-inner bg-gray-50">
-                        <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
+                <a href="{{ route('offers.click', $ad) }}" class="bg-white p-2 rounded-[1rem] shadow-xl hover:shadow-green-200 hover:-translate-y-3 transition-all group border border-white">
+                    <div class="aspect-square rounded-[1rem] overflow-hidden mb-1 relative shadow-inner bg-gray-50">
+                        <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-60 object-contain group-hover:scale-110 transition-all duration-700">
                         <div class="absolute top-3 left-3 bg-red-600 text-white text-[9px] font-black px-3 py-1 rounded-lg">
                             TOP DEAL
                         </div>
                     </div>
                     <div class="px-2">
-                        <h4 class="text-[11px] font-black text-gray-800 line-clamp-2 uppercase tracking-tight mb-4 min-h-[32px]">{{ $ad->title }}</h4>
+                        <h4 class="text-[11px] font-black text-gray-800 line-clamp-2 uppercase tracking-tight mb-1 min-h-[22px]">{{ $ad->title }}</h4>
                         <div class="w-full py-2.5 bg-green-50 text-green-600 text-[10px] font-black rounded-2xl group-hover:bg-green-600 group-hover:text-white transition-all text-center uppercase tracking-widest">
                             Grab Deal
                         </div>
@@ -121,9 +121,9 @@
 
         {{-- 5. SLIM CATEGORY BANNERS (off_slim) --}}
         @if(isset($placements['off_slim']))
-        <div class="grid md:grid-cols-2 gap-8 mb-24">
+        <div class="grid md:grid-cols-2 gap-8 mb-10">
             @foreach($placements['off_slim']->ads as $ad)
-            <a href="{{ route('offers.click', $ad) }}" class="group relative h-48 rounded-[3rem] overflow-hidden shadow-2xl">
+            <a href="{{ route('offers.click', $ad) }}" class="group relative h-48 rounded-[2rem] overflow-hidden shadow-2xl">
                 <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-r from-green-900/90 to-transparent p-10 flex flex-col justify-center">
                     <span class="text-green-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2">Category Spotlight</span>
@@ -139,21 +139,21 @@
 
         {{-- 6. BANK VOUCHER SECTION (off_bank) --}}
         @if(isset($placements['off_bank']))
-        <div class="bg-white rounded-[4rem] p-12 shadow-2xl border border-gray-100 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-12 opacity-5">
-                <i class="bi bi-wallet2 text-9xl"></i>
+        <div class="bg-white rounded-[2rem] p-3 shadow-2xl border border-gray-100 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4  text-green-600">
+                <i class="bi bi-wallet2 text-5xl"></i>
             </div>
             
-            <h3 class="text-3xl font-black text-gray-900 italic mb-10 relative z-10">Partner <span class="text-green-600">Bonuses</span></h3>
+            <h3 class="text-xl font-black text-gray-900 italic mb-1 relative z-10">Partner <span class="text-green-600">Bonuses</span></h3>
             
-            <div class="grid lg:grid-cols-3 gap-8 relative z-10">
+            <div class="grid lg:grid-cols-4 gap-8 relative z-10">
                 @foreach($placements['off_bank']->ads as $ad)
-                <div class="bg-gray-50 rounded-[2.5rem] p-8 border-2 border-dashed border-gray-200 hover:border-green-500 hover:bg-green-50/30 transition-all group">
-                    <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-2xl text-green-600 mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-gray-50 rounded-[2.5rem] p-3 border-2 border-dashed border-gray-200 hover:border-green-500 hover:bg-green-50/30 transition-all group">
+                    <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-2xl text-green-600 mb-1 group-hover:scale-110 transition-transform">
                         <i class="bi bi-bank"></i>
                     </div>
-                    <h4 class="text-lg font-black text-gray-800 italic uppercase mb-2">{{ $ad->title }}</h4>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6 leading-relaxed">Applicable on all major credit and debit cards during checkout.</p>
+                    <h6 class="text-sm font-black text-gray-800 italic uppercase mb-1">{{ $ad->title }}</h6>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 leading-relaxed">Applicable on all major credit and debit cards during checkout.</p>
                     
                     <div class="flex items-center bg-white rounded-2xl overflow-hidden border border-gray-100">
                         <div class="flex-1 px-4 py-3 font-mono text-xs font-black text-gray-600">SPEED2026</div>
