@@ -19,8 +19,6 @@
         <x-homeslider />
     </section>
 
-
-
     <!-- <div class="bg-gray-50"> -->
         <div style="background: white;">
         <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
@@ -64,96 +62,15 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: FILTER BOX -->
-                 {{--
-                <!-- <div class="w-full lg:w-1/6">
-                    <div class="bg-white shadow-md rounded-xl p-4" style="height: 340px;overflow-y: scroll;">
-
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Category Filter</h3>
-
-                    <div class="space-y-3">
-
-                        @foreach($topCategories as $category)
-                            <a
-                                href="{{ route('shop.index', ['category' => $category->slug]) }}"
-                                class="flex items-center justify-between text-sm px-2 py-1 rounded
-                                    hover:bg-gray-100
-                                    {{ request('category') == $category->slug ? 'font-semibold text-blue-600' : 'text-gray-700' }}"
-                            >
-                                <span>{{ $category->name }}</span>
-
-                                <span class="text-gray-400 text-xs">
-                                    ({{ $category->products_count }})
-                                </span>
-                            </a>
-                        @endforeach
-
-                    </div>
-                </div> -->
-                --}}
+               
 
             </div>
 
         </section>
 
-
-         <!-- {{-- ================= TOP FEATURE ICON ROW ================= --}}
-            <section class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🚚</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Free Delivery</p>
-                        <p class="text-gray-500">Free shipping on all orders</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">💰</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Big Saving Shop</p>
-                        <p class="text-gray-500">Save big every single order</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">⏰</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Online Support 24/7</p>
-                        <p class="text-gray-500">We’re here day and night</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🔁</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Money Back Return</p>
-                        <p class="text-gray-500">Guarantee under 7 days</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm px-4 py-3 flex items-start space-x-3 text-xs">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 text-lg">🎁</div>
-                    <div>
-                        <p class="font-semibold text-gray-900">Member Discount</p>
-                        <p class="text-gray-500">On orders over $120.00</p>
-                    </div>
-                </div>
-            </section> -->
-
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
            <section class="icons-carousel-section max-w-7xl mx-auto" data-aos="fade-up">
                 <div class="">
-
-                    <!-- LEFT SIDE (1/4 WIDTH) -->
-                    <!-- <div class="relative hidden md:flex items-center p-6 bg-cover bg-center md:col-span-1"
-                        style="background-image: url('https://wordpress.templatetrip.com/WCM003_egudgets/wp-content/uploads/2023/08/banner-03.jpg');">
-
-                       
-                        <div class="absolute inset-0 bg-black/40"></div>
-
-                        
-                        <div class="relative text-white text-left">
-                            <h2 class="text-xl font-bold leading-tight">Why Shop With Us?</h2>
-                            <p class="text-sm mt-1 opacity-90">Best features & benefits</p>
-                        </div>
-                </div> -->
-
 
                 <!-- RIGHT SIDE SLIDER (3/4 WIDTH) -->
                 <div class="md:col-span-3 overflow-hidden relative">
