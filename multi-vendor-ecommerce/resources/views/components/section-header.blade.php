@@ -5,13 +5,13 @@
     'pulse' => false
 ])
 
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-1.5 px-2">
-    <h2 class="text-1xl md:text-2xl font-black italic tracking-widest text-transparent uppercase"
+<div class="flex  md:flex-row md:items-center justify-between gap-1.5 px-2 ">
+    <h3 class="text-sm md:text-xl font-black italic tracking-widest text-transparent uppercase"
         style="-webkit-text-stroke: .9px #22c55e; filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.3));">
         {{ $title }}
-    </h2>
+    </h3>
 
-    <div class="flex items-center gap-2 px-2 py-1 rounded-full border-2 border-green-400 bg-green-300 backdrop-blur-sm 
+    <div class="flex items-center gap-1 px-1 py-1 rounded-full border-2 border-green-400 bg-green-300 backdrop-blur-sm 
                 shadow-[0_0_15px_rgba(74,222,128,0.5)] {{ $pulse ? 'animate-pulse' : '' }}">
         
         @if($icon === 'bolt')
@@ -24,7 +24,7 @@
             <svg class="w-5 h-5 text-green-700" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.318 6.318a4.5 4.5 0 000 6.364L10 18.364l5.682-5.682a4.5 4.5 0 00-6.364-6.364L10 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" clip-rule="evenodd"/></svg>
         @endif
 
-        <span class="text-yellow-900 font-bold text-sm uppercase tracking-widest">
+        <span class="text-yellow-900  text-sm uppercase tracking-widest">
             {{ $badgeText }}
         </span>
     </div>

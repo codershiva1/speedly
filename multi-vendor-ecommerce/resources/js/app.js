@@ -51,19 +51,22 @@ const categorySwiper = new Swiper(".categorySwiper", {
     slidesPerGroup: 1,       // move 1 slide at a time
     loop: true,              // enable looping
     loopFillGroupWithBlank: false, // don’t add blank slides
-    // autoplay: {
-    //     delay: 3000,
-    //     disableOnInteraction: false,
-    // },
+    autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+    },
    navigation: {
         nextEl: '.cat-next',
         prevEl: '.cat-prev',
     },
     spaceBetween: 0,         // no space between slides
     breakpoints: {
-        320: { slidesPerView: 1 },  // mobile
-        640: { slidesPerView: 2 },  // tablet
-        1024: { slidesPerView: 4 }, // desktop
+        200: { slidesPerView: 2 },
+        320: { slidesPerView: 3 },  // mobile
+        440: { slidesPerView: 4 },
+        640: { slidesPerView: 5 },  // tablet
+        840: { slidesPerView: 7 },
+        1024: { slidesPerView: 9 }, // desktop
     },
     speed: 600,              // transition speed (optional, smooth)
 });
@@ -74,22 +77,22 @@ const categorySwiper = new Swiper(".categorySwiper", {
 const dealsSwiper = new Swiper('.dealsSwiper', {
      modules: [Navigation, Autoplay],
     slidesPerView: 4,        // 4 slides visible
-    slidesPerGroup: 1,       // move 1 slide at a time
+    slidesPerGroup: 2,       // move 1 slide at a time
     loop: true,              // enable looping
     loopFillGroupWithBlank: false, // don’t add blank slides
-    // autoplay: {
-    //     delay: 3000,
-    //     disableOnInteraction: false,
-    // },
+    autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+    },
     navigation: {
         nextEl: '.deals-next',
         prevEl: '.deals-prev',
     },
-    spaceBetween: 0,         // no space between slides
+    spaceBetween: 8,         // no space between slides
     breakpoints: {
-        320: { slidesPerView: 1 },  // mobile
-        640: { slidesPerView: 2 },  // tablet
-        1024: { slidesPerView: 4 }, // desktop
+        320: { slidesPerView: 2 },  // mobile
+        640: { slidesPerView: 4 },  // tablet
+        1024: { slidesPerView: 6 }, // desktop
     },
     speed: 600,              // transition speed (optional, smooth)
 });

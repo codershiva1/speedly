@@ -37,7 +37,7 @@ class HomeController extends Controller
             ->whereNotNull('discount_price')
             ->selectRaw('*, (price - discount_price) as total_savings')
             ->orderByDesc('total_savings')
-            ->take(6)
+            // ->take(6)
             ->get();
 
         // SECTION 2: New Arrivals (Freshness)
@@ -67,7 +67,13 @@ class HomeController extends Controller
             ->get();
         // ---------------------
 
-       
+       $placements = \App\Models\AdPlacement::with(['ads' => function($q) {
+            $q->active()->orderBy('priority', 'desc');
+        }])
+        ->whereIn('key', ['home_slider', 'home_triple_banner', 'home_budget_sidebar'])
+        ->where('is_active', true)
+        ->get()
+        ->keyBy('key');
 
         $latestNews = [
             [
@@ -105,6 +111,7 @@ class HomeController extends Controller
             'featuredProducts' => $featuredProducts,
             'budgetStore' => $budgetStore,
             'latestNews' => $latestNews,
+            'adsplacements' => $placements,
         ]);
     }
 }
