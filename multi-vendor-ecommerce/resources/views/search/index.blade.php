@@ -1,5 +1,13 @@
 <x-layouts.site :title="__('Search')">
 
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { 
+        -ms-overflow-style: none; 
+        scrollbar-width: none; 
+    }
+</style>
+
 <div class=" mx-auto px-1 sm:px-4 lg:px-4 py-1 space-y-8">
 
     {{-- RESULTS --}}
@@ -20,32 +28,51 @@ const resultsBox = document.getElementById('searchResults');
 
 let debounceTimer = null;
 
+function fetchSearchResults(query = '') {
+    fetch(`${window.APP_URL}/api/search?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => renderResults(data));
+}
+
+// 2. ADD THIS: Trigger the fetch as soon as the page is ready
+document.addEventListener('DOMContentLoaded', function() {
+    fetchSearchResults(''); // Fetch defaults immediately
+});
+
 input.addEventListener('input', function () {
     let query = this.value.trim();
 
     clearTimeout(debounceTimer);
 
+    // If query is empty, show default results
+    if (query.length === 0) {
+        fetchSearchResults(''); 
+        return;
+    }
+
+    // If query is too short, do nothing (wait for more letters)
     if (query.length < 2) {
-        resultsBox.innerHTML = '';
         return;
     }
 
     debounceTimer = setTimeout(() => {
-        fetch(`${window.APP_URL}/api/search?q=${encodeURIComponent(query)}`)
-            .then(res => res.json())
-            .then(data => renderResults(data));
+        fetchSearchResults(query);
     }, 300);
 });
 
 function renderResults(data) {
     let html = '';
 
+    // Determine the titles based on the is_default flag from your controller
+    let categoryHeading = data.is_default ? 'Popular Categories' : 'Categories';
+    let productHeading = data.is_default ? 'Trending Products' : 'Products';
+
     // ---------- CATEGORIES ----------
     if (data.categories.length) {
         html += `
             <section>
-                <h3 class="text-lg font-semibold mb-3">Categories</h3>
-                <div class="flex gap-3 overflow-x-auto pb-2">
+                <h3 class="text-lg font-semibold mb-3">${categoryHeading}</h3>
+                <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
         `;
 
         data.categories.forEach(cat => {
@@ -69,7 +96,7 @@ function renderResults(data) {
     if (data.products.length) {
         html += `
             <section>
-                <h3 class="text-lg font-semibold mb-3">Products</h3>
+                <h3 class="text-lg font-semibold mb-3">${productHeading}</h3>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         `;
 
@@ -131,13 +158,12 @@ function renderResults(data) {
                 <!-- Price & Cart -->
                 <div class="mt-3 flex items-center justify-between">
                     <div class="flex flex-col leading-tight">
-                        <span class="text-base font-bold text-gray-900">₹${product.price}</span>
                         ${
-                            product.discount_price
-                            ? `<span class="line-through text-xs text-gray-400">
-                                    ₹${product.discount_price}
-                            </span>`
-                            : ''
+                            product.discount_price && product.discount_price > 0
+                                ? `<span class="text-base font-bold text-gray-900">₹${product.discount_price}</span>
+                                <span class="line-through text-xs text-gray-400">₹${product.price}</span>`
+                                
+                                : `<span class="text-base font-bold text-gray-900">₹${product.price}</span>`
                         }
                     </div>
 
@@ -168,10 +194,11 @@ function renderResults(data) {
     }
 
 
-    if (!data.categories.length && !data.products.length) {
+    // Only show "No results" if the user has typed something (not default mode)
+    if (!data.categories.length && !data.products.length && !data.is_default) {
         html = `
             <div class="text-center text-gray-400 py-16">
-                <p>No results found 😕</p>
+                <p>No results found for your search 😕</p>
             </div>
         `;
     }
