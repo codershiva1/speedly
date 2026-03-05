@@ -47,7 +47,6 @@ class ProductController extends Controller
     // 3. Save New Product
   public function store(Request $request)
     {
-        // 1️⃣ Validation: Sabhi fields jo DB mein NOT NULL hain yahan hone chahiye
         $request->validate([
             'name' => 'required|max:255',
             'sku' => 'required|unique:products,sku',
@@ -56,14 +55,18 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'status' => 'required|in:active,draft,inactive',
-            'main_image' => '|image|max:2048',
-            'images.*' => 'nullable|image|max:2048',
+    
+            'main_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    
+            'images' => 'nullable|array|max:4',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
+    
         DB::beginTransaction();
-
+    
         try {
-            // 2️⃣ Data Prepare (Ensure all fillable keys are handled)
+    
+            // 1️⃣ Create Product
             $product = Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
@@ -73,72 +76,71 @@ class ProductController extends Controller
                 'stock_quantity' => $request->stock_quantity,
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
-                'vendor_id' => auth()->id(), // 🔥 Ye missing tha shayad!
+                'vendor_id' => auth()->id(),
                 'status' => $request->status,
                 'description' => $request->description,
                 'short_description' => $request->short_description,
                 'is_featured' => $request->has('is_featured'),
                 'is_trending' => $request->has('is_trending'),
             ]);
-
-            $subFolder = "uploads/products/{$product->id}";
-
-            // 3️⃣ Main Image Upload
+    
+            // 2️⃣ Folder Create
+            $folderPath = public_path('storage/uploads/products/' . $product->id);
+    
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+    
+            // 3️⃣ Upload Main Image
             if ($request->hasFile('main_image')) {
-                $path = $request->file('main_image')->store($subFolder, 'public');
+    
+                $file = $request->file('main_image');
+    
+                $fileName = uniqid('main_') . '.' . $file->getClientOriginalExtension();
+    
+                $file->move($folderPath, $fileName);
+    
                 $product->images()->create([
-                    'path' => $path,
+                    'path' => 'uploads/products/' . $product->id . '/' . $fileName,
                     'is_primary' => 1,
                     'sort_order' => 0,
                 ]);
             }
-
-            // 4️⃣ Gallery Images Upload
-            if ($request->hasFile('main_image')) {
-
-                // 🔴 OLD MAIN IMAGE REMOVE (DB + FILE)
-                $oldMain = $product->images()
-                    ->where('is_primary', 1)
-                    ->first();
-
-                if ($oldMain) {
-                    $oldPath = public_path('storage/' . $oldMain->path);
-
-                    if (file_exists($oldPath)) {
-                        unlink($oldPath);
-                    }
-
-                    $oldMain->delete();
+    
+            // 4️⃣ Gallery Image Limit
+            if ($request->hasFile('images')) {
+    
+                $galleryCount = count($request->file('images'));
+    
+                if ($galleryCount > 4) {
+                    throw new \Exception('Maximum 4 gallery images allowed.');
                 }
-
-                // 📂 Folder Path
-                $folderPath = public_path('storage/uploads/products/' . $product->id);
-
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0755, true);
+    
+                foreach ($request->file('images') as $index => $file) {
+    
+                    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+    
+                    $file->move($folderPath, $fileName);
+    
+                    $product->images()->create([
+                        'path' => 'uploads/products/' . $product->id . '/' . $fileName,
+                        'is_primary' => 0,
+                        'sort_order' => $index + 1,
+                    ]);
                 }
-
-                // 🆕 Upload New Main Image
-                $file = $request->file('main_image');
-                $fileName = uniqid('main_') . '.' . $file->getClientOriginalExtension();
-
-                $file->move($folderPath, $fileName);
-
-                // ✅ SAVE AS PRIMARY IMAGE
-                $product->images()->create([
-                    'path'       => 'uploads/products/' . $product->id . '/' . $fileName,
-                    'is_primary' => 1,   // 🔥 ALWAYS PRIMARY
-                    'sort_order' => 0,
-                ]);
             }
-
+    
             DB::commit();
-            return redirect()->route('admin.products.index')->with('success', 'Done!');
-
+    
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Product created successfully');
+    
         } catch (\Exception $e) {
+    
             DB::rollBack();
-            // 🔥 Sabse important: Ye aapko batayega ki error asal mein hai kya
-            return back()->withInput()->with('error', 'SQL Error: ' . $e->getMessage());
+    
+            return back()->withInput()->with('error', $e->getMessage());
         }
     }
 
