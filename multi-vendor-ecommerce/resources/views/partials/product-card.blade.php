@@ -68,10 +68,15 @@
 
     {{-- PRICE & ACTION --}}
     <div class="mt-2 flex items-center justify-between ">
-        <div class="flex flex-col leading-none">
-            <span class="text-base font-black text-gray-900">₹{{ $product->price }}</span>
-            @if($product->discount_price)
-                <span class="text-[10px] text-gray-400 line-through mt-1">₹{{ $product->discount_price }}</span>
+        <div class="flex flex-col leading-tight">
+            @if ($product->discount_price && $product->discount_price > 0)
+                {{-- Show Discounted Price as primary --}}
+                <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                {{-- Show Original Price with strikethrough --}}
+                <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
+            @else
+                {{-- No discount available: Show only the regular price --}}
+                <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
             @endif
         </div>
 
