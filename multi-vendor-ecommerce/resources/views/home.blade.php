@@ -19,11 +19,77 @@
         <x-homeslider />
     </section>
 
+@if($categories->isNotEmpty())
+            {{-- ================= BEST SELLER ================= --}}
+
+            <section class="bg-white  shadow-sm p-2">
+                <div class="">
+
+                    <!-- SECTION HEADING -->
+                    <div class="flex items-center justify-between mb-3 text-sm">
+                           
+                            <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        </div>
+
+
+                    <!-- GRID -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+
+                        @foreach ($categories->take(6) as $category)
+                        
+                        <div class="bg-gray-100 rounded-2xl p-3">
+                        
+                            <!-- 2x2 PRODUCT PREVIEW -->
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach ($category->products->take(4) as $product)
+                        
+                                <a href="{{ route('shop.show', $product->slug) }}">
+                        
+                                    <div class="bg-white rounded-lg flex items-center justify-center h-16 overflow-hidden">
+                        
+                                        <img 
+                                        src="{{ asset('public/storage/'.$product->images->first()->path) }}"
+                                        class="max-h-14 object-contain "
+                                        style="width: 70%;
+"
+                                        alt="">
+                        
+                                    </div>
+                        
+                                </a>
+                        
+                                @endforeach
+                            </div>
+                        
+                            <!-- + MORE -->
+                            <div class="flex justify-center mt-2">
+                                <span class="bg-white text-xs px-3 py-1 rounded-full shadow text-gray-600">
+                                    +{{ max(0,$category->products->count()-4) }} more
+                                </span>
+                            </div>
+                        
+                            <!-- CATEGORY NAME -->
+                            <p class="text-sm font-semibold text-gray-900 text-center mt-2">
+                                {{ $category->name }}
+                            </p>
+                        
+                        </div>
+                        
+                        @endforeach
+                        
+                        </div>
+                </div>
+           </section>
+        @endif
+
+
+
+
     <!-- <div class="bg-gray-50"> -->
         <div style="background: white;">
         <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
-<div class=" mx-auto px-1 sm:px-4 lg:px-4 py-1 space-y-8">
-        <section class="max-w-7xl mx-auto px-1 overflow-hidden">
+<div class=" mx-auto  sm:px-4 lg:px-4 py-1 space-y-8">
+        <section class=" overflow-hidden">
             <div class="flex flex-col lg:flex-row gap-3">
                 <div class="w-full">
                     
@@ -135,7 +201,7 @@
 
 
         @if($megaDeals->isNotEmpty())
-            <section class="max-w-7xl mx-auto px-1 overflow-hidden">
+            <section class=" overflow-hidden">
                 {{-- HEADER --}}
                 <div class="flex items-center justify-between mb-3 mt-3 text-sm px-2">
                     <x-section-header 
@@ -171,7 +237,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                             <div class="w-full h-36 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                             </div>
                                         </a>
@@ -231,7 +297,7 @@
         @endif
 
        @if($newProducts->isNotEmpty())
-            <section class="max-w-7xl mx-auto px-1 overflow-hidden">
+            <section class=" overflow-hidden">
                 {{-- HEADER --}}
                 <div class="flex items-center justify-between mb-3 mt-3 text-sm px-2">
                     <x-section-header 
@@ -270,7 +336,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                             <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('storage/' . $img->path) : asset('storage/uploads/products/1/image3.png') }}" 
+                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/1/image3.png') }}" 
                                                     class="w-full h-full object-contain"
                                                     alt="{{ $product->name }}" >
                                             </div>
@@ -809,7 +875,7 @@
        @if($categories->isNotEmpty())
             {{-- ================= BEST SELLER ================= --}}
 
-            <section class="bg-white  shadow-sm p-4">
+            <section class="bg-white  shadow-sm">
                 <div class="">
 
                     <!-- SECTION HEADING -->
@@ -830,27 +896,25 @@
 
                         <!-- PRODUCT CARD -->
                         @foreach ($categories->take(6) as $category)
-                            <div class="bg-gray-100  w-auto">
+                            <div class="bg-gray-100  w-auto p-2">
 
                                 <!-- INNER IMAGE GRID -->
-                                <div class="grid grid-cols-2 grid-rows-2 ">
+                                <div class="grid grid-cols-2 grid-rows-2 gap-2">
                                     @foreach ($category->products->take(4) as $product)
-                                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="bg-white  flex items-center justify-center ">
-                                                <!-- <img 
-                                                    src="{{ asset('storage/' . $product->images->first()->path) }}"
-                                                    class="w-full h-full object-contain p-1"
-                                                    alt=""
-                                                > -->
-                                                <img 
-                                                    src="{{ asset('storage/uploads/products/1/image2.png')}}"
-                                                    class="w-full h-full object-contain p-1"
-                                                    alt=""
-                                                >
-                                            </div>
-                                        </a>
+                                    <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                    
+                                    <div class="bg-white flex items-center justify-center h-20 overflow-hidden rounded">
+                                    <img 
+                                    src="{{ asset('public/storage/' . $product->images->first()->path) }}"
+                                    class="w-full h-full object-contain p-1"
+                                    alt=""
+                                    >
+                                    
+                                    </div>
+                                    
+                                    </a>
                                     @endforeach
-                                </div>
+                                    </div>
 
                                 <!-- + MORE (WHITE PILL) -->
                                 <div class="flex justify-center mt-2">
@@ -876,7 +940,7 @@
 
        
             {{-- ================= LATEST NEWS ================= --}}
-            <section class="bg-white  shadow-sm p-4">
+            <section class="bg-white  shadow-sm p-2">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-semibold text-gray-900" style="font-size:22px;">Latest News</h2>
                     <a href="{{ route('pages.blog') }}" class="text-xs text-indigo-600 hover:underline">View all articles</a>

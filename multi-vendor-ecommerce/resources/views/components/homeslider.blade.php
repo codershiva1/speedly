@@ -24,8 +24,7 @@
     }
 
     .mobile-banner img {
-        width: 100%;
-        height: 180px;
+
         object-fit: cover;
     }
 
@@ -105,14 +104,45 @@
 
 
 
-<div class="mobile-banner">
-    <img 
-        src="{{asset('storage/uploads/banners/mobilebannerimg.png')}}" 
-        alt="banner"
-    >
-    <div class="mobile-banner-content">
-        <h3>Lightning Fast Delivery ⚡</h3>
-        <p>Fresh products in just 8 minutes</p>
-        <a href="{{ route('shop.index') }}">Shop Now</a>
+<section class="mobile-banner bg-yellow-400 pt-2 pb-2 px-2 rounded-t-3xl -mt-10" style="background: linear-gradient(135deg, #1FAF5A, #6EDC8A);">
+
+    <!-- TITLE -->
+    <div class="flex justify-center mb-4">
+        <span class=" text-xs font-semibold px-4 py-1 rounded-full shadow" style="background:white;">
+            ✦ OFFERS FOR YOU ✦
+        </span>
     </div>
-</div>
+
+    <!-- CARDS -->
+    <div class="grid grid-cols-2 gap-3">
+
+        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center gap-2">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/3523/3523887.png" class="w-8">
+
+            <div>
+                <p class="font-semibold text-sm">
+                    Get FLAT ₹50 OFF
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center gap-2">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png" class="w-8">
+
+            <div>
+                <p class="font-semibold text-sm">
+                    Enjoy FREE delivery
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

@@ -158,6 +158,7 @@
                     background-size: cover;
                     background-position: center top;
                     background-repeat: no-repeat;
+                    background: linear-gradient(135deg, #1FAF5A, #6EDC8A);
 
                     /* border-radius: 0 0 18px 18px; */
                     overflow: hidden;
