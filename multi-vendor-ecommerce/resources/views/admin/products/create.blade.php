@@ -96,34 +96,93 @@
                     </div>
                     
                      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-    
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">
-                    Product Details
-                    </h3>
-                    
-                    <div id="details-wrapper" class="space-y-3">
-                    
-                    <div class="grid grid-cols-2 gap-3 detail-row">
+
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">
+                        Product Details
+                        </h3>
                         
-                    <input type="text" name="details_key[]" 
-                    placeholder="Key (e.g. Brand)" 
-                    class="border-gray-200 rounded-xl">
-                    
-                    <input type="text" name="details_value[]" 
-                    placeholder="Value (e.g. Apple)" 
-                    class="border-gray-200 rounded-xl">
-                    
-                    </div>
-                    
-                    </div>
-                    
-                    <button type="button"
-                    onclick="addDetailRow()"
-                    class="mt-4 px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg">
-                    + Add More
-                    </button>
-                    
-                    </div>
+                        <div class="space-y-4">
+                        
+                        @php
+                        $fixedDetails = [
+                        'SKU',
+                        'Key Information',
+                        'Nutritional information',
+                        'Info',
+                        'Description',
+                        'Key Features',
+                        'Unit',
+                        'Shelf Life',
+                        'Disclaimer',
+                        'Customer care Details',
+                        'Country of Origin',
+                        'Manufacturer name and Address',
+                        "Market's Naam and Address",
+                        'Return policy',
+                        'Sugar profile',
+                        'Seller',
+                        'Nutrition information',
+                        'FSSAI License',
+                        'Seller FSSAI',
+                        'Gender',
+                        'Ingredients',
+                        'Storage Tips'
+                        ];
+                        @endphp
+                        
+                        @foreach($fixedDetails as $detail)
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                        
+                        <input type="hidden" name="details_key[]" value="{{ $detail }}">
+                        
+                        <label class="text-sm font-medium text-gray-600 flex items-center">
+                        {{ $detail }}
+                        </label>
+                        
+                        <input 
+                        type="text"
+                        name="details_value[]"
+                        placeholder="Enter {{ $detail }}"
+                        class="border-gray-200 rounded-xl">
+                        
+                        </div>
+                        
+                        @endforeach
+                        
+                        </div>
+                        
+                        
+                        <hr class="my-6">
+                        
+                        
+                        <h4 class="text-sm font-semibold text-gray-600 mb-3">
+                        Add Custom Detail
+                        </h4>
+                        
+                        <div id="details-wrapper" class="space-y-3">
+                        
+                        <div class="grid grid-cols-2 gap-3 detail-row">
+                        
+                        <input type="text" name="details_key[]" 
+                        placeholder="Key (e.g. Weight)" 
+                        class="border-gray-200 rounded-xl">
+                        
+                        <input type="text" name="details_value[]" 
+                        placeholder="Value (e.g. 200g)" 
+                        class="border-gray-200 rounded-xl">
+                        
+                        </div>
+                        
+                        </div>
+                        
+                        <button type="button"
+                        onclick="addDetailRow()"
+                        class="mt-4 px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                        + Add More
+                        </button>
+                        
+                        </div>
             </div>
 
             <div class="space-y-6">
