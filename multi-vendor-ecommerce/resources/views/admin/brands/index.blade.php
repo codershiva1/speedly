@@ -23,7 +23,28 @@
     @endif
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Search Bar -->
+        <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            
+            <form method="GET" action="{{ route('admin.brands.index') }}" class="w-full sm:w-80">
+                <div class="relative">
+                    <input 
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Search brand name or slug..."
+                        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
         
+                    <svg class="w-4 h-4 absolute left-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z">
+                        </path>
+                    </svg>
+                </div>
+            </form>
+        
+        </div>
         <div class="hidden md:block">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-gray-50/50 border-b border-gray-100">
@@ -40,7 +61,7 @@
                             <td class="px-6 py-4">
                                 <div class="h-12 w-20 rounded-lg border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden p-1">
                                     @if($brand->logo)
-                                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="h-full w-full object-contain">
+                                        <img src="{{ asset('public/storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="h-full w-full object-contain">
                                     @else
                                         <span class="text-[9px] text-gray-400 font-bold uppercase">No Logo</span>
                                     @endif
@@ -82,7 +103,7 @@
                     <div class="flex items-center gap-4">
                         <div class="h-14 w-14 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden p-2 flex-shrink-0">
                             @if($brand->logo)
-                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="h-full w-full object-contain">
+                                <img src="{{ asset('public/storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="h-full w-full object-contain">
                             @else
                                 <span class="text-[8px] text-gray-400 font-bold text-center">NO LOGO</span>
                             @endif

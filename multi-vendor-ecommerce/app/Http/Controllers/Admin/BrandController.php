@@ -12,13 +12,22 @@ use Illuminate\View\View;
 
 class BrandController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        // Category ki tarah yahan bhi eager loading ki zaroorat nahi agar images alag table mein nahi hain
-        $brands = Brand::orderBy('name')->paginate(15);
+        $query = Brand::query();
+    
+        // Search filter
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('slug', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+        $brands = $query->orderBy('name')->paginate(15)->withQueryString();
+    
         return view('admin.brands.index', compact('brands'));
     }
-
     public function create(): View
     {
         return view('admin.brands.create');
