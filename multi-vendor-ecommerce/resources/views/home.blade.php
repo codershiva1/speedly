@@ -235,7 +235,7 @@
 
                                         {{-- IMAGE --}}
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                                            <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
                                                 <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
@@ -334,7 +334,7 @@
 
                                         {{-- IMAGE --}}
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                            <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
                                                 <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/1/image3.png') }}" 
                                                     class="w-full h-full object-contain"
@@ -527,7 +527,7 @@
 
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php 
                                         $img = $product->images->first(); 
                                     @endphp
@@ -637,7 +637,7 @@
 
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
                                     @php 
                                         $img = $product->images->first(); 
                                     @endphp
@@ -799,7 +799,7 @@
 
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
                                     @php 
                                         $img = $product->images->first(); 
                                     @endphp

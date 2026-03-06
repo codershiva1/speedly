@@ -11,6 +11,10 @@ use App\Models\CartItem;
 class Product extends Model
 {
     use HasFactory;
+    
+    protected $casts = [
+        'product_details' => 'array',
+    ];
 
     protected $fillable = [
         'vendor_id',
@@ -31,6 +35,7 @@ class Product extends Model
         'meta_title',
         'meta_description',
         'meta_keywords',
+        'product_details',
     ];
 
     public function vendor(): BelongsTo

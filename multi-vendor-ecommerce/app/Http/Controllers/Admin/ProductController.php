@@ -47,6 +47,25 @@ class ProductController extends Controller
     // 3. Save New Product
   public function store(Request $request)
     {
+        $productDetails = [];
+
+        if ($request->details_key) {
+        
+            foreach ($request->details_key as $index => $key) {
+        
+                $value = $request->details_value[$index] ?? null;
+        
+                if (!empty($key) && !empty($value)) {
+        
+                    $productDetails[$key] = $value;
+        
+                }
+            }
+        
+        }
+        
+        // dd($productDetails);
+        
         $request->validate([
             'name' => 'required|max:255',
             'sku' => 'required|unique:products,sku',
@@ -82,6 +101,7 @@ class ProductController extends Controller
                 'short_description' => $request->short_description,
                 'is_featured' => $request->has('is_featured'),
                 'is_trending' => $request->has('is_trending'),
+                'product_details' => $productDetails
             ]);
     
             // 2️⃣ Folder Create
@@ -156,6 +176,22 @@ class ProductController extends Controller
     // 5. Update Product
    public function update(Request $request, Product $product)
     {
+
+        $productDetails = [];
+
+        if ($request->details_key) {
+        
+            foreach ($request->details_key as $index => $key) {
+        
+                $value = $request->details_value[$index] ?? null;
+        
+                if (!empty($key) && !empty($value)) {
+        
+                    $productDetails[$key] = $value;
+        
+                }
+            }
+        }
         // 1️⃣ Validation
         $request->validate([
             'name' => 'required|max:255',
@@ -192,9 +228,11 @@ class ProductController extends Controller
                 'status' => $request->status,
                 'description' => $request->description,
                 'short_description' => $request->short_description,
+                'product_details' => $productDetails,
                 'is_featured' => $request->has('is_featured'),
                 'is_trending' => $request->has('is_trending'),
                 'updated_by' => auth()->id(),
+                
             ]);
 
             $folderPath = public_path('storage/uploads/products/' . $product->id);

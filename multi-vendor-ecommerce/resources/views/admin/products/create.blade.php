@@ -94,6 +94,36 @@
                         <p id="file-list" class="mt-2 text-xs text-indigo-600 font-medium"></p>
                         <x-input-error :messages="$errors->get('images')" class="mt-2" />
                     </div>
+                    
+                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    Product Details
+                    </h3>
+                    
+                    <div id="details-wrapper" class="space-y-3">
+                    
+                    <div class="grid grid-cols-2 gap-3 detail-row">
+                        
+                    <input type="text" name="details_key[]" 
+                    placeholder="Key (e.g. Brand)" 
+                    class="border-gray-200 rounded-xl">
+                    
+                    <input type="text" name="details_value[]" 
+                    placeholder="Value (e.g. Apple)" 
+                    class="border-gray-200 rounded-xl">
+                    
+                    </div>
+                    
+                    </div>
+                    
+                    <button type="button"
+                    onclick="addDetailRow()"
+                    class="mt-4 px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                    + Add More
+                    </button>
+                    
+                    </div>
             </div>
 
             <div class="space-y-6">
@@ -140,7 +170,7 @@
                     </div>
                 </div>
 
-               
+              
             </div>
         </div>
     </form>
@@ -152,6 +182,28 @@
     function updateFileList(input) {
         const list = document.getElementById('file-list');
         list.innerHTML = input.files.length + ' images selected';
+    }
+    
+    function addDetailRow(){
+
+    let html = `
+    <div class="grid grid-cols-2 gap-3 detail-row">
+    
+    <input type="text" name="details_key[]" 
+    placeholder="Key (e.g. Weight)"
+    class="border-gray-200 rounded-xl">
+    
+    <input type="text" name="details_value[]" 
+    placeholder="Value (e.g. 200g)"
+    class="border-gray-200 rounded-xl">
+    
+    </div>
+    `;
+    
+    document
+    .getElementById('details-wrapper')
+    .insertAdjacentHTML('beforeend',html);
+    
     }
 </script>
 @endsection

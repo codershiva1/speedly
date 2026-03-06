@@ -121,6 +121,9 @@
                 .wishlist-icon{
                     display:none;
                 }
+                .logo-image {
+                    filter: brightness(0) invert(1);
+                }
 
                 /* Give space so content not hidden behind nav */
                 body {

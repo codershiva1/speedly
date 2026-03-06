@@ -146,6 +146,72 @@
                     You can upload remaining images up to max 4
                 </p>
             </div>
+            
+            {{-- PRODUCT DETAILS --}}
+                <div class="bg-white p-6 rounded-2xl shadow border">
+                    <h3 class="text-lg font-bold mb-4">Product Specifications</h3>
+                
+                    <div id="details-wrapper" class="space-y-3">
+                
+                        @if($product->product_details)
+                
+                            @foreach($product->product_details as $key => $value)
+                
+                            <div class=" gap-3 detail-row">
+                
+                                <input type="text"
+                                       name="details_key[]"
+                                       value="{{ $key }}"
+                                       class="col-span-2 rounded-xl border-gray-200">
+                
+                                <input type="text"
+                                       name="details_value[]"
+                                       value="{{ $value }}"
+                                       class="col-span-2 rounded-xl border-gray-200">
+                
+                                <button type="button"
+                                        onclick="removeRow(this)"
+                                        class="bg-red-500 text-white rounded-xl px-3">
+                                    ✕
+                                </button>
+                
+                            </div>
+                
+                            @endforeach
+                
+                        @else
+                
+                        <div class=" gap-3 detail-row">
+                
+                            <input type="text"
+                                   name="details_key[]"
+                                   placeholder="Key (Brand)"
+                                   class="col-span-2 rounded-xl border-gray-200">
+                
+                            <input type="text"
+                                   name="details_value[]"
+                                   placeholder="Value (Apple)"
+                                   class="col-span-2 rounded-xl border-gray-200">
+                
+                            <button type="button"
+                                    onclick="removeRow(this)"
+                                    class="bg-red-500 text-white rounded-xl px-3">
+                                ✕
+                            </button>
+                
+                        </div>
+                
+                        @endif
+                
+                    </div>
+                
+                    <button type="button"
+                            onclick="addDetailRow()"
+                            class="mt-4 px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                        + Add Specification
+                    </button>
+                
+                </div>
         </div>
 
         {{-- RIGHT SIDE --}}
@@ -215,4 +281,42 @@
         list.innerHTML = input.files.length + ' new images selected';
     }
 </script>
+
+<script>
+
+    function addDetailRow(){
+    
+    let html = `
+    <div class=" gap-3 detail-row">
+    
+    <input type="text"
+    name="details_key[]"
+    placeholder="Key"
+    class="col-span-2 rounded-xl border-gray-200">
+    
+    <input type="text"
+    name="details_value[]"
+    placeholder="Value"
+    class="col-span-2 rounded-xl border-gray-200">
+    
+    <button type="button"
+    onclick="removeRow(this)"
+    class="bg-red-500 text-white rounded-xl px-3">
+    ✕
+    </button>
+    
+    </div>
+    `;
+    
+    document
+    .getElementById("details-wrapper")
+    .insertAdjacentHTML("beforeend",html);
+    
+    }
+    
+    function removeRow(btn){
+    btn.parentElement.remove();
+    }
+    
+    </script>
 @endsection
