@@ -992,7 +992,7 @@
         </a>
 
         <!-- Categories -->
-        <a href="{{ route('shop.index') }}"
+        <a href="{{ route('categories.index') }}"
         class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
             <span class="text-lg">🗂️</span>
             <span class="text-xs">Categories</span>
@@ -1193,7 +1193,7 @@
 
 @php
     $isHome       = request()->routeIs('home');
-    $isShop       = request()->routeIs('shop.*');
+    $isShop       = request()->routeIs('categories.*');
     $wishlist     = request()->routeIs('wishlist.*');
     $isCart       = request()->routeIs('account.cart.*');
     $isAccount    = request()->routeIs('account.*');
@@ -1215,7 +1215,7 @@
         </a>
 
         <!-- Categories -->
-        <a href="{{ route('shop.index') }}" class="flex flex-col items-center text-xs {{ $isShop ? 'text-green-600' : 'text-gray-600' }}">
+        <a href="{{ route('categories.index') }}" class="flex flex-col items-center text-xs {{ $isShop ? 'text-green-600' : 'text-gray-600' }}">
             <i class="bi bi-grid text-xl"></i>
             <span>Categories</span>
         </a>
