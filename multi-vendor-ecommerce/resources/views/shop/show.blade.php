@@ -34,7 +34,7 @@ $productDetails = [
 
 
     <div class="bg-gray-50 min-h-screen ">
-        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-1 space-y-8">
 
             <!-- PRODUCT TOP SECTION -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start bg-white p-2">
@@ -80,10 +80,21 @@ $productDetails = [
                                 SAVE ₹{{ $product->price - $product->discount_price }}
                             </span>
                         @endif
+
+                         {{-- THUMBNAILS --}}
+                
+                        <div class="flex gap-3 overflow-x-auto mt-2">
+                            @foreach ($product->images as $image)
+                                <img src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
+                                    class="thumbnail-img w-20 h-20 object-contain bg-gray-100 rounded-xl p-2 border cursor-pointer hover:border-green-500 transition"
+                                    onclick="changeMainImage(this)">
+                            @endforeach
+                        </div>
+
                     </div>
 
                     <!-- PRODUCT DETAILS (COLLAPSIBLE) -->
-                    <div class="bg-white rounded-lg">
+                    <div class="bg-white rounded-xl border mt-6">
                         <button
                             type="button"
                             onclick="toggleProductDetails()"
@@ -126,7 +137,7 @@ $productDetails = [
                 </div>
 
                 <!-- RIGHT COLUMN (PRODUCT INFO) - STICKY -->
-                <aside class="sticky top-8 self-start space-y-4">
+                <aside class="sticky top-32 self-start space-y-4">
 
                     <!-- TITLE -->
                     <div>
@@ -160,16 +171,16 @@ $productDetails = [
                        {{-- ADD BUTTON --}}
                         @auth
                             <button
-                                class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold w-50
                                 {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
                                 data-product-id="{{ $product->id }}"
                                 >
-                                {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
                             </button>
                         @else
                             <a href="{{ route('login') }}"
                                 class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                ADD
+                                ADD TO CART
                             </a>
                         @endauth
                     </div>
@@ -584,6 +595,16 @@ $productDetails = [
 
 
 <script>
+    function changeMainImage(element) {
+    document.getElementById('mainProductImage').src = element.src;
+
+    document.querySelectorAll('.thumbnail-img').forEach(img => {
+        img.classList.remove('border-green-500');
+    });
+
+    element.classList.add('border-green-500');
+}
+
     function toggleProductDetails() {
         const content = document.getElementById('productDetailsContent');
         const toggle = document.getElementById('productDetailsToggle');

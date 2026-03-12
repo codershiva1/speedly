@@ -1122,6 +1122,8 @@
                         <div class="space-y-2">
                             <h4 class="text-sm font-semibold">Quick view</h4>
                             <ul class="space-y-1">
+                                <li><a href="{{ route('categories.index') }}" class="hover:text-amber-400">All categories</a></li>
+                                <li><a href="{{ route('products.all') }}" class="hover:text-amber-400">Explore products</a></li>
                                 <li><a href="{{ route('pages.service') }}" class="hover:text-amber-400">Service</a></li>
                                 <li><a href="{{ route('pages.find-store') }}" class="hover:text-amber-400">Find a Store</a></li>
                                 <li><a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a></li>

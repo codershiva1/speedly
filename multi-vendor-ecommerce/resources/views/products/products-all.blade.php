@@ -131,4 +131,11 @@
             @endif
         </div>
     </div>
+
+    
+     <script>
+        window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
+        window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
+    </script>
+    
 </x-layouts.site>
