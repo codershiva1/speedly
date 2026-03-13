@@ -42,7 +42,7 @@ class ShopController extends Controller
 
         $products = $query
             ->latest()
-            ->paginate(12)
+            ->paginate(500)
             ->withQueryString();
 
         $categories = Category::where('status', true)

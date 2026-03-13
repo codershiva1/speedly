@@ -3,7 +3,7 @@
           hover:shadow-md hover:-translate-y-1 transition-all w-full">
 
     <div class="h-20 w-20 flex items-center justify-center overflow-hidden rounded-md">
-        <img src="{{ asset('storage/'.$category->image) }}"
+        <img src="{{ asset('public/storage/'.$category->image) }}"
              alt="{{ $category->name }}"
              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
     </div>

@@ -35,7 +35,7 @@
                             <a href="{{ route('shop.show', $product->slug) }}" class="block mb-2">
                                 <div class="w-full h-32 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50/50">
                                     @php $img = $product->images->first(); @endphp
-                                    <img src="{{ $img ? asset('storage/' . $img->path) : asset('storage/placeholder.png') }}" 
+                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/placeholder.png') }}" 
                                          class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform" 
                                          alt="{{ $product->name }}">
                                 </div>
@@ -100,7 +100,7 @@
                                     <a href="{{ route('shop.show', $product->slug) }}" class="block mb-2">
                                         <div class="w-full h-32 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50/50">
                                             @php $img = $product->images->first(); @endphp
-                                            <img src="{{ $img ? asset('storage/' . $img->path) : asset('storage/placeholder.png') }}" 
+                                            <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/placeholder.png') }}" 
                                                  class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform" 
                                                  alt="{{ $product->name }}">
                                         </div>
@@ -137,5 +137,5 @@
         window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
         window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
     </script>
-    
+
 </x-layouts.site>

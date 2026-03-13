@@ -38,8 +38,9 @@
                  data-unit="{{ $item->unit_price }}">
 
                 <!-- IMAGE -->
+                @php $img = $item->product->images->first(); @endphp
                 <div class="w-full sm:w-28 h-40 sm:h-28 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="http://localhost/speedly/multi-vendor-ecommerce/public/storage/uploads/products/2/image7.png"
+                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/placeholder.png') }}"
                          class="w-full h-full object-cover">
                 </div>
 

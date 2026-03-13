@@ -32,13 +32,12 @@
         <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
             @php 
                 $img = $product->images->first(); 
-                $fullPath = $img 
-                ? 'http://localhost/speedly/multi-vendor-ecommerce/storage/' . $img->path 
-                    : null;
+                
             @endphp
 
             @if ($img)
-                <img src="{{ asset('storage/uploads/products/2/image7.png')}}" 
+
+                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/placeholder.png') }}" 
                     class="w-full h-full object-contain"
                     alt="{{ $product->name }}" >
             @else
