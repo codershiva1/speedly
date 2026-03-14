@@ -127,7 +127,7 @@ function renderResults(data) {
                             data-product-id="${product.id}">
                             <i class="fa fa-heart ${wishlistIcon}"></i>
                     </button>`
-                    : `<a href="/login"
+                    : `<a href="${window.APP_URL}/login"
                             class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center
                                 justify-center rounded-full bg-white shadow-md">
                             <i class="fa fa-heart text-gray-400"></i>
@@ -175,7 +175,7 @@ function renderResults(data) {
                                 data-product-id="${product.id}">
                                 ${cartBtnText}
                         </button>`
-                        : `<a href="/login"
+                        : `<a href="${window.APP_URL}/login"
                                 class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg
                                     text-sm font-semibold">
                                 ADD

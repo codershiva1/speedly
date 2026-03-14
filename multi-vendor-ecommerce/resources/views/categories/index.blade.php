@@ -89,7 +89,8 @@
         </div>
         <div class="flex gap-4 overflow-x-auto px-4 no-scrollbar">
             @foreach($brands as $brand)
-                <a href="#" class="bg-white min-w-[100px] h-24 rounded-2xl flex items-center justify-center p-4 shadow-sm border border-gray-100 hover:border-green-200 transition-all">
+                <a href="{{ route('products.all', ['brand' => $brand->slug]) }}" 
+                class="bg-white min-w-[100px] h-24 rounded-2xl flex items-center justify-center p-4 shadow-sm border border-gray-100 hover:border-green-200 transition-all">
                     <img src="{{ asset('public/storage/'.$brand->logo) }}" class="max-h-full object-contain" alt="{{ $brand->name }}">
                 </a>
             @endforeach

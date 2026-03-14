@@ -26,21 +26,21 @@
                 <div class="">
 
                     <!-- SECTION HEADING -->
-                    <div class="flex items-center justify-between mb-3 text-sm">
+                    <!-- <div class="flex items-center justify-between mb-3 text-sm">
                            
                             <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
-                        </div>
+                        </div> -->
 
 
                     <!-- GRID -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-1.5">
 
-                        @foreach ($categories->take(6) as $category)
+                        @foreach ($categories->take(8) as $category)
                         
-                        <div class="bg-gray-100 rounded-2xl p-3">
+                        <div class="bg-gray-100 rounded-2xl p-1">
                         
                             <!-- 2x2 PRODUCT PREVIEW -->
-                            <div class="grid grid-cols-2 gap-2">
+                            <div class="grid grid-cols-2 gap-1">
                                 @foreach ($category->products->take(4) as $product)
                         
                                 <a href="{{ route('shop.show', $product->slug) }}">
@@ -210,7 +210,7 @@
                         icon="bolt" 
                         :pulse="true" 
                     />
-                    <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    <a href="{{ route('products.all', ['type' => 'mega-deals']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
@@ -306,7 +306,7 @@
                         icon="leaf" 
                         :pulse="true"
                     />
-                    <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    <a href="{{ route('products.all', ['type' => 'new-arrivals']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
@@ -495,7 +495,7 @@
                             icon="fire" 
                             :pulse="true"
                         />
-                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                     </div>
           
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -606,7 +606,7 @@
                             icon="star" 
                             :pulse="true"
                         />
-                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                     </div>
                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
@@ -723,7 +723,7 @@
                             icon="bolt" 
                             :pulse="true"
                         />
-                        <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'budget-store']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
                     </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
