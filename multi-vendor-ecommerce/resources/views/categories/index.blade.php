@@ -6,6 +6,13 @@
         .category-card:hover img {
             transform: scale(1.1);
         }
+
+        @media (max-width: 767px) {
+            .sticky-header{
+            display:none;
+            }
+           
+        }
     </style>
 
     {{-- 1. Promo Banner --}}

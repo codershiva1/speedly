@@ -1207,87 +1207,63 @@
 
 
         <!-- MOBILE BOTTOM NAVBAR -->
-<nav class="mobile-bottom-nav fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-lg z-[9999]">
-    <div class="flex justify-between px-6 py-2">
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] z-[9999]">
 
-        <!-- Home -->
-        <a href="{{ route('home') }}" class="flex flex-col items-center text-xs {{ $isHome ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="bi bi-house-door text-xl"></i>
-            <span>Home</span>
-        </a>
+    <nav class="bg-white rounded-full shadow-xl border border-gray-200 px-6 py-2">
+        <div class="flex items-center justify-between relative">
 
-        <!-- Categories -->
-        <a href="{{ route('categories.index') }}" class="flex flex-col items-center text-xs {{ $isShop ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="bi bi-grid text-xl"></i>
-            <span>Categories</span>
-        </a>
-
-         <!-- 99 Store -->
-        <a href="{{ route('stores.show', 99) }}"
-        class="flex flex-col items-center text-xs {{ $is99 ? 'text-green-600' : 'text-gray-600' }}">
-            <span class="text-lg">🏷️</span>
-            <span class="text-xs">99 Store</span>
-        </a>
-
-        <!-- Add -->
-        <a href="{{ route('account.cart.index') }}"
-        class="flex flex-col items-center text-xs {{ $isAds ? 'text-green-600' : 'text-gray-600' }}">
-            <span class="text-lg">📢</span>
-            <span class="text-xs">Ads</span>
-        </a>
-
-        <!-- Search -->
-        {{-- <!-- <button
-            onclick="window.location.href='/search'"
-            class="flex flex-col items-center text-xs {{ $isSearch ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="bi bi-search text-xl"></i>
-            <span>Search</span>
-        </button> -->  --}}
-
-         <a href="{{ auth()->check() ? route('wishlist.index') : route('login') }}"
-            class="relative flex flex-col items-center text-xs {{ $wishlist ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="fa fa-heart text-xl"></i>
-            <span>Wishlist</span>
-            <span class="wishlist-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                {{ $wishlistCount }}
-            </span>
-        </button></a>
-
-         <!-- <div id="wishlistbtn" class="wishlist-icon">
-            <a href="{{ route('wishlist.index') }}" class="relative">
-                <i class="fa fa-heart text-xl"></i>
-
-                <span id="wishlist-count"
-                    class="absolute -top-4 -right-2 bg-[#ff0000] text-white
-                            text-xs rounded-full px-1.5 min-w-[18px] text-center">
-                    {{ $wishlistCount }}
-                </span>
+            <!-- Home -->
+            <a href="{{ route('home') }}"
+               class="flex flex-col items-center text-[11px] {{ $isHome ? 'text-green-600' : 'text-gray-500' }}">
+                <i class="bi bi-house-door text-lg"></i>
+                <span>Home</span>
             </a>
 
-        </div> -->
+            <!-- Categories -->
+            <a href="{{ route('categories.index') }}"
+               class="flex flex-col items-center text-[11px] {{ $isShop ? 'text-green-600' : 'text-gray-500' }}">
+                <i class="bi bi-grid text-lg"></i>
+                <span>Categories</span>
+            </a>
 
-        <!-- Cart -->
-     {{-- 
-        <!-- <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}"
-           class="relative flex flex-col items-center text-xs {{ $isCart ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="bi bi-bag text-xl"></i>
-            <span>Cart</span> -->
+            <!-- 99 Store -->
+            <a href="{{ route('stores.show', 99) }}"
+            class="flex flex-col items-center text-[11px] {{ $is99 ? 'text-green-600' : 'text-gray-500' }}">
+                <i class="bi bi-tags text-lg"></i>
+                <span>99 Store</span>
+            </a>
 
-            <!-- Cart Count -->
-            <!-- <span class="cart-count absolute -top-1 right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                {{ $cartCount }}
-            </span>
-        </a> -->
+            <!-- Ads -->
+            <a href="{{ route('offers.index') }}"
+            class="flex flex-col items-center text-[11px] {{ $isAds ? 'text-green-600' : 'text-gray-500' }}">
+                <i class="bi bi-megaphone text-lg"></i>
+                <span>Offer</span>
+            </a>
 
-        <!-- Profile -->
-      <!-- <a href="{{ auth()->check() ? route('account.dashboard') : route('login') }}"
-           class="flex flex-col items-center text-xs {{ $isAccount ? 'text-green-600' : 'text-gray-600' }}">
-            <i class="bi bi-person text-xl"></i>
-            <span>Account</span>
-        </a> --> --}}
+            <a href="{{ route('account.orders.index') }}"
+            class="flex flex-col items-center text-[11px] {{ $isAds ? 'text-green-600' : 'text-gray-500' }}">
+                <i class="bi bi-arrow-repeat text-lg"></i>
+                <span>Reorder</span>
+            </a>
 
-    </div>
-</nav>
+            <!-- Wishlist -->
+            <!-- <a href="{{ auth()->check() ? route('wishlist.index') : route('login') }}"
+               class="relative flex flex-col items-center text-[11px] {{ $wishlist ? 'text-green-600' : 'text-gray-500' }}">
+
+                <i class="fa fa-heart text-lg"></i>
+                <span>Wishlist</span>
+
+               
+                <span class="absolute -top-1 right-0 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                    {{ $wishlistCount }}
+                </span>
+
+            </a> -->
+
+        </div>
+    </nav>
+
+</div>
 
 
 

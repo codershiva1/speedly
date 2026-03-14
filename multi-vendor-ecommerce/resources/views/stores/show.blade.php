@@ -1,3 +1,10 @@
+<style>
+@media (max-width: 767px) {
+    .sticky-header{
+        display:none;
+    }
+}
+</style>
 <x-layouts.site :title="__('₹'.$price.' Store')">
 
    {{-- PREMIUM BANNER SLIDER --}}

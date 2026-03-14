@@ -1,3 +1,11 @@
+<style>
+     @media (max-width: 767px) {
+            .sticky-header{
+            display:none;
+            }
+           
+        }
+</style>
 <x-layouts.site title="Offers Hub | Speedly Savings">
 <div class="bg-[#0b3d21] min-h-screen pb-32" style="background-image: radial-gradient(#fff 0.1px, transparent 1px);background-size: 30px 30px;">
     

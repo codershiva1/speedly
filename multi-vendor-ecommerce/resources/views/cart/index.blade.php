@@ -20,11 +20,12 @@ $finalTotal = max($subtotal - $discount, 0);
     display:none;
     }
     #priceDetails{
-        margin-bottom:61px;
+        margin-bottom:80px;
     }
     #veiw-details-btn
     {
-       margin-bottom:61px; 
+       margin-bottom: 80px;
+       border-radius: 30px;
     }
 }
 @media (max-width: 1023px) {
