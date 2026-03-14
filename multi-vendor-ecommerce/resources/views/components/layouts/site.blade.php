@@ -1207,7 +1207,7 @@
 
 
         <!-- MOBILE BOTTOM NAVBAR -->
-<div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] z-[9999]">
+<div class="fixed mobile-bottom-nav bottom-4 left-1/2 -translate-x-1/2 w-[92%] z-[9999]">
 
     <nav class="bg-white rounded-full shadow-xl border border-gray-200 px-6 py-2">
         <div class="flex items-center justify-between relative">
