@@ -1,5 +1,5 @@
 <a href="{{ route('shop.index', ['category' => $category->slug]) }}"
-   class="group flex flex-col items-center text-center bg-[#F4F7FB] rounded-2xl p-2 shadow-sm 
+   class="group flex flex-col items-center text-center bg-[#61e1cf]/[0.18] rounded-2xl p-2 shadow-sm 
           hover:shadow-md hover:-translate-y-1 transition-all w-full">
 
     <div class="h-20 w-20 flex items-center justify-center overflow-hidden rounded-md">

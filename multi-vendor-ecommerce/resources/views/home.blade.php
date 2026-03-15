@@ -63,7 +63,7 @@
                         
                             <!-- + MORE -->
                             <div class="flex justify-center mt-2">
-                                <span class="bg-white text-xs px-3 py-1 rounded-full shadow text-gray-600">
+                                <span class="bg-[rgba(89,217,25,0.58)] text-xs px-3 py-1 rounded-full shadow text-gray-600">
                                     +{{ max(0,$category->products->count()-4) }} more
                                 </span>
                             </div>
@@ -88,7 +88,7 @@
     <!-- <div class="bg-gray-50"> -->
         <div style="background: white;">
         <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
-<div class=" mx-auto  sm:px-4 lg:px-4 py-1 space-y-8">
+<div class=" mx-auto  sm:px-4 lg:px-4 py-1 space-y-5">
         <section class=" overflow-hidden">
             <div class="flex flex-col lg:flex-row gap-3">
                 <div class="w-full">
@@ -126,7 +126,7 @@
         </section>
 
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
-           <section class="icons-carousel-section max-w-7xl mx-auto" data-aos="fade-up">
+           <section class="icons-carousel-section max-w-8xl mx-auto" data-aos="fade-up">
                 <div class="">
 
                 <!-- RIGHT SIDE SLIDER (3/4 WIDTH) -->
@@ -192,8 +192,8 @@
                         </div>
 
                         <!-- Navigation -->
-                        <div class="swiper-button-prev icon-swiper-prev"></div>
-                        <div class="swiper-button-next icon-swiper-next"></div>
+                        <!-- <div class="swiper-button-prev icon-swiper-prev"></div>
+                        <div class="swiper-button-next icon-swiper-next"></div> -->
                     </div>
                 </div>
            </section>
@@ -210,7 +210,7 @@
                         icon="bolt" 
                         :pulse="true" 
                     />
-                    <a href="{{ route('products.all', ['type' => 'mega-deals']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    <a href="{{ route('products.all', ['type' => 'mega-deals']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
@@ -286,10 +286,10 @@
                     </div>
                     
                     {{-- NAVIGATION --}}
-                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-green-300 rounded-full w-10 h-10 flex items-center justify-center  cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
+                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center  cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
                         <i class="fa fa-chevron-left text-white"></i>
                     </div>
-                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-green-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-1 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
+                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-1 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
                         <i class="fa fa-chevron-right text-white"></i>
                     </div>
                 </div>
@@ -306,7 +306,7 @@
                         icon="leaf" 
                         :pulse="true"
                     />
-                    <a href="{{ route('products.all', ['type' => 'new-arrivals']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                    <a href="{{ route('products.all', ['type' => 'new-arrivals']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
@@ -396,10 +396,10 @@
                     </div>
                     
                     {{-- NAVIGATION ARROWS (Hidden on mobile, visible on desktop hover) --}}
-                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-green-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
+                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
                         <i class="fa fa-chevron-left text-white"></i>
                     </div>
-                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-green-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
+                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
                         <i class="fa fa-chevron-right text-white"></i>
                     </div>
                 </div>
@@ -430,7 +430,7 @@
 
             {{-- ================= MOVING OFFER STRIP ================= --}}
             <section class="w-full overflow-hidden" data-aos="fade-up">
-                <div class="bg-indigo-700 text-white shadow-sm relative" style="padding:5px;">
+                <div class="bg-green-700 text-white shadow-sm relative" style="padding:5px;">
 
                     <div class="marquee whitespace-nowrap flex items-center text-[20px]">
 
@@ -495,7 +495,7 @@
                             icon="fire" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                     </div>
           
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -606,7 +606,7 @@
                             icon="star" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                     </div>
                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($featuredProducts->take(6) as $product)
@@ -723,7 +723,7 @@
                             icon="bolt" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'budget-store']) }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'budget-store']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                     </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -887,7 +887,7 @@
                             icon="bolt" 
                             :pulse="true"
                         />
-                            <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
+                            <a href="{{ route('shop.index') }}" class="text-xl text-green-600 hover:underline">View all</a>
                         </div>
 
 
@@ -943,7 +943,7 @@
             <section class="bg-white  shadow-sm p-2">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-semibold text-gray-900" style="font-size:22px;">Latest News</h2>
-                    <a href="{{ route('pages.blog') }}" class="text-xs text-indigo-600 hover:underline">View all articles</a>
+                    <a href="{{ route('pages.blog') }}" class="text-xl text-green-600 hover:underline">View all articles</a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     @foreach($latestNews as $article)
