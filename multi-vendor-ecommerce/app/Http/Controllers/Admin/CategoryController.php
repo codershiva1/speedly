@@ -62,18 +62,30 @@ class CategoryController extends Controller
         ]);
 
         $data['slug'] = Str::slug($data['name']);
-        
-        // Image Upload
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
-        }
-
-        // Status handle (Agar checkbox unchecked hai toh false)
         $data['status'] = $request->has('status') ? 1 : 0;
 
-        Category::create($data);
+    
+        $category = Category::create($data);
 
-        return redirect()->route('admin.categories.index')->with('status', 'Category created successfully!');
+
+        if ($request->hasFile('image')) {
+
+            $folderPath = "uploads/categories/" . $category->id;
+
+            $fileName = 'cat_' . time() . '.' . $request->image->extension();
+
+
+            $destinationPath = public_path('storage/' . $folderPath);
+
+            $request->image->move($destinationPath, $fileName);
+
+            $category->update([
+                'image' => $folderPath . '/' . $fileName
+            ]);
+        }
+
+        return redirect()->route('admin.categories.index')
+            ->with('status', 'Category created successfully!');
     }
 
     /**
@@ -103,20 +115,35 @@ class CategoryController extends Controller
         ]);
 
         $data['slug'] = Str::slug($data['name']);
-
-        // Image Update & Delete Old
-        if ($request->hasFile('image')) {
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }
-            $data['image'] = $request->file('image')->store('categories', 'public');
-        }
-
         $data['status'] = $request->has('status') ? 1 : 0;
+
+        // Image Update
+        if ($request->hasFile('image')) {
+
+            // Old image delete (manual)
+            if ($category->image && file_exists(public_path('storage/' . $category->image))) {
+                unlink(public_path('storage/' . $category->image));
+            }
+
+            $folderPath = "uploads/categories/" . $category->id;
+            $fileName = 'cat_' . time() . '.' . $request->image->extension();
+
+            $destinationPath = public_path('storage/' . $folderPath);
+
+            // create folder if not exists
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $request->image->move($destinationPath, $fileName);
+
+            $data['image'] = $folderPath . '/' . $fileName;
+        }
 
         $category->update($data);
 
-        return redirect()->route('admin.categories.index')->with('status', 'Category updated successfully!');
+        return redirect()->route('admin.categories.index')
+            ->with('status', 'Category updated successfully!');
     }
 
     /**

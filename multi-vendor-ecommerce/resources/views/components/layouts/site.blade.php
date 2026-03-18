@@ -917,110 +917,119 @@
     </div>
 
    <section
-        class="flex items-center justify-around gap-2 overflow-x-auto bg-white shadow-sm rounded-lg px-2 category-bar"
-        data-aos="fade-up"
-    >
+class="flex items-center gap-4 overflow-x-auto  px-2 py-2 category-bar"
+data-aos="fade-up"
+>
 
-        <!-- All -->
-        <a href="{{ route('shop.index') }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">🧾</span>
-            <span class="text-xs">All</span>
-        </a>
+<!-- All -->
+<a href="{{ route('shop.index') }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == null ? 'text-black' : 'text-black' }}">
+<i class="bi bi-grid text-lg"></i>
+<span>All</span>
+</a>
 
-        <!-- Winter -->
-        <a href="{{ route('shop.index', ['category' => 'winter']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">❄️</span>
-            <span class="text-xs">Winter</span>
-        </a>
+<!-- Winter -->
+<a href="{{ route('shop.index', ['category' => 'winter']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'winter' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-snow text-lg"></i>
+<span>Winter</span>
+</a>
 
-        <!-- Beauty -->
-        <a href="{{ route('shop.index', ['category' => 'beauty']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-pink-50 hover:text-pink-600 transition">
-            <span class="text-lg">💄</span>
-            <span class="text-xs">Beauty</span>
-        </a>
+<!-- Beauty -->
+<a href="{{ route('shop.index', ['category' => 'beauty']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'beauty' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-brush text-lg"></i>
+<span>Beauty</span>
+</a>
 
-        <!-- Electronics -->
-        <a href="{{ route('shop.index', ['category' => 'electronics']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
-            <span class="text-lg">📱</span>
-            <span class="text-xs">Electronics</span>
-        </a>
+<!-- Electronics -->
+<a href="{{ route('shop.index', ['category' => 'electronics']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'electronics' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-phone text-lg"></i>
+<span>Electronics</span>
+</a>
 
-        <!-- Fashion -->
-        <a href="{{ route('shop.index', ['category' => 'fashion']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
-            <span class="text-lg">👗</span>
-            <span class="text-xs">Fashion</span>
-        </a>
+<!-- Fashion -->
+<a href="{{ route('shop.index', ['category' => 'fashion']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'fashion' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-bag text-lg"></i>
+<span>Fashion</span>
+</a>
 
-        <!-- Home / Decor -->
-        <a href="{{ route('shop.index', ['category' => 'decor']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
-            <span class="text-lg">🏠</span>
-            <span class="text-xs">Decor</span>
-        </a>
+<!-- Decor -->
+<a href="{{ route('shop.index', ['category' => 'decor']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'decor' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-house text-lg"></i>
+<span>Decor</span>
+</a>
 
-        <!-- Importers -->
-        <a href="{{ route('shop.index', ['category' => 'importers']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition">
-            <span class="text-lg">🚢</span>
-            <span class="text-xs">Importers</span>
-        </a>
+<!-- Importers -->
+<a href="{{ route('shop.index', ['category' => 'importers']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'importers' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-truck text-lg"></i>
+<span>Importers</span>
+</a>
 
-        <!-- Fresh -->
-        <a href="{{ route('shop.index', ['category' => 'fresh']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-lime-50 hover:text-lime-600 transition">
-            <span class="text-lg">🍎</span>
-            <span class="text-xs">Fresh</span>
-        </a>
+<!-- Fresh -->
+<a href="{{ route('shop.index', ['category' => 'fresh']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'fresh' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-apple text-lg"></i>
+<span>Fresh</span>
+</a>
 
-        <!-- Kids -->
-        <a href="{{ route('shop.index', ['category' => 'kids']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-orange-50 hover:text-orange-600 transition">
-            <span class="text-lg">🧸</span>
-            <span class="text-xs">Kids</span>
-        </a>
+<!-- Kids -->
+<a href="{{ route('shop.index', ['category' => 'kids']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'kids' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-controller text-lg"></i>
+<span>Kids</span>
+</a>
 
-        <!-- Super Mall -->
-        <a href="{{ route('shop.index', ['category' => 'super-mall']) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-600 transition">
-            <span class="text-lg">🏬</span>
-            <span class="text-xs">Super Mall</span>
-        </a>
+<!-- Super Mall -->
+<a href="{{ route('shop.index', ['category' => 'super-mall']) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium
+{{ request('category') == 'super-mall' ? 'text-black' : 'text-black' }}">
+<i class="bi bi-shop text-lg"></i>
+<span>SuperMall</span>
+</a>
 
-        <!-- Categories -->
-        <a href="{{ route('categories.index') }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-            <span class="text-lg">🗂️</span>
-            <span class="text-xs">Categories</span>
-        </a>
+<!-- Categories -->
+<a href="{{ route('categories.index') }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black lg:text-black">
+<i class="bi bi-grid-3x3-gap text-lg"></i>
+<span>Categories</span>
+</a>
 
-        <!-- 99 Store -->
-        <a href="{{ route('stores.show', 99) }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-purple-50 hover:text-purple-600 transition">
-            <span class="text-lg">🏷️</span>
-            <span class="text-xs">99 Store</span>
-        </a>
+<!-- 99 Store -->
+<a href="{{ route('stores.show', 99) }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
+<i class="bi bi-tags text-lg"></i>
+<span>99 </span>
+</a>
 
-        <!-- Add -->
-        <a href="{{ route('offers.index') }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-green-50 hover:text-green-600 transition">
-            <span class="text-lg">📢</span>
-            <span class="text-xs">Ads</span>
-        </a>
+<!-- Ads -->
+<a href="{{ route('offers.index') }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
+<i class="bi bi-megaphone text-lg"></i>
+<span>offers</span>
+</a>
 
+<!-- Order Again -->
+<a href="{{ route('account.orders.index') }}"
+class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
+<i class="bi bi-arrow-repeat text-lg"></i>
+<span>Reorder</span>
+</a>
 
-        <!-- Order Again -->
-        <a href="{{ route('account.orders.index') }}"
-        class="flex flex-col items-center px-3 py-1 text-sm font-medium rounded-full hover:bg-yellow-50 hover:text-yellow-600 transition">
-            <span class="text-lg">🔁</span>
-            <span class="text-xs">Order Again</span>
-        </a>
-
-    </section>
+</section>
 
 
 </div>

@@ -42,15 +42,32 @@ class BrandController extends Controller
         ]);
 
         $data['slug'] = Str::slug($data['name']);
-        
-        // Logo Upload Logic
+        $data['status'] = $request->has('status') ? 1 : 0;
+
+        $brand = Brand::create($data);
+
+        // 🔥 FORCE upload: public/storage/uploads/brands/{id}
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('brands', 'public');
+
+            $folderPath = "uploads/brands/" . $brand->id;
+            $fileName = 'brand_' . uniqid() . '.' . $request->logo->extension();
+
+            $destinationPath = public_path('storage/' . $folderPath);
+
+            // Folder create
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $request->logo->move($destinationPath, $fileName);
+
+            $brand->update([
+                'logo' => $folderPath . '/' . $fileName
+            ]);
         }
 
-        Brand::create($data);
-
-        return redirect()->route('admin.brands.index')->with('status', 'Brand created successfully!');
+        return redirect()->route('admin.brands.index')
+            ->with('status', 'Brand created successfully!');
     }
 
     public function edit(Brand $brand): View
@@ -67,28 +84,44 @@ class BrandController extends Controller
         ]);
 
         $data['slug'] = Str::slug($data['name']);
+        $data['status'] = $request->has('status') ? 1 : 0;
 
         if ($request->hasFile('logo')) {
-            // Purana logo delete karein agar naya upload ho raha hai
-            if ($brand->logo) {
-                Storage::disk('public')->delete($brand->logo);
+
+            // 🧹 old delete
+            if ($brand->logo && file_exists(public_path('storage/' . $brand->logo))) {
+                unlink(public_path('storage/' . $brand->logo));
             }
-            $data['logo'] = $request->file('logo')->store('brands', 'public');
+
+            $folderPath = "uploads/brands/" . $brand->id;
+            $fileName = 'brand_' . uniqid() . '.' . $request->logo->extension();
+
+            $destinationPath = public_path('storage/' . $folderPath);
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $request->logo->move($destinationPath, $fileName);
+
+            $data['logo'] = $folderPath . '/' . $fileName;
         }
 
         $brand->update($data);
 
-        return redirect()->route('admin.brands.index')->with('status', 'Brand updated successfully!');
+        return redirect()->route('admin.brands.index')
+            ->with('status', 'Brand updated successfully!');
     }
 
     public function destroy(Brand $brand): RedirectResponse
     {
-        // Image file ko bhi storage se delete karein
-        if ($brand->logo) {
-            Storage::disk('public')->delete($brand->logo);
+        if ($brand->logo && file_exists(public_path('storage/' . $brand->logo))) {
+            unlink(public_path('storage/' . $brand->logo));
         }
-        
+
         $brand->delete();
-        return redirect()->route('admin.brands.index')->with('status', 'Brand deleted successfully.');
+
+        return redirect()->route('admin.brands.index')
+            ->with('status', 'Brand deleted successfully.');
     }
 }
