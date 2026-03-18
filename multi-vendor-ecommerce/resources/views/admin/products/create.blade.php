@@ -86,7 +86,7 @@
                     {{-- Gallery Images Section --}}
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                         <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
-                            Gallery Images (Max 4)
+                            Gallery Images (Max 10)
                         </h3>
                         <input id="images" name="images[]" type="file" multiple accept="image/*"
                             onchange="updateFileList(this)"
@@ -225,6 +225,25 @@
                                     <option value="{{ $id }}" @selected(old('category_id') == $id)>{{ $name }}</option>
                                 @endforeach
                             </select>
+
+                            
+                        </div>
+                        <div>
+                            <x-input-label for="brand_id" :value="__('Brand')" class="font-semibold" />
+                            
+                            <select id="brand_id" name="brand_id"
+                                class="mt-1 block w-full border-gray-200 rounded-xl shadow-sm focus:ring-indigo-500">
+                                
+                                <option value="">Select Brand</option>
+                                
+                                @foreach ($brands as $id => $name)
+                                    <option value="{{ $id }}" @selected(old('brand_id') == $id)>
+                                        {{ $name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <x-input-error :messages="$errors->get('brand_id')" class="mt-2" />
                         </div>
                     </div>
                 </div>

@@ -31,16 +31,16 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
-    // 2. Show Create Form
+
    public function create()
     {
-        // Sirf Active categories lein aur 'name' ko 'id' ke saath map karein
+  
         $categories = Category::where('status', 1)
                             ->orderBy('name')
                             ->pluck('name', 'id'); //
 
         $brands = Brand::orderBy('name')->pluck('name', 'id');
-
+        
         return view('admin.products.create', compact('categories', 'brands'));
     }
 
@@ -77,7 +77,7 @@ class ProductController extends Controller
     
             'main_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
     
-            'images' => 'nullable|array|max:4',
+            'images' => 'nullable|array|',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
     
@@ -128,27 +128,27 @@ class ProductController extends Controller
             }
     
             // 4️⃣ Gallery Image Limit
-            if ($request->hasFile('images')) {
-    
-                $galleryCount = count($request->file('images'));
-    
-                if ($galleryCount > 4) {
-                    throw new \Exception('Maximum 4 gallery images allowed.');
+                if ($request->hasFile('images')) {
+
+                    $galleryCount = count($request->file('images'));
+
+                    if ($galleryCount > 10) {
+                        throw new \Exception('Maximum 10 gallery images allowed.');
+                    }
+
+                    foreach ($request->file('images') as $index => $file) {
+
+                        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                        $file->move($folderPath, $fileName);
+
+                        $product->images()->create([
+                            'path' => 'uploads/products/' . $product->id . '/' . $fileName,
+                            'is_primary' => 0,
+                            'sort_order' => $index + 1,
+                        ]);
+                    }
                 }
-    
-                foreach ($request->file('images') as $index => $file) {
-    
-                    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-    
-                    $file->move($folderPath, $fileName);
-    
-                    $product->images()->create([
-                        'path' => 'uploads/products/' . $product->id . '/' . $fileName,
-                        'is_primary' => 0,
-                        'sort_order' => $index + 1,
-                    ]);
-                }
-            }
     
             DB::commit();
     
@@ -205,7 +205,7 @@ class ProductController extends Controller
             'main_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
             // GALLERY
-            'images' => 'nullable|array|max:4',
+            'images' => 'nullable|array|',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
 
             'delete_images' => 'nullable|array',
@@ -292,12 +292,12 @@ class ProductController extends Controller
             }
 
             // 5️⃣ GALLERY IMAGE LIMIT CHECK
-            $existingGalleryCount = $product->images()->where('is_primary', 0)->count();
-            $newGalleryCount = $request->hasFile('images') ? count($request->file('images')) : 0;
+                $existingGalleryCount = $product->images()->where('is_primary', 0)->count();
+                $newGalleryCount = $request->hasFile('images') ? count($request->file('images')) : 0;
 
-            if (($existingGalleryCount + $newGalleryCount) > 4) {
-                throw new \Exception('Maximum 4 gallery images allowed.');
-            }
+                if (($existingGalleryCount + $newGalleryCount) > 10) {
+                    throw new \Exception('Maximum 10 gallery images allowed.');
+                }
 
             // 6️⃣ Upload new gallery images
             if ($request->hasFile('images')) {

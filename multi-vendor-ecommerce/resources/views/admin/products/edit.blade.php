@@ -110,7 +110,7 @@
 
             {{-- GALLERY --}}
             <div class="bg-white p-6 rounded-2xl shadow border">
-                <h3 class="font-bold mb-4">Gallery Images (Max 4)</h3>
+                <h3 class="font-bold mb-4">Gallery Images (Max 10)</h3>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     @foreach($product->images->where('is_primary',0) as $image)
@@ -143,7 +143,7 @@
                        class="block w-full text-sm">
 
                 <p class="text-xs text-gray-400 mt-1">
-                    You can upload remaining images up to max 4
+                    You can upload remaining images up to max 10
                 </p>
             </div>
             
