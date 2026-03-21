@@ -14,15 +14,37 @@
 
     
 
-    {{-- HERO AREA --}}
-    <section class="mb-6" data-aos="fade-up">
+    {{-- HERO AREA & PROMO CARDS --}}
+    <section class="mb-6 -mt-16 md:mt-0" data-aos="fade-up">
+        <div class="grid grid-cols-2 gap-3 mb-6 md:hidden">
+            <!-- Promo Card 1 -->
+            <div class="bg-white rounded-2xl p-3 shadow-lg flex items-center gap-2 border border-green-50">
+                <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                    <i class="bi bi-cart-plus text-green-600 text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold text-gray-800 leading-tight">Get FLAT ₹50 OFF</h4>
+                    <p class="text-[8px] text-gray-500">First order > ₹199</p>
+                </div>
+            </div>
+            <!-- Promo Card 2 -->
+            <div class="bg-white rounded-2xl p-3 shadow-lg flex items-center gap-2 border border-green-50">
+                <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                    <i class="bi bi-truck text-blue-600 text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold text-gray-800 leading-tight">Enjoy FREE delivery</h4>
+                    <p class="text-[8px] text-gray-500">On all your orders</p>
+                </div>
+            </div>
+        </div>
+        
         <x-homeslider />
     </section>
 
 @if($categories->isNotEmpty())
-            {{-- ================= BEST SELLER ================= --}}
-
-            <section class="bg-white  shadow-sm p-2">
+    {{-- ================= BEST SELLER ================= --}}
+    <section class="bg-gradient-to-b from-green-50/50 to-white shadow-sm p-2">
                 <div class="">
 
                     <!-- SECTION HEADING -->
@@ -87,7 +109,11 @@
 
     <!-- <div class="bg-gray-50"> -->
         <div style="background: white;">
-        <!-- <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 space-y-8"> -->
+        <!--    {{-- CONTINUED GRADIENT FROM HEADER --}}
+    <div class="md:hidden h-20 bg-gradient-to-b from-[#10b981] to-white -mt-5"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 md:mt-20">
+ -->
 <div class=" mx-auto  sm:px-4 lg:px-4 py-1 space-y-5">
         <section class=" overflow-hidden">
             <div class="flex flex-col lg:flex-row gap-3">

@@ -169,20 +169,26 @@ $productDetails = [
                         </div>
 
                        {{-- ADD BUTTON --}}
-                        @auth
-                            <button
-                                class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold w-50
-                                {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                data-product-id="{{ $product->id }}"
-                                >
-                                {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
-                            </button>
+                        @if(auth()->check() && auth()->user()->isDeliveryBoy())
+                            <div class="px-2 py-3 px-6 border border-gray-200 bg-gray-50 text-gray-400 rounded-full text-xs font-semibold text-center cursor-not-allowed w-50" title="Delivery accounts cannot make purchases.">
+                                NOT ALLOWED
+                            </div>
                         @else
-                            <a href="{{ route('login') }}"
-                                class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                ADD TO CART
-                            </a>
-                        @endauth
+                            @auth
+                                <button
+                                    class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold w-50
+                                    {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                    data-product-id="{{ $product->id }}"
+                                    >
+                                    {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}"
+                                    class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold text-center w-50 block">
+                                    ADD TO CART
+                                </a>
+                            @endauth
+                        @endif
                     </div>
 
                     <!-- RATINGS -->
@@ -372,20 +378,26 @@ $productDetails = [
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                @auth
-                                    <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                        >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                @if(auth()->check() && auth()->user()->isDeliveryBoy())
+                                    <button disabled class="px-2 py-1.5 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg text-[10px] font-semibold cursor-not-allowed shrink-0" title="Delivery accounts cannot make purchases.">
+                                        RESTRICTED
                                     </button>
                                 @else
-                                    <a href="{{ route('login') }}"
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                        ADD
-                                    </a>
-                                @endauth
+                                    @auth
+                                        <button
+                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold shrink-0
+                                            {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                            data-product-id="{{ $product->id }}"
+                                            >
+                                            {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                        </button>
+                                    @else
+                                        <a href="{{ route('login') }}"
+                                            class="px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold text-green-600 block text-center shrink-0 hover:bg-green-50">
+                                            ADD
+                                        </a>
+                                    @endauth
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -469,20 +481,26 @@ $productDetails = [
                                 </div>
 
                                 {{-- ADD BUTTON --}}
-                                @auth
-                                    <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                        >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                @if(auth()->check() && auth()->user()->isDeliveryBoy())
+                                    <button disabled class="px-2 py-1.5 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg text-[10px] font-semibold cursor-not-allowed shrink-0" title="Delivery accounts cannot make purchases.">
+                                        RESTRICTED
                                     </button>
                                 @else
-                                    <a href="{{ route('login') }}"
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                        ADD
-                                    </a>
-                                @endauth
+                                    @auth
+                                        <button
+                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold shrink-0
+                                            {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                            data-product-id="{{ $product->id }}"
+                                            >
+                                            {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                        </button>
+                                    @else
+                                        <a href="{{ route('login') }}"
+                                            class="px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold text-green-600 block text-center shrink-0 hover:bg-green-50">
+                                            ADD
+                                        </a>
+                                    @endauth
+                                @endif
                             </div>
                         </div>
                     @endforeach

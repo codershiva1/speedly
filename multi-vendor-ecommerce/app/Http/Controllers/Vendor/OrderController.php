@@ -40,11 +40,36 @@ class OrderController extends Controller
         $order->load([
             'user',
             'payment',
+            'deliveryBoy',
             'items' => function ($q) use ($vendorId) {
                 $q->where('vendor_id', $vendorId)->with('product');
             },
         ]);
 
-        return view('vendor.orders.show', compact('order'));
+        $deliveryBoys = \App\Models\User::where('role', 'delivery_boy')->get();
+
+        return view('vendor.orders.show', compact('order', 'deliveryBoys'));
+    }
+
+    /**
+     * Manually Assign Delivery Boy
+     */
+    public function assignDelivery(Request $request, Order $order): \Illuminate\Http\RedirectResponse
+    {
+        $vendorId = auth()->id();
+        abort_unless($order->items()->where('vendor_id', $vendorId)->exists(), 403);
+
+        $request->validate([
+            'delivery_boy_id' => 'required|exists:users,id'
+        ]);
+
+        $order->update([
+            'delivery_boy_id' => $request->delivery_boy_id,
+            'delivery_status' => 'assigned',
+            'assigned_at' => now(),
+            'delivery_otp' => rand(1000, 9999)
+        ]);
+
+        return back()->with('status', 'Delivery boy assigned successfully.');
     }
 }

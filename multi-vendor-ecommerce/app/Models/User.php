@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isDeliveryBoy(): bool
+    {
+        return $this->role === 'delivery_boy';
+    }
+
     public function isVendor(): bool
     {
         return $this->role === 'vendor';
@@ -82,6 +87,34 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function deliveryBoyProfile()
+    {
+        return $this->hasOne(DeliveryBoyProfile::class);
+    }
+
+    public function deliveryBoyEarnings()
+    {
+        return $this->hasMany(DeliveryBoyEarning::class);
+    }
+
+    public function deliveryBoyShifts()
+    {
+        return $this->hasMany(DeliveryBoyShift::class);
+    }
+    
+    /**
+     * Get the deliveries assigned to the user (Delivery Boy).
+     */
+    public function deliveries()
+    {
+        return $this->hasMany(Order::class, 'delivery_boy_id');
+    }
+
+    public function deliveryReviewsReceived()
+    {
+        return $this->hasMany(DeliveryReview::class, 'delivery_boy_id');
     }
 
     public function wishlist()

@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'product'  => \App\Models\Product::class,
             'category' => \App\Models\Category::class,
+            'user'     => \App\Models\User::class,
             // future:
             // 'store' => \App\Models\Store::class,
         ]);

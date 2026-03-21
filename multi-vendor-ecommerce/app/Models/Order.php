@@ -32,12 +32,27 @@ class Order extends Model
         'shipping_state',
         'shipping_postal_code',
         'shipping_country',
+        'latitude',
+        'longitude',
         'notes',
+        'delivery_boy_id',
+        'delivery_status',
+        'delivery_otp',
+        'pod_image',
+        'assigned_at',
+        'picked_up_at',
+        'delivered_at',
+        'delivery_distance',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function deliveryBoy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'delivery_boy_id');
     }
 
     public function items(): HasMany

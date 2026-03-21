@@ -157,21 +157,34 @@
                 }
 
                  .mobile-hero-wrapper {
-                    background-image: url("http://localhost/speedly_wind/multi-vendor-ecommerce/public/storage/uploads/banners/mobileheaderimg.png");
-                    background-size: cover;
-                    background-position: center top;
-                    background-repeat: no-repeat;
-                    background: linear-gradient(135deg, #1FAF5A, #6EDC8A);
-
-                    /* border-radius: 0 0 18px 18px; */
+                    background: linear-gradient(135deg, #064e3b 0%, #10b981 70%, #6ee7b7 100%);
                     overflow: hidden;
                     padding-bottom: 12px;
                 }
 
+                /* Ensure text is readable on dark background */
+                .top-bar *, .delivery-text, .location-text {
+                    color: #ffffff !important;
+                }
+
                 /* Remove white box feeling */
-                .top-bar {
+                .mobile-hero-wrapper .top-bar {
                     background: transparent !important;
                     border-bottom: none !important;
+                }
+
+                /* Target only specific header elements for white color */
+                .mobile-hero-wrapper .top-bar .top-left i, 
+                .mobile-hero-wrapper .top-bar .top-left span,
+                .mobile-hero-wrapper .top-bar .cart-count,
+                .mobile-hero-wrapper .top-bar .profile-icon svg {
+                    color: #ffffff !important;
+                }
+
+                /* Ensure dropdown links are dark and readable */
+                .mobile-hero-wrapper [slot="content"] a,
+                .mobile-hero-wrapper .absolute.mt-2 a {
+                    color: #1f2937 !important;
                 }
 
                 .category-bar {
@@ -191,15 +204,38 @@
                     opacity: 0.9;
                 }
 
-                /* Search bar stays white */
+                /* Exact match to 'pichkari' reference image */
                 #searchBarBox {
-                    background: #ffffff !important;
+                    background: linear-gradient(to right, #7ea472 0%, #c8df8e 100%) !important;
+                    backdrop-filter: blur(4px) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+                    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+                    border-radius: 9999px !important;
+                    padding-right: 12px !important;
                 }
 
-                #searchBarBox i {
-                    color: #6b7280 !important;
+                #searchBarBox i, #searchBarBox input {
+                    color: #2e4d23 !important; /* Dark earthy green icon/text */
+                    font-weight: 500 !important;
+                }
+
+                /* Vertical separator line */
+                #searchBarBox .bi-mic-fill {
+                    border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
+                    padding-left: 15px !important;
+                    margin-left: 10px !important;
                 }
                 
+                #searchBarBox .bi-image-fill {
+                   margin-left: 10px !important;
+                }
+                /* Category icons on green background must be white */
+                .category-bar a {
+                    color: #ffffff !important;
+                }
+                .category-bar a span {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                }
             }
 
             @media (max-width: 764px) {
@@ -726,10 +762,10 @@
                             </button>
                         </div>
                     </div>
-                
-                </div>
+            </div>
 
                 <div class="top-right">
+                    @if(!auth()->check() || !auth()->user()->isDeliveryBoy())
                     <!-- Cart Icon -->
                         <div id="cartBtn" class="cart-icon">
                             <a href="{{ auth()->check() ? route('account.cart.index') : route('login') }}">
@@ -738,9 +774,11 @@
                                 text-xs rounded-full px-1.5 min-w-[18px] text-center" id="cart-count" style="top: -8px;right: -10px;">{{ $cartCount }}</span>
                             </a>
                         </div>
+                    @endif
 
                    <!-- AUTH CHECK -->
                     @auth
+                        @if(!auth()->user()->isDeliveryBoy())
                         <div id="wishlistbtn" class="wishlist-icon">
                             <a href="{{ route('wishlist.index') }}" class="relative">
                                 <i class="fa fa-heart text-xl"></i>
@@ -753,6 +791,7 @@
                             </a>
 
                         </div>
+                        @endif
                 
                         <!-- ================= Logged In User ================= -->
                         <x-dropdown align="right" width="48">
@@ -774,14 +813,14 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-dropdown-link :href="route('profile.edit')">
+                                <x-dropdown-link :href="auth()->user()->isDeliveryBoy() ? route('delivery.profile') : route('profile.edit')">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
                                 <x-dropdown-link 
-                                    :href="auth()->user()->role === 'admin' 
-                                        ? route('admin.dashboard') 
-                                        : route('account.dashboard')">
+                                    :href="auth()->user()->role === 'admin' ? route('admin.dashboard') :
+                                          (auth()->user()->role === 'vendor' ? route('vendor.dashboard') :
+                                          (auth()->user()->role === 'delivery_boy' ? route('delivery.dashboard') : route('account.dashboard')))">
                                     {{ __('Dashboard') }}
                                 </x-dropdown-link>
 

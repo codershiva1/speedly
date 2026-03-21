@@ -26,6 +26,8 @@ class VendorProfile extends Model
         'state',
         'country',
         'postal_code',
+        'latitude',
+        'longitude',
         'status',
     ];
 

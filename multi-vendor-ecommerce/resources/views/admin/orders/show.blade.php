@@ -109,6 +109,40 @@
                         </div>
                     </div>
 
+                    <!-- Delivery Assignment Box -->
+                    <div class="bg-white p-6 shadow-sm sm:rounded-2xl border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">{{ __('Delivery Assignment') }}</h3>
+                        
+                        @if($order->deliveryBoy)
+                            <div class="p-3 bg-green-50 border border-green-100 rounded-lg flex items-center gap-3 mb-4">
+                                <div class="h-10 w-10 rounded-full bg-green-200 flex items-center justify-center text-green-800 font-bold">
+                                    {{ substr($order->deliveryBoy->name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">{{ $order->deliveryBoy->name }}</p>
+                                    <p class="text-xs text-green-700 font-medium">Status: {{ strtoupper(str_replace('_', ' ', $order->delivery_status)) }}</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500">Delivery OTP: <span class="font-bold tracking-widest">{{ $order->delivery_otp }}</span></p>
+                        @endif
+
+                        <form action="{{ route('admin.orders.assign', $order) }}" method="POST" class="mt-4">
+                            @csrf
+                            <x-input-label for="delivery_boy_id" :value="__($order->deliveryBoy ? 'Reassign Delivery Boy' : 'Assign Delivery Boy')" class="mb-2 text-xs font-bold uppercase text-gray-500" />
+                            <div class="flex gap-2">
+                                <select name="delivery_boy_id" required class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 text-sm">
+                                    <option value="">-- Choose Rider --</option>
+                                    @foreach($deliveryBoys as $boy)
+                                        <option value="{{ $boy->id }}" @selected($order->delivery_boy_id == $boy->id)>{{ $boy->name }}</option>
+                                    @endforeach
+                                </select>
+                                <x-primary-button class="bg-orange-500 hover:bg-orange-600 rounded-xl px-4 py-2">
+                                    {{ __('Assign') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="bg-indigo-900 p-6 shadow-sm sm:rounded-2xl text-white">
                         <h3 class="font-bold mb-4 opacity-80 uppercase text-xs tracking-widest">{{ __('Payment Summary') }}</h3>
                         <div class="space-y-2 text-sm">

@@ -33,9 +33,11 @@ class OrderController extends Controller
     public function show(Order $order): View
     {
         // Loading all necessary relations
-        $order->load(['user', 'items.product', 'items.vendor']);
+        $order->load(['user', 'items.product', 'items.vendor', 'deliveryBoy']);
+        
+        $deliveryBoys = \App\Models\User::where('role', 'delivery_boy')->get();
 
-        return view('admin.orders.show', compact('order'));
+        return view('admin.orders.show', compact('order', 'deliveryBoys'));
     }
 
     /**
@@ -53,7 +55,30 @@ class OrderController extends Controller
             'payment_status' => $request->payment_status
         ]);
 
+        if ($request->status === 'confirmed' && !$order->delivery_boy_id) {
+            \App\Services\DeliveryAssignmentService::autoAssign($order);
+        }
+
         return back()->with('status', 'Order status updated successfully.');
     }
     
+    /**
+     * Manually Assign Delivery Boy
+     */
+    public function assignDelivery(Request $request, Order $order): RedirectResponse
+    {
+        $request->validate([
+            'delivery_boy_id' => 'required|exists:users,id'
+        ]);
+
+        $order->update([
+            'delivery_boy_id' => $request->delivery_boy_id,
+            'delivery_status' => 'assigned',
+            'assigned_at' => now(),
+            // generate a 4-digit OTP for delivery
+            'delivery_otp' => rand(1000, 9999)
+        ]);
+
+        return back()->with('status', 'Delivery boy assigned successfully.');
+    }
 }
