@@ -32,16 +32,24 @@ class ProductController extends Controller
     }
 
 
-   public function create()
+    public function create()
     {
-  
-        $categories = Category::where('status', 1)
+        $parentCategories = Category::where('status', 'active')
+                            ->where(function($q) {
+                                $q->whereNull('parent_id')->orWhere('parent_id', 0);
+                            })
                             ->orderBy('name')
-                            ->pluck('name', 'id'); //
+                            ->get();
+
+        $childCategories = Category::where('status', 'active')
+                            ->whereNotNull('parent_id')
+                            ->where('parent_id', '!=', 0)
+                            ->orderBy('name')
+                            ->get();
 
         $brands = Brand::orderBy('name')->pluck('name', 'id');
         
-        return view('admin.products.create', compact('categories', 'brands'));
+        return view('admin.products.create', compact('parentCategories', 'childCategories', 'brands'));
     }
 
     // 3. Save New Product
@@ -69,7 +77,8 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'sku' => 'required|unique:products,sku',
-            'category_id' => 'required|exists:categories,id',
+            'parent_category_ids' => 'required|array',
+            'child_category_ids' => 'nullable|array',
             'brand_id' => 'nullable|exists:brands,id',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
@@ -93,7 +102,6 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'discount_price' => $request->discount_price,
                 'stock_quantity' => $request->stock_quantity,
-                'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
                 'vendor_id' => auth()->id(),
                 'status' => $request->status,
@@ -103,9 +111,15 @@ class ProductController extends Controller
                 'is_trending' => $request->has('is_trending'),
                 'product_details' => $productDetails
             ]);
+
+            $categoryIds = array_merge(
+                $request->input('parent_category_ids', []),
+                $request->input('child_category_ids', [])
+            );
+            $product->categories()->sync($categoryIds);
     
             // 2️⃣ Folder Create
-            $folderPath = public_path('storage/uploads/products/' . $product->id);
+            $folderPath = public_path('uploads/products/' . $product->id);
     
             if (!file_exists($folderPath)) {
                 mkdir($folderPath, 0777, true);
@@ -167,10 +181,22 @@ class ProductController extends Controller
     // 4. Show Edit Form
     public function edit(Product $product)
     {
-       $categories = Category::orderBy('name')->pluck('name', 'id');
+        $parentCategories = Category::where('status', 'active')
+                            ->where(function($q) {
+                                $q->whereNull('parent_id')->orWhere('parent_id', 0);
+                            })
+                            ->orderBy('name')
+                            ->get();
+
+        $childCategories = Category::where('status', 'active')
+                            ->whereNotNull('parent_id')
+                            ->where('parent_id', '!=', 0)
+                            ->orderBy('name')
+                            ->get();
+
         $brands = Brand::orderBy('name')->pluck('name', 'id');
-        $product->load('images');
-        return view('admin.products.edit', compact('product', 'categories', 'brands'));
+        $product->load('images', 'categories');
+        return view('admin.products.edit', compact('product', 'parentCategories', 'childCategories', 'brands'));
     }
 
     // 5. Update Product
@@ -196,7 +222,8 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'sku' => 'required|unique:products,sku,' . $product->id,
-            'category_id' => 'required|exists:categories,id',
+            'parent_category_ids' => 'required|array',
+            'child_category_ids' => 'nullable|array',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer',
             'status' => 'required|in:active,draft,inactive',
@@ -223,7 +250,6 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'discount_price' => $request->discount_price,
                 'stock_quantity' => $request->stock_quantity,
-                'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
                 'status' => $request->status,
                 'description' => $request->description,
@@ -235,7 +261,13 @@ class ProductController extends Controller
                 
             ]);
 
-            $folderPath = public_path('storage/uploads/products/' . $product->id);
+            $categoryIds = array_merge(
+                $request->input('parent_category_ids', []),
+                $request->input('child_category_ids', [])
+            );
+            $product->categories()->sync($categoryIds);
+
+            $folderPath = public_path('uploads/products/' . $product->id);
             if (!file_exists($folderPath)) {
                 mkdir($folderPath, 0777, true);
             }
@@ -245,8 +277,8 @@ class ProductController extends Controller
                 $images = ProductImage::whereIn('id', $request->delete_images)->get();
 
                 foreach ($images as $img) {
-                    if (file_exists(public_path('storage/' . $img->path))) {
-                        unlink(public_path('storage/' . $img->path));
+                    if (file_exists(public_path($img->path))) {
+                        unlink(public_path($img->path));
                     }
                     $img->delete();
                 }
@@ -261,7 +293,7 @@ class ProductController extends Controller
                     ->first();
 
                 if ($oldMain) {
-                    $oldPath = public_path('storage/' . $oldMain->path);
+                    $oldPath = public_path($oldMain->path);
 
                     if (file_exists($oldPath)) {
                         unlink($oldPath);
@@ -271,7 +303,7 @@ class ProductController extends Controller
                 }
 
                 // 📂 Folder Path
-                $folderPath = public_path('storage/uploads/products/' . $product->id);
+                $folderPath = public_path('uploads/products/' . $product->id);
 
                 if (!file_exists($folderPath)) {
                     mkdir($folderPath, 0755, true);

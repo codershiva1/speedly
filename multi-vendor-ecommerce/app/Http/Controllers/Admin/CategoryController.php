@@ -4,160 +4,76 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-    /**
-     * Sabhi categories dikhane ke liye (Search aur Pagination ke saath)
-     */
-    public function index(Request $request): View
+    public function index()
     {
-        $searchTerm = $request->input('search');
-
-        $categories = Category::query()
-            ->with('parent') 
-            ->when($searchTerm, function ($query, $searchTerm) {
-                return $query->where('name', 'LIKE', "%{$searchTerm}%")
-                             ->orWhereHas('parent', function($q) use ($searchTerm) {
-                                 $q->where('name', 'LIKE', "%{$searchTerm}%");
-                             });
-            })
-            ->latest()
-            ->paginate(10);
-
-        $categories->appends(['search' => $searchTerm]);
-
+        $categories = Category::with('parent')->latest()->paginate(15);
         return view('admin.categories.index', compact('categories'));
     }
 
-    /**
-     * Create form dikhane ke liye
-     */
-    public function create(): View
+    public function create()
     {
-        // Sabhi categories ko fetch kar rahe hain dropdown ke liye (Parent Category select karne ke liye)
-        $parents = Category::orderBy('name')->pluck('name', 'id');
+        $parents = Category::whereNull('parent_id')->get();
         return view('admin.categories.create', compact('parents'));
     }
 
-    /**
-     * Nayi category save karne ke liye (Saare fields ke saath)
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $data = $request->validate([
-            'name'             => ['required', 'string', 'max:255'],
-            'parent_id'        => ['nullable', 'exists:categories,id'],
-            'description'      => ['nullable', 'string'],
-            'image'            => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'meta_title'       => ['nullable', 'string', 'max:255'],
-            'meta_description' => ['nullable', 'string'],
-            'meta_keywords'    => ['nullable', 'string', 'max:255'],
-            'status'           => ['nullable', 'boolean'],
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
-        $data['status'] = $request->has('status') ? 1 : 0;
-
-    
-        $category = Category::create($data);
-
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-
-            $folderPath = "uploads/categories/" . $category->id;
-
-            $fileName = 'cat_' . time() . '.' . $request->image->extension();
-
-
-            $destinationPath = public_path('storage/' . $folderPath);
-
-            $request->image->move($destinationPath, $fileName);
-
-            $category->update([
-                'image' => $folderPath . '/' . $fileName
-            ]);
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $data['image'] = 'uploads/categories/'.$imageName;
         }
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Category created successfully!');
+        Category::create($data);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
-    /**
-     * Edit form dikhane ke liye
-     */
-    public function edit(Category $category): View
+    public function edit(Category $category)
     {
-        // Apne aap ko parent nahi bana sakte, isliye current ID exclude ki hai
-        $parents = Category::where('id', '!=', $category->id)->orderBy('name')->pluck('name', 'id');
+        $parents = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
         return view('admin.categories.edit', compact('category', 'parents'));
     }
 
-    /**
-     * Data update karne ke liye
-     */
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(Request $request, Category $category)
     {
-        $data = $request->validate([
-            'name'             => ['required', 'string', 'max:255'],
-            'parent_id'        => ['nullable', 'exists:categories,id'],
-            'description'      => ['nullable', 'string'],
-            'image'            => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'meta_title'       => ['nullable', 'string', 'max:255'],
-            'meta_description' => ['nullable', 'string'],
-            'meta_keywords'    => ['nullable', 'string', 'max:255'],
-            'status'           => ['nullable', 'boolean'],
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
-        $data['status'] = $request->has('status') ? 1 : 0;
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
 
-        // Image Update
         if ($request->hasFile('image')) {
-
-            // Old image delete (manual)
-            if ($category->image && file_exists(public_path('storage/' . $category->image))) {
-                unlink(public_path('storage/' . $category->image));
-            }
-
-            $folderPath = "uploads/categories/" . $category->id;
-            $fileName = 'cat_' . time() . '.' . $request->image->extension();
-
-            $destinationPath = public_path('storage/' . $folderPath);
-
-            // create folder if not exists
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-
-            $request->image->move($destinationPath, $fileName);
-
-            $data['image'] = $folderPath . '/' . $fileName;
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $data['image'] = 'uploads/categories/'.$imageName;
         }
 
         $category->update($data);
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Category updated successfully!');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
-    /**
-     * Category delete karne ke liye
-     */
-    public function destroy(Category $category): RedirectResponse
+    public function destroy(Category $category)
     {
-        // Image delete from storage
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }
-
         $category->delete();
-
-        return redirect()->route('admin.categories.index')->with('status', 'Category deleted successfully!');
+        return back()->with('success', 'Category deleted.');
     }
 }

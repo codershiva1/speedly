@@ -46,7 +46,7 @@
 
             Alpine.store('sidebar', {
                 // Initialize based on screen size
-                isExpanded: window.innerWidth >= 1280, // true for desktop, false for mobile
+                isExpanded: window.innerWidth >= 1024, // true for desktop, false for mobile
                 isMobileOpen: false,
                 isHovered: false,
 
@@ -67,7 +67,7 @@
 
                 setHovered(val) {
                     // Only allow hover effects on desktop when sidebar is collapsed
-                    if (window.innerWidth >= 1280 && !this.isExpanded) {
+                    if (window.innerWidth >= 1024 && !this.isExpanded) {
                         this.isHovered = val;
                     }
                 }
@@ -95,9 +95,9 @@
 
 <body
     x-data="{ 'loaded': true}"
-    x-init="$store.sidebar.isExpanded = window.innerWidth >= 1280;
+    x-init="$store.sidebar.isExpanded = window.innerWidth >= 1024;
     const checkMobile = () => {
-        if (window.innerWidth < 1280) {
+        if (window.innerWidth < 1024) {
             $store.sidebar.setMobileOpen(false);
             $store.sidebar.isExpanded = false;
         } else {
@@ -111,15 +111,15 @@
     <x-common.preloader/>
     {{-- preloader end --}}
 
-    <div class="min-h-screen xl:flex">
+    <div class="min-h-screen lg:flex">
         @include('layouts.admin.backdrop')
         @include('layouts.admin.sidebar')
 
         <div class="flex-1 transition-all duration-300 ease-in-out"
             :class="{
-                'xl:ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
-                'xl:ml-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
-                'ml-0': $store.sidebar.isMobileOpen
+                'lg:ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+                'lg:ml-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+                'ml-0': true
             }">
             <!-- app header start -->
             @include('layouts.admin.app-header')

@@ -93,7 +93,7 @@
                 @endphp
 
                 @if($mainImage)
-                    <img src="{{ asset('public/storage/'.$mainImage->path) }}"
+                    <img src="{{ asset($mainImage->path) }}"
                          class="w-40 h-40 object-cover rounded-xl mb-3">
                           <label class="flex items-center gap-2 mt-2 text-sm text-red-600 cursor-pointer">
                     <input type="checkbox" name="delete_main_image" value="1">
@@ -115,7 +115,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     @foreach($product->images->where('is_primary',0) as $image)
                         <div class="relative">
-                            <img src="{{ asset('public/storage/'.$image->path) }}"
+                            <img src="{{ asset($image->path) }}"
                                  class="w-full h-32 object-cover rounded-xl border">
 
                             <input type="checkbox"
@@ -248,14 +248,47 @@
 
             {{-- CATEGORY / BRAND --}}
             <div class="bg-white p-6 rounded-2xl shadow border">
-                <x-input-label value="Category"/>
-                <select name="category_id" class="w-full rounded-xl border-gray-200" required>
-                    @foreach($categories as $id=>$name)
-                        <option value="{{ $id }}" @selected($product->category_id==$id)>
-                            {{ $name }}
-                        </option>
-                    @endforeach
-                </select>
+                @php
+                    $selectedCategories = $product->categories->pluck('id')->toArray();
+                    if($product->category_id && !in_array($product->category_id, $selectedCategories)) {
+                        $selectedCategories[] = $product->category_id;
+                    }
+                    $oldParentIds = old('parent_category_ids', $selectedCategories);
+                    if (!is_array($oldParentIds)) $oldParentIds = [];
+
+                    $oldChildIds = old('child_category_ids', $selectedCategories);
+                    if (!is_array($oldChildIds)) $oldChildIds = [];
+                @endphp
+
+                <div class="mb-4">
+                    <x-input-label for="parent_category_ids" :value="__('Parent Categories')" class="font-semibold" />
+                    <div class="mt-1 block w-full border border-gray-200 rounded-xl shadow-sm max-h-48 overflow-y-auto p-3 bg-white">
+                        @foreach ($parentCategories as $category)
+                            <label class="flex items-center space-x-2 py-1 cursor-pointer">
+                                <input type="checkbox" name="parent_category_ids[]" value="{{ $category->id }}"
+                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    @checked(in_array($category->id, $oldParentIds))>
+                                <span class="text-sm text-gray-700">{{ $category->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    <x-input-error :messages="$errors->get('parent_category_ids')" class="mt-2" />
+                </div>
+                
+                <div>
+                    <x-input-label for="child_category_ids" :value="__('Child Categories')" class="font-semibold" />
+                    <div class="mt-1 block w-full border border-gray-200 rounded-xl shadow-sm max-h-48 overflow-y-auto p-3 bg-white">
+                        @foreach ($childCategories as $category)
+                            <label class="flex items-center space-x-2 py-1 cursor-pointer">
+                                <input type="checkbox" name="child_category_ids[]" value="{{ $category->id }}"
+                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    @checked(in_array($category->id, $oldChildIds))>
+                                <span class="text-sm text-gray-700">{{ $category->name }} ({{ $category->parent->name ?? 'None' }})</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    <x-input-error :messages="$errors->get('child_category_ids')" class="mt-2" />
+                </div>
 
                 <div class="mt-4">
                     <x-input-label value="Brand"/>

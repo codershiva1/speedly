@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Traits\Loggable;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-    use SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, Loggable;
 
     protected $fillable = [
     'name', 
@@ -133,5 +134,25 @@ class User extends Authenticatable
     public function defaultAddress()
     {
         return $this->hasOne(\App\Models\Address::class)->where('is_default', 1);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'vendor_id');
+    }
+
+    public function vendorOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'vendor_id');
+    }
+
+    public function withdrawalRequests()
+    {
+        return $this->hasMany(DeliveryWithdrawalRequest::class, 'user_id');
+    }
+
+    public function supportMessages()
+    {
+        return $this->hasMany(SupportMessage::class);
     }
 }

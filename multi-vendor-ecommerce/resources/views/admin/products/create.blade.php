@@ -217,16 +217,34 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">Organize</h3>
                     <div class="space-y-4">
-                        <div>
-                            <x-input-label for="category_id" :value="__('Category')" class="font-semibold" />
-                            <select id="category_id" name="category_id" class="mt-1 block w-full border-gray-200 rounded-xl shadow-sm focus:ring-indigo-500" required>
-                                <option value="">Select Category</option>
-                                @foreach ($categories as $id => $name)
-                                    <option value="{{ $id }}" @selected(old('category_id') == $id)>{{ $name }}</option>
+                        <div class="mb-4">
+                            <x-input-label for="parent_category_ids" :value="__('Parent Categories')" class="font-semibold" />
+                            <div class="mt-1 block w-full border border-gray-200 rounded-xl shadow-sm max-h-48 overflow-y-auto p-3 bg-white">
+                                @foreach ($parentCategories as $category)
+                                    <label class="flex items-center space-x-2 py-1 cursor-pointer">
+                                        <input type="checkbox" name="parent_category_ids[]" value="{{ $category->id }}"
+                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            @checked(is_array(old('parent_category_ids')) && in_array($category->id, old('parent_category_ids')))>
+                                        <span class="text-sm text-gray-700">{{ $category->name }}</span>
+                                    </label>
                                 @endforeach
-                            </select>
-
-                            
+                            </div>
+                            <x-input-error :messages="$errors->get('parent_category_ids')" class="mt-2" />
+                        </div>
+                        
+                        <div>
+                            <x-input-label for="child_category_ids" :value="__('Child Categories')" class="font-semibold" />
+                            <div class="mt-1 block w-full border border-gray-200 rounded-xl shadow-sm max-h-48 overflow-y-auto p-3 bg-white">
+                                @foreach ($childCategories as $category)
+                                    <label class="flex items-center space-x-2 py-1 cursor-pointer">
+                                        <input type="checkbox" name="child_category_ids[]" value="{{ $category->id }}"
+                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            @checked(is_array(old('child_category_ids')) && in_array($category->id, old('child_category_ids')))>
+                                        <span class="text-sm text-gray-700">{{ $category->name }} ({{ $category->parent->name ?? 'None' }})</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                            <x-input-error :messages="$errors->get('child_category_ids')" class="mt-2" />
                         </div>
                         <div>
                             <x-input-label for="brand_id" :value="__('Brand')" class="font-semibold" />

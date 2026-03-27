@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
+use App\Traits\Loggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Ad extends Model
 {
+    use HasFactory, Loggable;
+
     protected $fillable = [
         'ad_placement_id',
         'target_type',

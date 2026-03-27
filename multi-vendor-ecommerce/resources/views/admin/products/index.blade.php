@@ -9,7 +9,7 @@
             </h2>
             <p class="text-sm text-gray-500">Manage your store products, stock levels, and pricing.</p>
         </div>
-        <a href="{{ route('admin.products.create') }}" class="w-full md:w-auto inline-flex items-center justify-center px-5 py-3 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition duration-150 shadow-lg shadow-indigo-100">
+        <a href="{{ route('admin.products.create') }}" class="w-full md:w-auto inline-flex items-center justify-center px-5 py-3 bg-emerald-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 transition duration-150 shadow-lg shadow-emerald-100">
             <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             {{ __('Add New Product') }}
         </a>
@@ -33,7 +33,7 @@
                                 name="search" 
                                 value="{{ request('search') }}"
                                 placeholder="Search product name, SKU..."
-                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                             >
                 
                             <svg class="w-4 h-4 absolute left-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@
                             <td class="px-6 py-4">
                                 <div class="h-12 w-12 overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
                                     @if($product->images->first())
-                                        <img src="{{ asset('public/storage/' . $product->primaryImage->path) }}" class="h-full w-full object-cover">
+                                        <img src="{{ asset($product->primaryImage->path) }}" class="h-full w-full object-cover">
                                     @else
                                         <div class="flex h-full w-full items-center justify-center text-[8px] text-gray-400">NO IMG</div>
                                     @endif
@@ -100,7 +100,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-2">
-                                    <a href="{{ route('admin.products.edit', $product) }}" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                                    <a href="{{ route('admin.products.edit', $product) }}" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </a>
                                     <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline" onsubmit="return confirm('Delete product?')">
@@ -125,7 +125,7 @@
                     <div class="flex items-start gap-4">
                         <div class="h-20 w-20 flex-shrink-0 rounded-xl border border-gray-100 bg-gray-50 overflow-hidden">
                             @if($product->images->first())
-                                <img src="{{ asset('public/storage/' . $product->images->first()->path) }}" class="h-full w-full object-cover">
+                                <img src="{{ asset($product->images->first()->path) }}" class="h-full w-full object-cover">
                             @else
                                 <div class="flex h-full w-full items-center justify-center text-[10px] text-gray-400">NO IMAGE</div>
                             @endif
@@ -141,7 +141,7 @@
                             <p class="text-[10px] text-gray-400 mt-0.5 font-mono">{{ $product->sku }}</p>
                             
                             <div class="mt-2 flex items-baseline gap-2">
-                                <span class="text-base font-extrabold text-indigo-600">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-base font-extrabold text-emerald-600">${{ number_format($product->price, 2) }}</span>
                                 @if($product->stock_quantity <= 5)
                                     <span class="text-[10px] font-bold text-red-600 uppercase">⚠️ {{ $product->stock_quantity }} Left</span>
                                 @else
@@ -156,7 +156,7 @@
                             <span class="font-semibold">{{ optional($product->category)->name }}</span> • {{ optional($product->brand)->name }}
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ route('admin.products.edit', $product) }}" class="flex items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold transition">
+                            <a href="{{ route('admin.products.edit', $product) }}" class="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold transition">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 Edit
                             </a>

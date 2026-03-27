@@ -26,9 +26,18 @@ class DashboardController extends Controller
         
         $recentOrders = \App\Models\Order::latest()->take(10)->get();
 
+        // Chart Data: Sales for the last 30 days
+        $salesData = \App\Models\Order::where('payment_status', 'paid')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->selectRaw('DATE(created_at) as date, SUM(total_amount) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalUsers', 'totalAdmins', 'totalVendors', 'totalCustomers',
-            'revenue', 'totalOrders', 'totalBrands', 'activeCoupons', 'recentOrders'
+            'revenue', 'totalOrders', 'totalBrands', 'activeCoupons', 'recentOrders',
+            'salesData'
         ));
     }
 }

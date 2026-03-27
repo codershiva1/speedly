@@ -203,6 +203,11 @@ Route::prefix('admin')
     ->middleware(['auth', 'verified', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class , 'index'])->name('dashboard');
+        
+        // Admin Profile
+        Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
+        Route::post('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('brands', AdminBrandController::class);
         // Withdrawal Requests
@@ -218,9 +223,26 @@ Route::prefix('admin')
         Route::post('/coupons/{coupon}/toggle', [CouponController::class , 'toggle'])
             ->name('coupons.toggle');
 
+        Route::resource('ads', \App\Http\Controllers\Admin\AdController::class);
+
+        Route::get('withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');
+        Route::post('withdrawals/{withdrawalRequest}/approve', [WithdrawalController::class, 'approve'])->name('withdrawals.approve');
+        Route::post('withdrawals/{withdrawalRequest}/reject', [WithdrawalController::class, 'reject'])->name('withdrawals.reject');
+
+        Route::get('support', [\App\Http\Controllers\Admin\SupportController::class, 'index'])->name('support.index');
+        Route::post('support/{message}/read', [\App\Http\Controllers\Admin\SupportController::class, 'markAsRead'])->name('support.mark-read');
+        Route::delete('support/{message}', [\App\Http\Controllers\Admin\SupportController::class, 'destroy'])->name('support.destroy');
+
+        Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+        Route::post('settings/update', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
+
+        Route::get('logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('logs.index');
+
+        Route::get('export/orders', [\App\Http\Controllers\Admin\ExportController::class, 'exportOrders'])->name('export.orders');
+        Route::get('export/vendors', [\App\Http\Controllers\Admin\ExportController::class, 'exportVendors'])->name('export.vendors');
+
+
         Route::get('users', [AdminUserController::class , 'index'])->name('users.index');
-
-
         Route::get('users/create', [AdminUserController::class , 'create'])->name('users.create');
         Route::get('users/edit/{id}', [AdminUserController::class , 'edit'])->name('users.edit');
         Route::put('users/update/{id}', [AdminUserController::class , 'update'])->name('users.update');
@@ -228,6 +250,21 @@ Route::prefix('admin')
         Route::post('users/store', [AdminUserController::class , 'store'])->name('users.store');
         Route::get('users/{id}/restore', [AdminUserController::class , 'restore'])->name('users.restore');
         Route::delete('users/{id}/force-delete', [AdminUserController::class , 'forceDelete'])->name('users.forceDelete');
+        
+        // ---- Specialized User Management ----
+        Route::get('vendors', [\App\Http\Controllers\Admin\VendorController::class, 'index'])->name('vendors.index');
+        Route::get('vendors/{vendor}', [\App\Http\Controllers\Admin\VendorController::class, 'show'])->name('vendors.show');
+        Route::post('vendors/{vendor}/approve', [\App\Http\Controllers\Admin\VendorController::class, 'approve'])->name('vendors.approve');
+        Route::post('vendors/{vendor}/reject', [\App\Http\Controllers\Admin\VendorController::class, 'reject'])->name('vendors.reject');
+
+        Route::get('delivery-boys', [\App\Http\Controllers\Admin\DeliveryBoyController::class, 'index'])->name('delivery-boys.index');
+        Route::get('delivery-boys/{deliveryBoy}', [\App\Http\Controllers\Admin\DeliveryBoyController::class , 'show'])->name('delivery-boys.show');
+        Route::post('delivery-boys/approve/{deliveryBoy}', [\App\Http\Controllers\Admin\DeliveryBoyController::class , 'approve'])->name('delivery-boys.approve');
+        Route::post('delivery-boys/{deliveryBoy}/reject', [\App\Http\Controllers\Admin\DeliveryBoyController::class, 'reject'])->name('delivery-boys.reject');
+
+        // ---- Marketplace Structure ----
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+        Route::resource('brands', \App\Http\Controllers\Admin\BrandController::class);
 
         Route::get('/admin/search', [AdminSearchController::class , 'globalSearch'])->name('search');
         Route::get('/admin/notifications', function () {

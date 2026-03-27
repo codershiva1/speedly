@@ -7,7 +7,7 @@
             <h2 class="text-2xl font-extrabold text-gray-800 tracking-tight">Promotional Coupons</h2>
             <p class="text-xs text-gray-500 mt-1">Manage discounts and seasonal offers.</p>
         </div>
-        <a href="{{ route('admin.coupons.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition">
+        <a href="{{ route('admin.coupons.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition">
             <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             CREATE COUPON
         </a>
@@ -18,13 +18,13 @@
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition group">
                 <div class="p-5">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
-                            <span class="text-indigo-700 font-black font-mono text-sm tracking-wider uppercase">{{ $coupon->code }}</span>
+                        <div class="bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                            <span class="text-emerald-700 font-black font-mono text-sm tracking-wider uppercase">{{ $coupon->code }}</span>
                         </div>
                         <form action="{{ route('admin.coupons.toggle', $coupon) }}" method="POST">
                             @csrf 
                             {{-- @method('PATCH') ko hata diya --}}
-                            <button type="submit" class="w-11 h-6 {{ $coupon->is_active ? 'bg-green-500' : 'bg-gray-200' }} rounded-full relative transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="w-11 h-6 {{ $coupon->is_active ? 'bg-emerald-500' : 'bg-gray-200' }} rounded-full relative transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
                                 <span class="absolute top-1 {{ $coupon->is_active ? 'right-1' : 'left-1' }} w-4 h-4 bg-white rounded-full shadow-sm transition-all duration-200"></span>
                             </button>
                         </form>
@@ -51,7 +51,7 @@
                                 <span>{{ $coupon->used_count }} / {{ $coupon->max_uses }}</span>
                             </div>
                             <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: {{ min(($coupon->used_count / $coupon->max_uses) * 100, 100) }}%"></div>
+                                <div class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: {{ min(($coupon->used_count / $coupon->max_uses) * 100, 100) }}%"></div>
                             </div>
                         </div>
                     @endif
@@ -66,7 +66,7 @@
                         </div>
                         
                         <div class="flex gap-1.5">
-                            <a href="{{ route('admin.coupons.edit', $coupon) }}" class="p-2.5 bg-gray-50 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+                            <a href="{{ route('admin.coupons.edit', $coupon) }}" class="p-2.5 bg-gray-50 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                             </a>
                             <form action="{{ route('admin.coupons.destroy', $coupon) }}" method="POST" onsubmit="return confirm('Delete coupon?')">
@@ -86,7 +86,7 @@
                 </div>
                 <h3 class="text-gray-800 font-bold">No coupons found</h3>
                 <p class="text-gray-400 text-sm mt-1 mb-6">Create your first discount coupon to boost sales.</p>
-                <a href="{{ route('admin.coupons.create') }}" class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white rounded-lg font-bold text-xs">
+                <a href="{{ route('admin.coupons.create') }}" class="inline-flex items-center px-5 py-2 bg-emerald-600 text-white rounded-lg font-bold text-xs">
                     ADD NOW
                 </a>
             </div>

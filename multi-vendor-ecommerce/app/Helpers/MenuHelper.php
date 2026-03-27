@@ -37,8 +37,20 @@ class MenuHelper
 
             [
                 'icon'  => 'users',
-                'name'  => 'users',
+                'name'  => 'Users',
                 'route' => 'admin.users.index'
+            ],
+            
+            [
+                'icon'  => 'authentication', // Vendor icon
+                'name'  => 'Vendors',
+                'route' => 'admin.vendors.index'
+            ],
+
+            [
+                'icon'  => 'user-profile', // Delivery boy icon
+                'name'  => 'Delivery Boys',
+                'route' => 'admin.delivery-boys.index'
             ],
 
             [
@@ -50,7 +62,7 @@ class MenuHelper
             [
                 'icon'  => 'user-profile',
                 'name'  => 'Profile',
-                'route' => 'profile.edit',
+                'route' => 'admin.profile.index',
             ],
 
             [
@@ -79,9 +91,41 @@ class MenuHelper
             ],
 
             [
-                'icon'  => 'coupens',
-                'name'  => 'Coupons',
-                'route' => 'admin.coupons.index',
+                'icon'  => 'presentation-chart-line',
+                'name'  => 'Marketing',
+                'subItems' => [
+                    [
+                        'name'  => 'Ad Campaigns',
+                        'route' => 'admin.ads.index',
+                    ],
+                    [
+                        'name'  => 'Coupons',
+                        'route' => 'admin.coupons.index',
+                    ],
+                ],
+            ],
+
+            [
+                'icon'  => 'credit-card',
+                'name'  => 'Financial & Support',
+                'subItems' => [
+                    [
+                        'name'  => 'Withdrawal Requests',
+                        'route' => 'admin.withdrawals.index',
+                    ],
+                    [
+                        'name'  => 'Support Messages',
+                        'route' => 'admin.support.index',
+                    ],
+                    [
+                        'name'  => 'System Settings',
+                        'route' => 'admin.settings.index',
+                    ],
+                    [
+                        'name'  => 'Security Logs',
+                        'route' => 'admin.logs.index',
+                    ],
+                ],
             ],
         ];
     }
@@ -193,6 +237,14 @@ class MenuHelper
                 viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 12H3m12 0l-4-4m4 4l-4 4m5-9V5a2 2 0 012-2h4a2 2 0 012 2v14a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2"/>
+            </svg>',
+
+            'presentation-chart-line' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>',
+
+            'credit-card' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>',
         ];
 

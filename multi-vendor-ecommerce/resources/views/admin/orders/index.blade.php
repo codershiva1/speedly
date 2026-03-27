@@ -2,13 +2,16 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto  sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
-        <h2 class="text-xl md:text-2xl font-extrabold text-gray-800">Order Management</h2>
-        
-        <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-            <a href="{{ route('admin.orders.index', ['status' => 'pending']) }}" class="whitespace-nowrap px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-bold border border-yellow-200">Pending</a>
-            <a href="{{ route('admin.orders.index', ['status' => 'confirmed']) }}" class="whitespace-nowrap px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold border border-blue-200">Confirmed</a>
-            <a href="{{ route('admin.orders.index') }}" class="whitespace-nowrap px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold border border-gray-200">All Orders</a>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 class="text-xl md:text-2xl font-black text-emerald-900 tracking-tighter uppercase">Order Oversight</h2>
+        <div class="flex gap-3">
+            <a href="{{ route('admin.export.orders') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition shadow-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                Export CSV
+            </a>
+            <span class="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold ring-1 ring-emerald-200">
+                Financial Control
+            </span>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
                         <div class="text-[10px] text-gray-400 font-mono">{{ $order->payment_method }}</div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-bold text-gray-900">{{ $order->currency }} {{ number_format($order->total_amount, 2) }}</span>
+                        <span class="font-black text-emerald-900">{{ $order->currency }} {{ number_format($order->total_amount, 2) }}</span>
                     </td>
                     <td class="px-6 py-4">
                         @php
@@ -51,7 +54,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-xs font-bold">
+                        <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition text-[10px] font-black uppercase tracking-widest shadow-sm">
                             View Details
                         </a>
                     </td>
@@ -63,27 +66,27 @@
 
     <div class="grid grid-cols-1 gap-4 md:hidden">
         @foreach ($orders as $order)
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-            <div class="flex justify-between items-start mb-3">
-                <div>
-                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">#{{ $order->order_number }}</span>
-                    <div class="text-xs text-gray-400">{{ $order->created_at->format('d M, Y • H:i') }}</div>
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-50 group hover:bg-emerald-50/10 transition-colors">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none mb-1">Order #{{ $order->order_number }}</span>
+                    <div class="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{{ $order->created_at->format('d M, Y • H:i') }}</div>
                 </div>
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold {{ $colors[$order->status] ?? 'bg-gray-100 text-gray-600' }}">
-                    {{ ucfirst($order->status) }}
+                <span class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shadow-sm {{ $colors[$order->status] ?? 'bg-gray-50 text-gray-600 border-gray-100' }}">
+                    {{ $order->status }}
                 </span>
             </div>
             
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-end mt-2">
                 <div>
-                    <div class="text-sm font-bold text-gray-800">{{ $order->user->name }}</div>
-                    <div class="text-xs text-gray-500 uppercase tracking-tight">{{ $order->payment_method }}</div>
-                    <div class="mt-1 text-lg font-black text-gray-900">
+                    <div class="text-[11px] font-black text-emerald-900 uppercase tracking-tight">{{ $order->user->name }}</div>
+                    <div class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">{{ $order->payment_method }}</div>
+                    <div class="mt-2 text-base font-black text-emerald-900 tracking-tighter">
                         {{ $order->currency }} {{ number_format($order->total_amount, 2) }}
                     </div>
                 </div>
-                <a href="{{ route('admin.orders.show', $order) }}" class="px-4 py-2 bg-gray-900 text-white rounded-lg text-xs font-bold shadow-sm">
-                    View
+                <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md shadow-emerald-100 transition hover:bg-emerald-700">
+                    Interact
                 </a>
             </div>
         </div>

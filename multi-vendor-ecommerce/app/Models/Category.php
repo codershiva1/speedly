@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Traits\Loggable;
+
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, Loggable;
 
     protected $fillable = [
         'parent_id',

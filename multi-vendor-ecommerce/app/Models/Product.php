@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\CartItem;
 
+use App\Traits\Loggable;
+
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Loggable;
     
     protected $casts = [
         'product_details' => 'array',
@@ -46,6 +48,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
     }
 
     public function brand(): BelongsTo

@@ -3,8 +3,8 @@
     $menuGroups = MenuHelper::getMenuGroups();
 @endphp
 
-<aside id=""
-    class="fixed flex flex-col mt-0 top-0 px-5 left-0 bg-white  text-gray-900 h-screen transition-all duration-300 ease-in-out z-99999 border-r border-gray-200"
+<aside id="sidebar"
+    class="fixed flex flex-col mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-[99999] border-r border-gray-200"
     x-data="{
         openSubmenus: {},
         init() {
@@ -38,9 +38,9 @@
 
         // Position Logic: 
         // On mobile: show/hide based on isMobileOpen
-        // On desktop (xl): always show (translate-x-0)
-        'translate-x-0': $store.sidebar.isMobileOpen,
-        '-translate-x-full xl:translate-x-0': !$store.sidebar.isMobileOpen
+        // On desktop (lg): always show (translate-x-0)
+        'translate-x-0 shadow-2xl': $store.sidebar.isMobileOpen,
+        '-translate-x-full lg:translate-x-0 lg:shadow-none': !$store.sidebar.isMobileOpen
     }"
     @mouseenter="if (!$store.sidebar.isExpanded) $store.sidebar.setHovered(true)"
     @mouseleave="$store.sidebar.setHovered(false)"
@@ -50,7 +50,7 @@
     <div class="pt-2 pb-7 flex justify-center">
         <a href="{{ route('home') }}">
             <img class="w-[150px]"
-                 src="{{ asset('storage/uploads/logo/speedly_logo3.png') }}"
+                 src="{{ asset('uploads/logo/speedly_logo3.png') }}"
                  alt="logo">
         </a>
     </div>
@@ -64,10 +64,12 @@
                     <div>
 
                         <!-- Group Title -->
-                        <h2 class="mb-4 text-xs uppercase text-gray-800"
-                            x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
-                            {{ $menuGroup['title'] }}
-                        </h2>
+                        @if (count($menuGroup['items']) > 0)
+                            <h2 class="mb-4 text-xs uppercase text-gray-800"
+                                x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
+                                {{ $menuGroup['title'] }}
+                            </h2>
+                        @endif
 
                         <ul class="flex flex-col gap-1">
 
@@ -153,16 +155,18 @@
             </div>
         </nav>
 
-        <!-- Sidebar Widget -->
-        <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-             class="mt-auto">
-            @include('layouts.admin.sidebar-widget')
-        </div>
+        <!-- Sidebar Widget Removed -->
     </div>
 </aside>
 
 <!-- Mobile Overlay -->
 <div x-show="$store.sidebar.isMobileOpen"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
      @click="$store.sidebar.setMobileOpen(false)"
-     class="fixed ">
+     class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[9999] lg:hidden">
 </div>

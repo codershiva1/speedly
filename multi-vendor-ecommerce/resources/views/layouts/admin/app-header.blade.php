@@ -1,5 +1,5 @@
 <header
-    class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 xl:border-b"
+    class="sticky top-0 flex w-full bg-white border-b border-gray-100 z-[99] transition-all"
     x-data="{
         isApplicationMenuOpen: false,
         toggleApplicationMenu() {
@@ -8,12 +8,12 @@
     }">
     <div class="flex flex-col items-center justify-between grow xl:flex-row xl:px-6">
         <div
-            class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
+            class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-100 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
 
-            <!-- Desktop Sidebar Toggle Button (visible on xl and up) -->
+            <!-- Desktop Sidebar Toggle Button (visible on lg and up) -->
             <button
-                class="hidden xl:flex items-center justify-center w-10 h-10 text-gray-500 border border-gray-200 rounded-lg dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11"
-                :class="{ 'bg-gray-100 dark:bg-white/[0.03]': !$store.sidebar.isExpanded }"
+                class="hidden lg:flex items-center justify-center w-10 h-10 text-gray-400 border border-gray-100 rounded-lg lg:h-11 lg:w-11"
+                :class="{ 'bg-gray-50': !$store.sidebar.isExpanded }"
                 @click="$store.sidebar.toggleExpanded()" aria-label="Toggle Sidebar">
                 <svg x-show="!$store.sidebar.isMobileOpen" width="16" height="12" viewBox="0 0 16 12" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -29,9 +29,9 @@
                 </svg>
             </button>
 
-            <!-- Mobile Menu Toggle Button (visible below xl) -->
+            <!-- Mobile Menu Toggle Button (visible below lg) -->
             <button
-                class="flex xl:hidden items-center justify-center w-10 h-10 text-gray-500 rounded-lg dark:text-gray-400 lg:h-11 lg:w-11"
+                class="flex lg:hidden items-center justify-center w-10 h-10 text-gray-500 rounded-lg dark:text-gray-400 lg:h-11 lg:w-11"
                 :class="{ 'bg-gray-100 dark:bg-white/[0.03]': $store.sidebar.isMobileOpen }"
                 @click="$store.sidebar.toggleMobileOpen()" aria-label="Toggle Mobile Menu">
                 <svg x-show="!$store.sidebar.isMobileOpen" width="16" height="12" viewBox="0 0 16 12" fill="none"
@@ -49,15 +49,15 @@
             </button>
 
             <!-- Logo (mobile only) -->
-            <a href="/" class="xl:hidden">
+            <a href="/" class="lg:hidden">
                 
-                <img class="dark:hidden" style="width:50%;" src="/storage/uploads/logo/speedly_logo3.png" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+                <img class="dark:hidden" style="width:50%;" src="/uploads/logo/speedly_logo3.png" alt="Logo" />
+                <img class="hidden dark:block" src="/uploads/logo/logo-dark.svg" alt="Logo" />
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->
             <button @click="toggleApplicationMenu()"
-                class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 xl:hidden">
+                class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden">
                 <!-- Dots Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -66,8 +66,8 @@
                 </svg>
             </button>
 
-            <!-- Search Bar (desktop only) -->
-            <div class="hidden xl:block">
+            <!-- Search Bar (hidden on mobile, visible on lg and up) -->
+            <div class="hidden lg:block ml-4">
                 <form>
                     <div class="relative">
                         <span class="absolute -translate-y-1/2 pointer-events-none left-4 top-1/2">
@@ -81,7 +81,7 @@
                         </span>
                         <form action="{{ route('admin.search') }}" method="GET">
                         <input type="text" placeholder="Search or type command..."
-                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]" />
+                            class="h-11 w-full rounded-xl border border-gray-100 bg-gray-50/50 py-2.5 pl-12 pr-14 text-sm text-gray-700 shadow-sm placeholder:text-gray-400 focus:border-emerald-300 focus:outline-hidden focus:ring-4 focus:ring-emerald-500/5 lg:w-[380px] xl:w-[430px]" />
                         </form>
                             <!-- <button
                             class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
@@ -93,10 +93,13 @@
             </div>
         </div>
 
-        <!-- Application Menu (mobile) and Right Side Actions (desktop) -->
-        <div :class="isApplicationMenuOpen ? 'flex' : 'hidden'"
-            class="items-center justify-between w-full gap-4 px-5 py-4 xl:flex shadow-theme-md xl:justify-end xl:px-0 xl:shadow-none">
-            <div class="flex items-center gap-2 2xsm:gap-3">
+        <!-- Right Side Actions -->
+        <div class="flex items-center justify-end gap-3 px-3 py-2 sm:px-5 lg:px-0">
+            <div class="flex items-center gap-2">
+                <!-- Mobile Search Trigger (future improvement: add modal) -->
+                <button class="flex lg:hidden items-center justify-center w-10 h-10 text-gray-400 border border-gray-100 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
                 <!-- Theme Toggle Button -->
                 <!-- <button
                     class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"

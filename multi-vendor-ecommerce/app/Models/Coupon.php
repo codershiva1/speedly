@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use App\Models\User; 
 
+use App\Traits\Loggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Coupon extends Model
 {
+    use HasFactory, Loggable;
+
     protected $fillable = [
         'code',
         'type',

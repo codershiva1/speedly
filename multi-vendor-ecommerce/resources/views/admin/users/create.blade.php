@@ -27,7 +27,7 @@
                                 <svg id="avatar-placeholder" class="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                             </div>
                             <div class="mt-4">
-                                <label for="image-upload" class="cursor-pointer bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-100 transition inline-block">
+                                <label for="image-upload" class="cursor-pointer bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-100 transition inline-block">
                                     Choose Photo
                                 </label>
                                 <input id="image-upload" type="file" name="image" class="hidden" onchange="previewImage(this)">
@@ -43,7 +43,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
                                 <input type="text" name="name" value="{{ old('name') }}" required 
-                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
+                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
                                     placeholder="e.g. Rahul Sharma">
                                 @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
@@ -51,7 +51,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
                                 <input type="email" name="email" value="{{ old('email') }}" required 
-                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
+                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
                                     placeholder="rahul@example.com">
                                 @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
@@ -59,7 +59,7 @@
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">System Role</label>
                                 <div class="relative">
-                                    <select name="role" required class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 appearance-none outline-none text-gray-800 shadow-inner">
+                                    <select name="role" required class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 appearance-none outline-none text-gray-800 shadow-inner">
                                         <option value="customer">Customer</option>
                                         <option value="vendor">Vendor</option>
                                         <option value="admin">Administrator</option>
@@ -73,13 +73,13 @@
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Password</label>
                                 <input type="password" name="password" required 
-                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
+                                    class="w-full bg-gray-50 border-transparent border-none rounded-2xl px-5 py-3.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
                                     placeholder="••••••••">
                             </div>
                         </div>
 
                         <div class="mt-10 flex items-center gap-4">
-                            <button type="submit" class="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+                            <button type="submit" class="flex-1 bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 flex items-center justify-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 Create Account
                             </button>
