@@ -43,65 +43,73 @@
     </section>
 
 @if($categories->isNotEmpty())
-    {{-- ================= BEST SELLER ================= --}}
-    <section class="bg-gradient-to-b from-green-50/50 to-white shadow-sm p-2">
-                <div class="">
+    {{-- ================= CATEGORY CARDS ================= --}}
+    <section class="bg-gradient-to-b from-green-50/50 to-white py-3 px-2">
 
-                    <!-- SECTION HEADING -->
-                    <!-- <div class="flex items-center justify-between mb-3 text-sm">
-                           
-                            <a href="{{ route('shop.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
-                        </div> -->
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-2">
 
+            @foreach ($categories->take(16) as $category)
+                @php
+                    $catProducts = $category->products()->with('images')->get();
+                    $count = $catProducts->count();
+                @endphp
 
-                    <!-- GRID -->
-                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-1.5">
+                {{-- Skip categories with 0 products --}}
+                @if($count === 0)
+                    @continue
+                @endif
 
-                        @foreach ($categories->take(8) as $category)
+                @php
+                    $preview = $catProducts->take(4);
+                    $previewCount = $preview->count();
+                    // Grid cols: 1 item = 1 col full-width, 2-4 items = 2 cols
+                    $gridCols = $previewCount === 1 ? 'grid-cols-1' : 'grid-cols-2';
+                    $extraCount = max(0, $count - 4);
+                @endphp
+
+                <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="group block">
+                    <div class="bg-white rounded-2xl p-2 shadow-sm border border-gray-100 group-hover:shadow-md group-hover:border-green-200 transition-all duration-200">
+
+                        {{-- Adaptive Product Image Grid --}}
+                        <div class="grid {{ $gridCols }} gap-1 mb-2">
+                            @foreach ($preview as $product)
+                                @php $img = $product->images->first(); @endphp
+                                <div class="bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden
+                                    {{ $previewCount === 1 ? 'h-24' : 'h-14' }}">
+                                    @if($img)
+                                        <img
+                                            src="{{ asset('public/storage/' . $img->path) }}"
+                                            class="object-contain w-full h-full p-1"
+                                            alt="{{ $product->name }}"
+                                            loading="lazy">
+                                    @else
+                                        <i class="bi bi-image text-gray-300 text-xl"></i>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+
                         
-                        <div class="bg-gray-100 rounded-2xl p-1">
-                        
-                            <!-- 2x2 PRODUCT PREVIEW -->
-                            <div class="grid grid-cols-2 gap-1">
-                                @foreach ($category->products->take(4) as $product)
-                        
-                                <a href="{{ route('shop.show', $product->slug) }}">
-                        
-                                    <div class="bg-white rounded-lg flex items-center justify-center h-16 overflow-hidden">
-                        
-                                        <img 
-                                        src="{{ asset('public/storage/'.$product->images->first()->path) }}"
-                                        class="max-h-14 object-contain "
-                                        style="width: 70%;
-"
-                                        alt="">
-                        
-                                    </div>
-                        
-                                </a>
-                        
-                                @endforeach
-                            </div>
-                        
-                            <!-- + MORE -->
-                            <div class="flex justify-center mt-2">
-                                <span class="bg-[rgba(89,217,25,0.58)] text-xs px-3 py-1 rounded-full shadow text-gray-600">
-                                    +{{ max(0,$category->products->count()-4) }} more
-                                </span>
-                            </div>
-                        
-                            <!-- CATEGORY NAME -->
-                            <p class="text-sm font-semibold text-gray-900 text-center mt-2">
-                                {{ $category->name }}
-                            </p>
-                        
+                        {{-- Product count badge --}}
+                        <div class="flex justify-center mt-1">
+                            <span class="bg-green-100 text-green-700 text-[9px] font-semibold px-2 py-0.5 rounded-full">
+                                @if($extraCount > 0) &middot; +{{ $extraCount }} more @endif
+                            </span>
                         </div>
                         
-                        @endforeach
-                        
-                        </div>
-                </div>
-           </section>
+                        {{-- Category Name --}}
+                        <p class="text-[11px] font-semibold text-gray-800 text-center leading-tight truncate">
+                            {{ $category->name }}
+                        </p>
+                    </div>
+                </a>
+
+            @endforeach
+        </div>
+
+    </section>
+
+
         @endif
 
 

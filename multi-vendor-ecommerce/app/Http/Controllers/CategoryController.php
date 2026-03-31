@@ -13,9 +13,9 @@ class CategoryController extends Controller
         // 1. Parent Categories (Those that HAVE children)
         $parentCategories = Category::whereNull('parent_id')
             ->has('children')
-            ->where('status', true)
+            ->where('status', 'active')
             ->with(['children' => function($q) {
-                $q->where('status', true)->withCount('products');
+                $q->where('status', 'active')->withCount('products');
             }])
             ->get();
 
@@ -23,12 +23,12 @@ class CategoryController extends Controller
         // This ensures categories that aren't part of a group still show up
         $standaloneCategories = Category::whereNull('parent_id')
             ->doesntHave('children')
-            ->where('status', true)
+            ->where('status', 'active')
             ->withCount('products')
             ->get();
 
         // 3. Featured Brands
-        $brands = Brand::where('status', true)->take(12)->get();
+        $brands = Brand::where('status', 'active')->take(12)->get();
 
         // 4. Promo Placements
         $categoryAds = AdPlacement::with(['ads' => function($q) {
