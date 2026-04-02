@@ -12,95 +12,124 @@ import 'swiper/css/navigation';
 
 
 import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
-import { Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
 
 // ----------icon slider --------------------
-
 const iconSwiper = new Swiper('.iconSwiper', {
     modules: [Navigation, Autoplay],
-    slidesPerView: 4,        // 4 slides visible
-    slidesPerGroup: 1,       // move 1 slide at a time
-    loop: true,              // enable looping
-    loopFillGroupWithBlank: false, // don’t add blank slides
+    slidesPerView: 4,
+    slidesPerGroup: 1,
+    loop: true,
     autoplay: {
-        delay: 3000,
+        delay: 3500,
         disableOnInteraction: false,
     },
     navigation: {
         nextEl: '.icon-swiper-next',
         prevEl: '.icon-swiper-prev',
     },
-    spaceBetween: 0,         // no space between slides
+    spaceBetween: 0,
     breakpoints: {
-        320: { slidesPerView: 1 },  // mobile
-        640: { slidesPerView: 2 },  // tablet
-        1024: { slidesPerView: 4 }, // desktop
+        320: { slidesPerView: 1 },
+        640: { slidesPerView: 2 },
+        1024: { slidesPerView: 4 },
     },
-    speed: 600,              // transition speed (optional, smooth)
+    speed: 600,
 });
-
 
 // -------------------category slider------------------
-// import Swiper from "swiper";
-// import { Navigation, Autoplay, Grid } from "swiper/modules";
-
 const categorySwiper = new Swiper(".categorySwiper", {
     modules: [Navigation, Autoplay],
-    slidesPerView: 4,        // 4 slides visible
-    slidesPerGroup: 1,       // move 1 slide at a time
-    loop: true,              // enable looping
-    loopFillGroupWithBlank: false, // don’t add blank slides
+    slidesPerView: 4,
+    slidesPerGroup: 1,
+    loop: true,
     autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
-   navigation: {
-        nextEl: '.cat-next',
-        prevEl: '.cat-prev',
-    },
-    spaceBetween: 0,         // no space between slides
-    breakpoints: {
-        200: { slidesPerView: 2 },
-        320: { slidesPerView: 3 },  // mobile
-        440: { slidesPerView: 4 },
-        640: { slidesPerView: 5 },  // tablet
-        840: { slidesPerView: 7 },
-        1024: { slidesPerView: 9 }, // desktop
-    },
-    speed: 600,              // transition speed (optional, smooth)
-});
-
-
-// -----------------------------------------
-
-const dealsSwiper = new Swiper('.dealsSwiper', {
-     modules: [Navigation, Autoplay],
-    slidesPerView: 4,        // 4 slides visible
-    slidesPerGroup: 2,       // move 1 slide at a time
-    loop: true,              // enable looping
-    loopFillGroupWithBlank: false, // don’t add blank slides
-    autoplay: {
-        delay: 3000,
+        delay: 4000,
         disableOnInteraction: false,
     },
     navigation: {
-        nextEl: '.deals-next',
-        prevEl: '.deals-prev',
+        nextEl: '.cat-next',
+        prevEl: '.cat-prev',
     },
-    spaceBetween: 8,         // no space between slides
+    spaceBetween: 0,
     breakpoints: {
-        320: { slidesPerView: 2 },  // mobile
-        640: { slidesPerView: 4 },  // tablet
-        1024: { slidesPerView: 6 }, // desktop
+        200: { slidesPerView: 2 },
+        320: { slidesPerView: 3 },
+        440: { slidesPerView: 4 },
+        640: { slidesPerView: 5 },
+        840: { slidesPerView: 7 },
+        1024: { slidesPerView: 9 },
     },
-    speed: 600,              // transition speed (optional, smooth)
+    speed: 600,
+});
+
+// -------------------universal product sliders--------------------
+document.querySelectorAll('.product-slider-container').forEach((container) => {
+    const swiperEl = container.querySelector('.swiper');
+    const prevEl = container.querySelector('.swiper-prev');
+    const nextEl = container.querySelector('.swiper-next');
+    
+    if (swiperEl) {
+        // Dynamic slides based on container width (e.g. sections with sidebars)
+        const desktopSlides = container.dataset.slidesDesktop ? parseInt(container.dataset.slidesDesktop) : 7;
+        const tabletSlides = container.dataset.slidesDesktop ? Math.max(2, Math.min(6, parseInt(container.dataset.slidesDesktop) - 1)) : 6;
+        const mobileSlides = container.dataset.slidesDesktop ? Math.max(1, Math.min(2, parseInt(container.dataset.slidesDesktop) - 1)) : 2;
+
+        new Swiper(swiperEl, {
+            modules: [Navigation, Autoplay],
+            slidesPerView: desktopSlides, // Fallback
+            slidesPerGroup: 1,
+            loop: false,
+            autoplay: false,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: nextEl,
+                prevEl: prevEl,
+            },
+            breakpoints: {
+                320: { slidesPerView: mobileSlides, spaceBetween: 10 },
+                640: { slidesPerView: Math.min(4, desktopSlides), spaceBetween: 12 },
+                1024: { slidesPerView: tabletSlides, spaceBetween: 16 },
+                1280: { slidesPerView: desktopSlides, spaceBetween: 20 },
+            },
+            speed: 500,
+            watchOverflow: true,
+        });
+    }
 });
 
 
 //  import '../css/home.css';
 
 
+
+// -------------------triple banner slider--------------------
+// -------------------triple banner slider--------------------
+const tripleSwiper = new Swiper('.tripleBannerSwiper', {
+    modules: [Navigation, Autoplay, Pagination],
+    grabCursor: true,
+    centeredSlides: true,
+    loop: true,
+    autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+    },
+    pagination: {
+        el: '.tripleBannerPagination',
+        clickable: true
+    },
+    navigation: {
+        nextEl: '.triple-next',
+        prevEl: '.triple-prev',
+    },
+    breakpoints: {
+        320: { slidesPerView: 1.2, spaceBetween: 10 },
+        640: { slidesPerView: 1.5, spaceBetween: 20 },
+        1024: { slidesPerView: 1.8, spaceBetween: 30 },
+        1280: { slidesPerView: 2.2, spaceBetween: 40 },
+    },
+    speed: 1000,
+});
 
 // ------------------- scroll to top ----------------------
 

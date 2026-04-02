@@ -2,6 +2,72 @@
 
     @push('styles')
         @vite(['resources/css/home.css'])
+        <style>
+            /* Slider Navigation Styling */
+            .product-slider-container .swiper-button-disabled {
+                opacity: 0 !important;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+            .swiper-prev, .swiper-next {
+                transition: all 0.3s ease;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            .swiper-prev:hover, .swiper-next:hover {
+                background: #22c55e !important;
+                transform: translateY(-50%) scale(1.1) !important;
+            }
+
+            /* Badge/Pulse Folding Animation */
+            .badge-folding {
+                animation: unfold 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                transform-origin: left;
+            }
+            @keyframes unfold {
+                0% { transform: scaleX(0); opacity: 0; }
+                100% { transform: scaleX(1); opacity: 1; }
+            }
+            
+            .glow-pulse {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+                animation: glow 2s infinite;
+            }
+            @keyframes glow {
+                0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+            }
+            /* Triple Banner Slider Styling */
+            .tripleBannerSwiper {
+                padding-top: 20px !important;
+                padding-bottom: 20px !important;
+            }
+            .tripleBannerPagination .swiper-pagination-bullet {
+                width: 10px;
+                height: 10px;
+                background: #22c55e;
+                opacity: 0.2;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                border-radius: 5px;
+            }
+            .tripleBannerPagination .swiper-pagination-bullet-active {
+                width: 35px;
+                opacity: 1;
+                background: #16a34a;
+            }
+            .tripleBannerSwiper .swiper-slide {
+                transition: all 0.6s ease;
+                opacity: 0.4;
+                transform: scale(0.85);
+            }
+            .tripleBannerSwiper .swiper-slide-active {
+                opacity: 1;
+                transform: scale(1);
+            }
+        </style>
     @endpush
 
     @push('scripts')
@@ -54,8 +120,8 @@
                     $count = $catProducts->count();
                 @endphp
 
-                {{-- Skip categories with 0 products --}}
-                @if($count === 0)
+                {{-- Skip categories with less than 4 products --}}
+                @if($count < 4)
                     @continue
                 @endif
 
@@ -106,11 +172,8 @@
 
             @endforeach
         </div>
-
     </section>
-
-
-        @endif
+@endif
 
 
 
@@ -235,7 +298,7 @@
 
 
         @if($megaDeals->isNotEmpty())
-            <section class=" overflow-hidden">
+            <section class="overflow-hidden">
                 {{-- HEADER --}}
                 <div class="flex items-center justify-between mb-3 mt-3 text-sm px-2">
                     <x-section-header 
@@ -248,28 +311,44 @@
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
-                <div class="relative group px-2">
-                    <div class="swiper dealsSwiper">
+                <div class="relative group px-2 product-slider-container">
+                    <div class="swiper">
                         <div class="swiper-wrapper">
                             @foreach ($megaDeals as $product)
-                                <div class="swiper-slide h-auto flex">
+                                <div class="swiper-slide h-auto flex pb-4">
                                     {{-- PRODUCT CARD START --}}
-                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full">
-                                        {{-- WISHLIST --}}
+                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
+                                        
+                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                                {{ $product->stock_quantity }} LEFT
+                                            </div>
+                                        @endif
+
+                                        {{-- 1. DISCOUNT BADGE --}}
+                                        @if($product->discount_price && $product->price > 0)
+                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                                {{ $discountPercent }}% OFF
+                                            </div>
+                                        @endif
+
+                                        {{-- WISHLIST (STAYS ON TOP) --}}
                                         @auth
-                                        <button class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
+                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
                                                 data-product-id="{{ $product->id }}">
-                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }}"></i>
+                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
                                         </button>
                                         @else
-                                        <a href="{{ route('login') }}" class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                            <i class="fa fa-heart text-gray-400"></i>
+                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
                                         </a>
                                         @endauth
 
                                         {{-- IMAGE --}}
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
+                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
                                                 <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
@@ -284,22 +363,33 @@
                                             <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                                 {{ $product->name }}
                                             </p>
+
+                                            {{-- 2. STAR RATINGS (Always visible now) --}}
+                                            @php 
+                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                            @endphp
+                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                            </div>
+
                                             @if($product->size)
-                                                <p class="text-xs text-gray-500 mt-1">{{ $product->size }}</p>
+                                                <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
                                             @endif
                                         </div>
 
                                         {{-- PRICE & ACTION --}}
                                         <div class="mt-3 flex items-center justify-between">
-                                            
                                             <div class="flex flex-col leading-tight">
                                                 @if ($product->discount_price && $product->discount_price > 0)
-                                                    {{-- Show Discounted Price as primary --}}
                                                     <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                    {{-- Show Original Price with strikethrough --}}
                                                     <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
                                                 @else
-                                                    {{-- No discount available: Show only the regular price --}}
                                                     <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
                                                 @endif
                                             </div>
@@ -320,18 +410,18 @@
                     </div>
                     
                     {{-- NAVIGATION --}}
-                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center  cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
-                        <i class="fa fa-chevron-left text-white"></i>
+                    <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-left"></i>
                     </div>
-                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-1 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
-                        <i class="fa fa-chevron-right text-white"></i>
+                    <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-right"></i>
                     </div>
                 </div>
             </section> 
         @endif
 
-       @if($newProducts->isNotEmpty())
-            <section class=" overflow-hidden">
+        @if($newProducts->isNotEmpty())
+            <section class="overflow-hidden">
                 {{-- HEADER --}}
                 <div class="flex items-center justify-between mb-3 mt-3 text-sm px-2">
                     <x-section-header 
@@ -344,97 +434,109 @@
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
-                <div class="relative group px-2">
-                    <div class="swiper dealsSwiper">
+                <div class="relative group px-2 product-slider-container">
+                    <div class="swiper">
                         <div class="swiper-wrapper">
                             @foreach ($newProducts as $product)
-                                <div class="swiper-slide h-auto flex">
-                                    {{-- PRODUCT CARD START --}}
-                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full">
+                                <div class="swiper-slide h-auto flex pb-4">
+                                     {{-- PRODUCT CARD START --}}
+                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
                                         
-                                        {{-- WISHLIST ICON --}}
+                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                                {{ $product->stock_quantity }} LEFT
+                                            </div>
+                                        @endif
+
+                                        {{-- 1. DISCOUNT BADGE --}}
+                                        @if($product->discount_price && $product->price > 0)
+                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                                {{ $discountPercent }}% OFF
+                                            </div>
+                                        @endif
+
+                                        {{-- WISHLIST (STAYS ON TOP) --}}
                                         @auth
-                                        <button
-                                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                            data-product-id="{{ $product->id }}"
-                                        >
-                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }}"></i>
+                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
+                                                data-product-id="{{ $product->id }}">
+                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
                                         </button>
                                         @else
-                                        <a href="{{ route('login') }}" class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                            <i class="fa fa-heart text-gray-400"></i>
+                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
                                         </a>
                                         @endauth
 
                                         {{-- IMAGE --}}
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
+                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/1/image3.png') }}" 
-                                                    class="w-full h-full object-contain"
-                                                    alt="{{ $product->name }}" >
+                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                    class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                             </div>
                                         </a>
 
-                                        {{-- PRODUCT TITLE & INFO --}}
+                                        {{-- INFO --}}
                                         <div class="mt-3 flex-1">
-                                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
-                                                <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                                                </svg>
-                                                8 MINS
+                                            <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
+                                                <i class="fa-solid fa-clock"></i> 8 MINS
                                             </span>
-
                                             <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                                 {{ $product->name }}
                                             </p>
 
+                                            {{-- STAR RATINGS --}}
+                                            @php 
+                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                            @endphp
+                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                            </div>
+
                                             @if($product->size)
-                                                <p class="text-xs text-gray-500 mt-1">{{ $product->size }}</p>
+                                                <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
                                             @endif
                                         </div>
 
-                                        {{-- PRICE & ADD BUTTON --}}
+                                        {{-- PRICE & ACTION --}}
                                         <div class="mt-3 flex items-center justify-between">
-                                           <div class="flex flex-col leading-tight">
+                                            <div class="flex flex-col leading-tight">
                                                 @if ($product->discount_price && $product->discount_price > 0)
-                                                    {{-- Show Discounted Price as primary --}}
                                                     <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                    {{-- Show Original Price with strikethrough --}}
                                                     <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
                                                 @else
-                                                    {{-- No discount available: Show only the regular price --}}
                                                     <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
                                                 @endif
                                             </div>
-
                                             @auth
-                                                <button
-                                                    class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold
-                                                    {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                    data-product-id="{{ $product->id }}"
-                                                >
+                                                <button class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                                        data-product-id="{{ $product->id }}">
                                                     {{ $product->cartItem ? 'ADDED' : 'ADD' }}
                                                 </button>
                                             @else
-                                                <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">
-                                                    ADD
-                                                </a>
+                                                <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">ADD</a>
                                             @endauth
                                         </div>
                                     </div>
-                                    {{-- PRODUCT CARD END --}}
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     
-                    {{-- NAVIGATION ARROWS (Hidden on mobile, visible on desktop hover) --}}
-                    <div class="deals-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
-                        <i class="fa fa-chevron-left text-white"></i>
+                    {{-- NAVIGATION --}}
+                    <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-left"></i>
                     </div>
-                    <div class="deals-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[rgba(89,217,25,0.58)] rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-2 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100">
-                        <i class="fa fa-chevron-right text-white"></i>
+                    <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-right"></i>
                     </div>
                 </div>
             </section>
@@ -442,23 +544,67 @@
 
 
             <!-- ---------------------------------------------------------------------- -->
-             {{-- ================= DYNAMIC TRIPLE BANNERS ================= --}}
+            {{-- ================= PREMIUM DYNAMIC TRIPLE BANNERS ================= --}}
             @if(isset($adsplacements['home_triple_banner']) && $adsplacements['home_triple_banner']->ads->isNotEmpty())
-                <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    @foreach($adsplacements['home_triple_banner']->ads->take(3) as $ad)
-                        <div class="banner relative overflow-hidden rounded-xl group" style="height:200px;">
-                            <a href="{{ route('offers.click', $ad->id) }}" class="block w-full h-full">
-                                {{-- asset('storage/' . $ad->banner_image) --}}
-                                <img 
-                                    src="{{$ad->banner_image}}" 
-                                    class="w-full h-full object-cover banner-img transition-transform duration-500 group-hover:scale-105" 
-                                    alt="{{ $ad->title }}"
-                                />
-                                {{-- Optional: Show Title if needed --}}
-                                <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
-                            </a>
+                <section class="py-12 overflow-hidden tripleBannerSlider bg-gray-50/50">
+                    <div class="max-w-7xl mx-auto px-4">
+                        <div class="relative group">
+                            <div class="swiper tripleBannerSwiper !overflow-visible">
+                                <div class="swiper-wrapper">
+                                    @foreach($adsplacements['home_triple_banner']->ads as $ad)
+                                        <div class="swiper-slide">
+                                            <div class="banner w-full relative overflow-hidden rounded-[2rem] shadow-2xl border-4 border-white group/slide" 
+                                                 style="height: 250px; md:height: 350px;">
+                                                
+                                                <a href="{{ route('offers.click', $ad->id) }}" class="block w-full h-full relative">
+                                                    {{-- Gradient Overlay --}}
+                                                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent z-10 transition-opacity group-hover/slide:opacity-60 duration-500"></div>
+                                                    
+                                                    {{-- Main Image --}}
+                                                    <img src="{{$ad->banner_image}}" 
+                                                         class="w-full h-full object-cover transition-transform duration-1000 group-hover/slide:scale-110" 
+                                                         alt="{{ $ad->title }}">
+
+                                                    {{-- Text Content --}}
+                                                    <div class="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-12">
+                                                        <div class="max-w-md transform transition-all duration-700 group-hover/slide:translate-x-4">
+                                                            @if($ad->subtitle)
+                                                            <span class="text-green-400 text-xs md:text-sm font-black uppercase tracking-[0.2em] mb-3 block animate-pulse">
+                                                                {{ $ad->subtitle }}
+                                                            </span>
+                                                            @endif
+                                                            
+                                                            <h4 class="text-2xl md:text-5xl font-black text-white italic uppercase leading-[0.85] tracking-tighter drop-shadow-2xl">
+                                                                {{ $ad->title }}
+                                                            </h4>
+                                                            
+                                                            <div class="h-1.5 w-16 bg-green-500 rounded-full mt-6 mb-4 group-hover/slide:w-32 transition-all duration-700"></div>
+                                                            
+                                                            <div  class="inline-flex items-center gap-3 bg-white text-black px-5 md:px-8 py-3 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all transform hover:scale-110 shadow-xl w-fit">
+                                                                Grab Now
+                                                                <i class="fa fa-arrow-right text-[10px]"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            {{-- Navigation Controls --}}
+                            <div class="triple-prev absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white border border-gray-100 rounded-full flex items-center justify-center shadow-2xl cursor-pointer hover:bg-green-600 hover:text-white transition-all transform hover:scale-110 active:scale-90 opacity-0 group-hover:opacity-100 hidden md:flex">
+                                <i class="fa fa-chevron-left"></i>
+                            </div>
+                            <div class="triple-next absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white border border-gray-100 rounded-full flex items-center justify-center shadow-2xl cursor-pointer hover:bg-green-600 hover:text-white transition-all transform hover:scale-110 active:scale-90 opacity-0 group-hover:opacity-100 hidden md:flex">
+                                <i class="fa fa-chevron-right"></i>
+                            </div>
+
+                            {{-- Pagination --}}
+                            <div class="tripleBannerPagination flex justify-center gap-2 mt-8"></div>
                         </div>
-                    @endforeach
+                    </div>
                 </section>
             @endif
 
@@ -518,11 +664,8 @@
 
 
         @if($trendingProducts->isNotEmpty())
-            <section style="background: white;">
-                <!-- <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Featured products</h2>
-                </div> -->
-                <div class="flex items-center justify-between mb-3 text-sm">
+            <section style="background: white;" class="overflow-hidden">
+                <div class="flex items-center justify-between mb-3 text-sm px-2">
                         <x-section-header 
                             title="Trending Now" 
                             badgeText="Hot Picks" 
@@ -532,108 +675,116 @@
                         <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                     </div>
           
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    @foreach ($trendingProducts->take(6) as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
-                            
+                <div class="relative group px-2 product-slider-container">
+                    <div class="swiper">
+                        <div class="swiper-wrapper">
+                            @foreach ($trendingProducts as $product)
+                                <div class="swiper-slide h-auto flex pb-4">
+                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
+                                        
+                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                                {{ $product->stock_quantity }} LEFT
+                                            </div>
+                                        @endif
 
-                           {{-- WISHLIST ICON (TOP RIGHT) --}}
+                                        {{-- 1. DISCOUNT BADGE --}}
+                                        @if($product->discount_price && $product->price > 0)
+                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                                {{ $discountPercent }}% OFF
+                                            </div>
+                                        @endif
 
-                            @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                            @endauth
+                                        {{-- WISHLIST (STAYS ON TOP) --}}
+                                        @auth
+                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
+                                                data-product-id="{{ $product->id }}">
+                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
+                                        </button>
+                                        @else
+                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
+                                        </a>
+                                        @endauth
 
+                                        {{-- IMAGE --}}
+                                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
+                                                @php $img = $product->images->first(); @endphp
+                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                    class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
+                                            </div>
+                                        </a>
 
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php 
-                                        $img = $product->images->first(); 
-                                    @endphp
+                                        {{-- INFO --}}
+                                        <div class="mt-3 flex-1">
+                                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                                <i class="fa-solid fa-clock"></i> 8 MINS
+                                            </span>
+                                            <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1 mt-2">
+                                                {{ $product->name }}
+                                            </p>
 
-                                   
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
-                                        class="w-full h-full object-contain"
-                                        alt="{{ $product->name }}" >
-                                   
+                                            {{-- STAR RATINGS --}}
+                                            @php 
+                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                            @endphp
+                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                            </div>
+
+                                            @if($product->size)
+                                                <p class="text-sm text-gray-500 mt-0.5">{{ $product->size }}</p>
+                                            @endif
+                                        </div>
+
+                                        {{-- PRICE & ACTION --}}
+                                        <div class="mt-2 flex items-center justify-between">
+                                            <div class="flex flex-col leading-tight">
+                                                @if ($product->discount_price && $product->discount_price > 0)
+                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                                                    <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
+                                                @else
+                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
+                                                @endif
+                                            </div>
+                                            @auth
+                                                 <button class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                                    data-product-id="{{ $product->id }}">
+                                                    {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                                </button>
+                                            @else
+                                                <a href="{{ route('login') }}" class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">ADD</a>
+                                            @endauth
+                                        </div>
+                                    </div>
                                 </div>
-                            </a>
-
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                            </svg>
-                            8 MINS
-                            </span>
-
-                            <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-2 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
-                                <div class="flex flex-col leading-tight">
-                                    @if ($product->discount_price && $product->discount_price > 0)
-                                        {{-- Show Discounted Price as primary --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                        {{-- Show Original Price with strikethrough --}}
-                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                    @else
-                                        {{-- No discount available: Show only the regular price --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                               @auth
-                                     <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                    >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                    </button>
-                                @else
-                                    <a href="{{ route('login') }}"
-                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                        ADD
-                                    </a>
-                                @endauth
-                            </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
+                    
+                    {{-- NAVIGATION --}}
+                    <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-left"></i>
+                    </div>
+                    <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-right"></i>
+                    </div>
                 </div>
-                </section> 
-
-            @endif
+            </section> 
+        @endif
 
             @if($featuredProducts->isNotEmpty())
-                <section>
-                    <div class="flex items-center justify-between mb-3 mt-3 text-sm">
+                <section class="overflow-hidden">
+                    <div class="flex items-center justify-between mb-3 mt-3 text-sm px-2">
                        <x-section-header 
                             title="Featured" 
                             badgeText="Handpicked" 
@@ -642,103 +793,113 @@
                         />
                         <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xl text-green-600 hover:underline">View all</a>
                     </div>
-                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    @foreach ($featuredProducts->take(6) as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
-                            
+                    
+                    <div class="relative group px-2 product-slider-container">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                @foreach ($featuredProducts as $product)
+                                    <div class="swiper-slide h-auto flex pb-4">
+                                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
+                                            
+                                            {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                                    {{ $product->stock_quantity }} LEFT
+                                                </div>
+                                            @endif
 
-                            {{-- WISHLIST ICON (TOP RIGHT) --}}
+                                            {{-- 1. DISCOUNT BADGE --}}
+                                            @if($product->discount_price && $product->price > 0)
+                                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                                    {{ $discountPercent }}% OFF
+                                                </div>
+                                            @endif
 
-                            @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                            @endauth
+                                            {{-- WISHLIST (STAYS ON TOP) --}}
+                                            @auth
+                                            <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
+                                                    data-product-id="{{ $product->id }}">
+                                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
+                                            </button>
+                                            @else
+                                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
+                                            </a>
+                                            @endauth
 
+                                            {{-- IMAGE --}}
+                                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
+                                                    @php $img = $product->images->first(); @endphp
+                                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                        class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
+                                                </div>
+                                            </a>
 
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php 
-                                        $img = $product->images->first(); 
-                                    @endphp
+                                            {{-- INFO --}}
+                                            <div class="mt-3 flex-1">
+                                                <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                                    <i class="fa-solid fa-clock"></i> 8 MINS
+                                                </span>
+                                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1 mt-2">
+                                                    {{ $product->name }}
+                                                </p>
 
-                                   
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
-                                        class="w-full h-full object-contain"
-                                        alt="{{ $product->name }}" >
-                                   
-                                </div>
-                            </a>
+                                                {{-- STAR RATINGS --}}
+                                                @php 
+                                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                                @endphp
+                                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                                        @endfor
+                                                    </div>
+                                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                                </div>
 
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                            </svg>
-                            8 MINS
-                            </span>
+                                                @if($product->size)
+                                                    <p class="text-sm text-gray-500 mt-0.5">{{ $product->size }}</p>
+                                                @endif
+                                            </div>
 
-                            <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-2 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
-                               <div class="flex flex-col leading-tight">
-                                    @if ($product->discount_price && $product->discount_price > 0)
-                                        {{-- Show Discounted Price as primary --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                        {{-- Show Original Price with strikethrough --}}
-                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                    @else
-                                        {{-- No discount available: Show only the regular price --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                                @auth
-                                     <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                    >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                    </button>
-                                @else
-                                    <a href="{{ route('login') }}"
-                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                        ADD
-                                    </a>
-                                @endauth
+                                            {{-- PRICE & ACTION --}}
+                                            <div class="mt-2 flex items-center justify-between">
+                                                <div class="flex flex-col leading-tight">
+                                                    @if ($product->discount_price && $product->discount_price > 0)
+                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
+                                                    @else
+                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
+                                                    @endif
+                                                </div>
+                                                @auth
+                                                     <button class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                                        data-product-id="{{ $product->id }}">
+                                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                                    </button>
+                                                @else
+                                                    <a href="{{ route('login') }}" class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">ADD</a>
+                                                @endauth
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                    @endforeach
-                </div>
-            </section>
-        @endif
+                        
+                        {{-- NAVIGATION --}}
+                        <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                            <i class="fa fa-chevron-left"></i>
+                        </div>
+                        <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </section>
+            @endif
 
 
                 </div>
@@ -798,178 +959,227 @@
 </aside>
 
                     {{-- RIGHT PRODUCTS STRIP --}}
-                    <div class="lg:col-span-3 bg-gray-50   ">
-   
+                <div class="lg:col-span-3 bg-gray-50">
+                    {{-- UNIVERSAL SLIDER --}}
+                    <div class="relative group px-2 product-slider-container" data-slides-desktop="5">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                @foreach ($budgetStore as $product)
+                                    <div class="swiper-slide h-auto flex pb-4">
+                                        {{-- PRODUCT CARD START --}}
+                                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
+                                            
+                                            {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                                    {{ $product->stock_quantity }} LEFT
+                                                </div>
+                                            @endif
 
-                        {{-- === SWIPER WRAPPER === --}}
-                          
+                                            {{-- 1. DISCOUNT BADGE --}}
+                                            @if($product->discount_price && $product->price > 0)
+                                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                                    {{ $discountPercent }}% OFF
+                                                </div>
+                                            @endif
 
-                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @foreach ($budgetStore->take(4) as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
-                            
+                                            {{-- WISHLIST (STAYS ON TOP) --}}
+                                            @auth
+                                            <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
+                                                    data-product-id="{{ $product->id }}">
+                                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
+                                            </button>
+                                            @else
+                                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
+                                            </a>
+                                            @endauth
 
-                            {{-- WISHLIST ICON (TOP RIGHT) --}}
+                                            {{-- IMAGE --}}
+                                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
+                                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
+                                                    @php $img = $product->images->first(); @endphp
+                                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                        class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
+                                                </div>
+                                            </a>
 
-                            @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                            @endauth
+                                            {{-- INFO --}}
+                                            <div class="mt-3 flex-1">
+                                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
+                                                    <i class="fa-solid fa-clock"></i> 8 MINS
+                                                </span>
+                                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
+                                                    {{ $product->name }}
+                                                </p>
 
+                                                {{-- STAR RATINGS --}}
+                                                @php 
+                                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                                @endphp
+                                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                                        @endfor
+                                                    </div>
+                                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                                </div>
 
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36  rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php 
-                                        $img = $product->images->first(); 
-                                    @endphp
+                                                @if($product->size)
+                                                    <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
+                                                @endif
+                                            </div>
 
-                                  
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
-                                        class="w-full h-full object-contain"
-                                        alt="{{ $product->name }}" >
-                                    
-                                </div>
-                            </a>
-
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                            <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                            </svg>
-                            8 MINS
-                            </span>
-
-                            <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-2 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
-                                <div class="flex flex-col leading-tight">
-                                    @if ($product->discount_price && $product->discount_price > 0)
-                                        {{-- Show Discounted Price as primary --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                        {{-- Show Original Price with strikethrough --}}
-                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                    @else
-                                        {{-- No discount available: Show only the regular price --}}
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                                @auth
-                                     <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                    >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                    </button>
-                                @else
-                                    <a href="{{ route('login') }}"
-                                    class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
-                                        ADD
-                                    </a>
-                                @endauth
+                                            {{-- PRICE & ACTION --}}
+                                            <div class="mt-3 flex items-center justify-between">
+                                                <div class="flex flex-col leading-tight">
+                                                    @if ($product->discount_price && $product->discount_price > 0)
+                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
+                                                    @else
+                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
+                                                    @endif
+                                                </div>
+                                                @auth
+                                                    <button class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
+                                                            data-product-id="{{ $product->id }}">
+                                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
+                                                    </button>
+                                                @else
+                                                    <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">ADD</a>
+                                                @endauth
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                    @endforeach
+                        
+                        {{-- NAVIGATION --}}
+                        <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                            <i class="fa fa-chevron-left"></i>
+                        </div>
+                        <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                    </div>
                 </div>
 
                     </div>
-                </div>
                 </div>
             </section>
        @endif
 
        @if($categories->isNotEmpty())
-            {{-- ================= BEST SELLER ================= --}}
-
-            <section class="bg-white  shadow-sm">
-                <div class="">
-
+            {{-- ================= BEST SELLERS (SLIDER) ================= --}}
+            <section class="bg-white py-6 overflow-hidden">
+                <div class="px-2">
                     <!-- SECTION HEADING -->
-                    <div class="flex items-center justify-between mb-3 text-sm">
-                           
+                    <div class="flex items-center justify-between mb-4">
                         <x-section-header 
                             title="Best Sellers" 
                             badgeText="Best Selections" 
                             icon="bolt" 
                             :pulse="true"
                         />
-                            <a href="{{ route('shop.index') }}" class="text-xl text-green-600 hover:underline">View all</a>
+                        <a href="{{ route('categories.index') }}" class="text-xs font-bold text-green-600 hover:underline uppercase tracking-wider flex items-center gap-1">
+                            Explore All <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+
+                    <!-- SLIDER CONTAINER -->
+                    <div class="relative group product-slider-container" data-slides-desktop="2" data-slides-tablet="2">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                @foreach ($categories as $category)
+                                    @php
+                                        // Take up to 4 products for the specific criss-cross bento grid in the image
+                                        $displayProducts = $category->products->take(4);
+                                        $pCount = $displayProducts->count();
+                                    @endphp
+
+                                    @if($pCount >= 3)
+                                        <div class="swiper-slide h-auto pb-2">
+                                            <div class="bg-gray-50/80 rounded-2xl p-3 border border-gray-100 hover:border-green-200 transition-all hover:shadow-xl group/card h-full flex flex-col mx-1">
+                                                
+                                                <!-- HEADER -->
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex flex-col">
+                                                        <h3 class="text-sm font-extrabold text-gray-900 group-hover/card:text-green-700 transition-colors line-clamp-1">
+                                                            {{ $category->name }}
+                                                        </h3>
+                                                        <span class="text-[10px] font-medium text-gray-500 uppercase tracking-tight">{{ $category->products->count() }} items</span>
+                                                    </div>
+                                                    <span class="text-[10px] font-black text-white bg-green-600 px-2 py-1 rounded shadow-sm">
+                                                        BEST
+                                                    </span>
+                                                </div>
+
+                                                <!-- CRISS-CROSS BENTO GRID (WITH WHITE DIVIDER LINES) -->
+                                                <div class="flex gap-[2px] bg-white rounded-xl overflow-hidden border-2 border-white shadow-sm h-72">
+                                                    {{-- LEFT COLUMN --}}
+                                                    <div class="flex flex-col gap-[2px] w-1/2 h-full">
+                                                        {{-- Small Top --}}
+                                                        <a href="{{ route('shop.show', $displayProducts[0]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
+                                                            <img src="{{ asset('public/storage/' . $displayProducts[0]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                        </a>
+                                                        {{-- Large Bottom --}}
+                                                        @if($pCount > 1)
+                                                        <a href="{{ route('shop.show', $displayProducts[1]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
+                                                            <img src="{{ asset('public/storage/' . $displayProducts[1]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                        </a>
+                                                        @endif
+                                                    </div>
+
+                                                    {{-- RIGHT COLUMN --}}
+                                                    <div class="flex flex-col gap-[2px] w-1/2 h-full">
+                                                        {{-- Large Top --}}
+                                                        @if($pCount > 2)
+                                                        <a href="{{ route('shop.show', $displayProducts[2]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
+                                                            <img src="{{ asset('public/storage/' . $displayProducts[2]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                        </a>
+                                                        @endif
+                                                        {{-- Small Bottom --}}
+                                                        @if($pCount > 3)
+                                                        <a href="{{ route('shop.show', $displayProducts[3]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
+                                                            <img src="{{ asset('public/storage/' . $displayProducts[3]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                        </a>
+                                                        @else
+                                                            {{-- Placeholder --}}
+                                                            <div class="h-[40%] bg-gray-50/40 flex items-center justify-center">
+                                                                <i class="fa-solid fa-plus text-gray-200"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <!-- FOOTER ACTIONS -->
+                                                <div class="mt-3 flex items-center justify-between pt-2 border-t border-gray-100">
+                                                     <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="inline-flex items-center gap-1.5 text-[11px] font-black text-green-600 hover:text-green-800 transition-colors group/btn">
+                                                        EXPLORE NOW
+                                                        <i class="fa-solid fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
                         </div>
 
-
-                    <!-- GRID -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-
-                        <!-- PRODUCT CARD -->
-                        @foreach ($categories->take(6) as $category)
-                            <div class="bg-gray-100  w-auto p-2">
-
-                                <!-- INNER IMAGE GRID -->
-                                <div class="grid grid-cols-2 grid-rows-2 gap-2">
-                                    @foreach ($category->products->take(4) as $product)
-                                    <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                    
-                                    <div class="bg-white flex items-center justify-center h-20 overflow-hidden rounded">
-                                    <img 
-                                    src="{{ asset('public/storage/' . $product->images->first()->path) }}"
-                                    class="w-full h-full object-contain p-1"
-                                    alt=""
-                                    >
-                                    
-                                    </div>
-                                    
-                                    </a>
-                                    @endforeach
-                                    </div>
-
-                                <!-- + MORE (WHITE PILL) -->
-                                <div class="flex justify-center mt-2">
-                                    <span class="bg-white text-xs text-gray-600 px-3 py-0.5 rounded-full shadow-sm">
-                                        +{{ max(0, $category->products->count() - 4) }} more
-                                    </span>
-                                </div>
-
-                                <!-- CATEGORY NAME -->
-                                <p class="text-sm font-semibold text-gray-900 text-center mb-3 leading-tight mt-1">
-                                    {{ $category->name }}
-                                </p>
-
-                            </div>
-                            @endforeach
-
-                        <!-- Add more cards as needed -->
-
+                        <!-- CUSTOM NAVIGATION -->
+                        <div class="swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-md rounded-full w-12 h-12 items-center justify-center shadow-lg border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all hidden md:flex">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </div>
+                        <div class="swiper-next absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-md rounded-full w-12 h-12 items-center justify-center shadow-lg border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all hidden md:flex">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
                     </div>
                 </div>
-           </section>
+            </section>
         @endif
 
        

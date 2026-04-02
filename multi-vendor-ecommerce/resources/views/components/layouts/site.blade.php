@@ -221,9 +221,8 @@
 
                 /* Vertical separator line */
                 #searchBarBox .bi-mic-fill {
-                    border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
-                    padding-left: 15px !important;
-                    margin-left: 10px !important;
+                    padding-left: 5px !important;
+                    margin-left: 5px !important;
                 }
                 
                 #searchBarBox .bi-image-fill {
@@ -692,10 +691,57 @@
 }
 
 /* ===============floting cart=========== */
-#floating-cart {
-    max-width: calc(100% - 24px);
-    /* backdrop-filter: blur(2px); */
-    background-color: rgb(66 180 29 / 78%);
+
+/* Rock-Solid Header Transitions */
+.category-bar {
+    transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.4s ease;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.category-bar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.category-bar a {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.category-bar i {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.25s linear;
+    transform-origin: center;
+    opacity: 1;
+}
+
+.category-bar.scrolled {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+.category-bar.scrolled a {
+    flex-direction: row !important;
+    padding: 2px 8px !important;
+    gap: 4px;
+}
+
+.category-bar.scrolled i {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    margin: 0;
+    transform: translateY(10px) scale(0);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.category-bar.scrolled span {
+    font-size: 13px;
+    padding: 0 4px;
+    font-weight: 600;
 }
 
 
@@ -729,37 +775,39 @@
                         @unless($isSearchPage)
                             onclick="window.location='{{ route('search.index') }}'"
                         @endunless
-                         class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-1 shadow-sm cursor-pointer">
+                         class="relative w-full max-w-3xl mx-auto flex items-center bg-gray-100 rounded-full px-4 py-2 shadow-sm cursor-pointer group">
 
                             <!-- Search Icon -->
-                            <i class="bi bi-search text-gray-500 text-lg mr-3"></i>
+                            <i class="bi bi-search text-gray-500 text-lg mr-3 group-hover:text-green-600 transition-colors"></i>
 
-                            <!-- Animated placeholder -->
-                            <div class="relative w-full overflow-hidden h-6 pointer-events-none" id="placeholderContainer">
-                                <div id="placeholderWrapper" class="relative transition-transform duration-700 ease-out">
-                                    <!-- Spans will be added by JS -->
+                            <div class="relative flex-1 h-8 flex items-center min-w-0">
+                                <!-- Animated placeholder -->
+                                <div class="absolute inset-0 flex items-center overflow-hidden h-full pointer-events-none z-0" id="placeholderContainer">
+                                    <div id="placeholderWrapper" class="relative transition-transform duration-700 ease-out whitespace-nowrap">
+                                        <!-- Spans added by JS -->
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Search input (clickable but readonly on home page) -->
-                             {{--  placeholder="{{ $isSearchPage ? 'Search for fruits, snacks, milk…' : '' }}"  --}}
-                            <input 
-                                id="mainSearchInput"
-                                type="text"
-                                class="bg-transparent focus:outline-none text-gray-700 w-full
-                                {{ $isSearchPage ? '' : 'pointer-events-none' }}"
-                                {{ $isSearchPage ? '' : 'readonly' }}
-                                {{ $isSearchPage ? 'autofocus' : '' }}
-                            >
-                            <!-- Voice Search -->
-                            <button class="ml-3 text-blue-400 hover:text-blue-500" title="Voice Search">
-                                <i class="bi bi-mic-fill text-xl"></i>
-                            </button>
-                            
 
-                            <!-- Image Search -->
-                            <button class="ml-3 text-green-400 hover:text-green-500" title="Image Search">
-                                <i class="bi bi-image-fill text-xl"></i>
-                            </button>
+                                <!-- ACTUAL INPUT -->
+                                <input 
+                                    id="mainSearchInput"
+                                    type="text"
+                                    class="relative bg-transparent focus:outline-none text-gray-800 w-full h-full z-10 font-medium
+                                    {{ $isSearchPage ? '' : 'pointer-events-none' }}"
+                                    {{ $isSearchPage ? '' : 'readonly' }}
+                                    {{ $isSearchPage ? 'autofocus' : '' }}
+                                    autocomplete="off"
+                                >
+                            </div>
+
+                            <div class="flex items-center gap-3 ml-2 border-l border-gray-200 pl-4 z-10">
+                                <button class="text-gray-400 hover:text-green-600 transition-colors" title="Voice Search">
+                                    <i class="bi bi-mic-fill text-xl"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-green-600 transition-colors" title="Image Search">
+                                    <i class="bi bi-image-fill text-xl"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
             </div>
@@ -1404,81 +1452,104 @@ class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
             //     alert("Opening Cart...");
             // });
 
+            // PRE-FETCH DYNAMIC CATEGORIES FOR PLACEHOLDERS
+            @php
+                $placeholderCategories = \App\Models\Category::whereNotNull('name')->take(8)->pluck('name')->toArray();
+                if(empty($placeholderCategories)) {
+                    $placeholderCategories = ['bread', 'chips', 'milk', 'sugar', 'coffee', 'butter'];
+                }
+            @endphp
+            
+            const items = {!! json_encode(array_map(function($v){ return 'Search "' . $v . '"'; }, $placeholderCategories)) !!};
+            
+            let currentIndex = 0;
+            const wrapper = document.getElementById("placeholderWrapper");
+            const container = document.getElementById("placeholderContainer");
+            const searchInput = document.getElementById("mainSearchInput");
+            const searchBarBox = document.getElementById("searchBarBox");
+
+            // Dynamically add placeholders
+            if (container) {
+                // FORCE visibility and layering
+                container.innerHTML = `<div id="activeItem" class="flex items-center w-full h-full font-bold tracking-tight transform-gpu" style="color: rgba(255, 255, 255, 0.95); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 1; transform: translateY(0); pointer-events: none; z-index: 50;"></div>`;
+                const activeItem = document.getElementById("activeItem");
+                
+                let currentItemIndex = 0;
+
+                function updateTicker() {
+                    // Check if input has content - if so, we hide the whole container, not just stop the ticker
+                    if (searchInput && searchInput.value && searchInput.value.trim().length > 0) return;
+                    if (!activeItem || !items || items.length === 0) return;
+
+                    // EXIT CURRENT
+                    activeItem.style.opacity = "0";
+                    activeItem.style.transform = "translateY(-15px)";
+
+                    setTimeout(() => {
+                        // UPDATE TEXT
+                        currentItemIndex = (currentItemIndex + 1) % items.length;
+                        activeItem.textContent = items[currentItemIndex];
+                        
+                        // SNAP TO BOTTOM (No transition)
+                        activeItem.style.transition = "none";
+                        activeItem.style.transform = "translateY(15px)";
+                        
+                        // Force reflow
+                        activeItem.offsetHeight; 
+                        
+                        setTimeout(() => {
+                            // ENTER
+                            activeItem.style.transition = "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)";
+                            activeItem.style.opacity = "1";
+                            activeItem.style.transform = "translateY(0)";
+                        }, 50);
+
+                    }, 800);
+                }
+
+                // INITIAL DRAW
+                if (activeItem && items && items.length > 0) {
+                    activeItem.textContent = items[0];
+                    activeItem.style.opacity = "1";
+                    activeItem.style.transform = "translateY(0)";
+                }
+
+                let animInterval = setInterval(updateTicker, 3500);
+
+                function togglePlaceholder() {
+                    if (!container) return;
+                    if (searchInput.value.length > 0) {
+                        container.style.opacity = "0";
+                        container.style.visibility = "hidden";
+                    } else {
+                        container.style.opacity = "1";
+                        container.style.visibility = "visible";
+                    }
+                }
+
+                if (searchInput) {
+                    searchInput.addEventListener("input", togglePlaceholder);
+                    searchInput.addEventListener("focus", () => {
+                        searchBarBox.style.border = "1px solid rgba(255, 255, 255, 0.6)";
+                        searchBarBox.style.boxShadow = "0 0 0 4px rgba(255, 255, 255, 0.1)";
+                        togglePlaceholder();
+                    });
+                    searchInput.addEventListener("blur", () => {
+                        searchBarBox.style.border = "1px solid rgba(255, 255, 255, 0.4)";
+                        searchBarBox.style.boxShadow = "none";
+                        togglePlaceholder();
+                    });
+                    searchBarBox?.addEventListener("click", () => searchInput.focus());
+                }
+            }
+
+            document.getElementById("mainlocationHeader")?.addEventListener("click", function() {
+                var modal = new bootstrap.Modal(document.getElementById("locationModal"));
+                modal.show();
+            });
+
         });
-
-
-        const items = [
-    'Search "bread"',
-    'Search "chips"',
-    'Search "hukkas"',
-    'Search "milk"',
-    'Search "sugar"',
-    'Search "coffee"',
-    'Search "butter"',
-];
-
-let currentIndex = 0;
-
-const wrapper = document.getElementById("placeholderWrapper");
-const container = document.getElementById("placeholderContainer");
-
-// Dynamically add placeholders as <span>
-wrapper.innerHTML = items.map(text => `<span class="block text-gray-400">${text}</span>`).join("");
-
-// Measure actual row height dynamically
-let rowHeight = wrapper.children[0].offsetHeight;
-
-wrapper.style.transform = "translateY(0)";
-wrapper.style.transition = "transform 0.7s ease-out";
-
-let animInterval;
-
-function startTicker() {
-    animInterval = setInterval(() => {
-        currentIndex++;
-
-        wrapper.style.transform = `translateY(-${currentIndex * rowHeight}px)`;
-
-        // Reset to start when finished
-        if (currentIndex >= items.length - 1) {
-            setTimeout(() => {
-                wrapper.style.transition = "none";
-                wrapper.style.transform = "translateY(0)";
-                currentIndex = 0;
-
-                setTimeout(() => {
-                    wrapper.style.transition = "transform 0.7s ease-out";
-                }, 20);
-
-            }, 800);
-        }
-
-    }, 2500);
-}
-
-function stopTicker() {
-    clearInterval(animInterval);
-}
-
-startTicker();
-
-// On click → open search page
-document.getElementById("searchBarBox").addEventListener("click", () => {
-    stopTicker();
-    // window.location.href = "/search";
-});
-
-
-
-
-document.getElementById("mainlocationHeader").addEventListener("click", function() {
-    var modal = new bootstrap.Modal(document.getElementById("locationModal"));
-    modal.show();
-    console.log('model opened');
-});
-
-
-        </script>
+    </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1487,10 +1558,56 @@ document.getElementById("mainlocationHeader").addEventListener("click", function
         <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
         <script>
+            // FINAL High-Stability Header Scroll Logic (State Machine)
+            (function() {
+                let lastStateScrollY = window.scrollY;
+                let isScrolledState = false;
+                const categoryBar = document.querySelector('.category-bar');
+                if (!categoryBar) return;
+
+                // THRESHOLDS (in pixels)
+                const HIDE_THRESHOLD = 40; // Cumulative Down-scroll to hide
+                const SHOW_THRESHOLD = 60; // Cumulative Up-scroll to show
+
+                window.addEventListener('scroll', function() {
+                    const currentY = window.scrollY;
+                    const diff = currentY - lastStateScrollY;
+
+                    // ALWAYS RESET AT TOP
+                    if (currentY < 15) {
+                        if (isScrolledState) {
+                            categoryBar.classList.remove('scrolled');
+                            isScrolledState = false;
+                        }
+                        lastStateScrollY = currentY;
+                        return;
+                    }
+
+                    // HIDE LOGIC (SCROLL DOWN)
+                    if (!isScrolledState && diff > HIDE_THRESHOLD) {
+                        categoryBar.classList.add('scrolled');
+                        isScrolledState = true;
+                        lastStateScrollY = currentY;
+                    } 
+                    // SHOW LOGIC (SCROLL UP)
+                    else if (isScrolledState && diff < -SHOW_THRESHOLD) {
+                        categoryBar.classList.remove('scrolled');
+                        isScrolledState = false;
+                        lastStateScrollY = currentY;
+                    }
+
+                    // DIRECTIONAL LOCK: Reset base point if user reverses scroll direction
+                    // but hasn't yet hit the threshold to trigger a state change.
+                    if ((!isScrolledState && diff < 0) || (isScrolledState && diff > 0)) {
+                        lastStateScrollY = currentY;
+                    }
+                }, { passive: true });
+            })();
+
             // Initialize AOS
             AOS.init({
-                duration: 1000, // animation duration in ms
-                once: true,     // animation happens only once
+                duration: 1000, 
+                once: true,
                 easing: 'ease-out-cubic',
             });
         </script>

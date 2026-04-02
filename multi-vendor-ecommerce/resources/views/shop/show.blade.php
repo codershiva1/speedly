@@ -2,36 +2,29 @@
 
 
 @php
-$productDetails = [
-    'Flavour' => 'Chocolate',
-    'Storage Tips' => 'Keep refrigerated and away from direct sunlight. Consume within 2.5 months from the date of manufacturing',
-    'Energy Per 100 g (kcal)' => '576',
-    'Protein Per 100 g (g)' => '10',
-    'Total Carbohydrates Per 100 g (g)' => '28',
-    'Total Sugar Per 100 g (g)' => '21',
-    'Added Sugars Per 100 g (g)' => '21',
-    'Total Fat Per 100 g (g)' => '44.8',
-    'Cholesterol Per 100 g (g)' => '0',
-    'Dietary Fiber Per 100 g (g)' => '11.6',
-    'Key Features' => [
-        'Plant Based',
-        'Gluten Free',
-        'Dairy & Lactose Free',
-        'Low Carb',
-        'Refined Sugar Free',
-        'PCOS Friendly',
-        'Preservatives Free',
-    ],
-    'Ingredients' => 'Vegan 70% Dark Chocolate (Cacao, Unrefined Cane Sugar, Cacao Butter) (81%), Almonds (10%), Pumpkin Seeds, Goji Berries (6%), Rose Petals, Sea Salt',
-    'Description' => $product->description,
-    'Unit' => '50 g',
-    'FSSAI License' => '12722055001288',
-    'Allergen Information' => 'This product contains nuts. May contain traces of soy',
-    'Shelf Life' => '4 months',
-    'Country of Origin' => 'India',
-];
+$productDetails = $product->product_details ?? [];
+if ($product->description && !isset($productDetails['Description'])) {
+    $productDetails['Description'] = $product->description;
+}
 @endphp
-
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        height: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #ccc;
+    }
+    #mainProductImage {
+        transition: transform 0.2s ease-out;
+    }
+</style>
 
     <div class="bg-gray-50 min-h-screen ">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-1 space-y-8">
@@ -66,13 +59,24 @@ $productDetails = [
                             </a>
                             @endauth
 
-                        <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                        <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center group/main-image cursor-zoom-in relative">
                             @php $primaryImage = $product->images->first(); @endphp
                             
-                            <img src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
+                            <img id="mainProductImage" src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
                                 alt="{{ $product->name }}"
-                                class="w-full h-full object-cover">
+                                class="w-full h-full object-cover transition-transform duration-500 origin-center"
+                                onmousemove="zoomImage(event)"
+                                onmouseleave="resetZoom()">
                             
+                             <!-- SLIDER OVERLAYS -->
+                             <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 opacity-0 group-hover/main-image:opacity-100 transition-opacity">
+                                <button onclick="prevImage()" class="w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center text-gray-800 transition">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <button onclick="nextImage()" class="w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center text-gray-800 transition">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                             </div>
                         </div>
 
                         @if ($product->discount_price)
@@ -83,11 +87,11 @@ $productDetails = [
 
                          {{-- THUMBNAILS --}}
                 
-                        <div class="flex gap-3 overflow-x-auto mt-2">
-                            @foreach ($product->images as $image)
-                                <img src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
-                                    class="thumbnail-img w-20 h-20 object-contain bg-gray-100 rounded-xl p-2 border cursor-pointer hover:border-green-500 transition"
-                                    onclick="changeMainImage(this)">
+                         <div class="flex gap-3 overflow-x-auto mt-2 pb-2 custom-scrollbar">
+                            @foreach ($product->images as $index => $image)
+                                <img src="{{ asset('public/storage/' . $image->path) }}"
+                                    class="thumbnail-img w-20 h-20 object-contain bg-gray-50 rounded-xl p-2 border cursor-pointer hover:border-green-500 transition {{ $index === 0 ? 'border-green-500 shadow-sm' : 'border-gray-100' }}"
+                                    onclick="changeMainImage(this, {{ $index }})">
                             @endforeach
                         </div>
 
@@ -411,72 +415,83 @@ $productDetails = [
                 <h2 class="text-lg font-semibold mb-4">Top 10 Products in this Category</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($topCategoryProducts as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col overflow-hidden">
                             
-                           {{-- WISHLIST ICON (TOP RIGHT) --}}
+                            {{-- STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                    {{ $product->stock_quantity }} LEFT
+                                </div>
+                            @endif
 
+                            {{-- DISCOUNT BADGE --}}
+                            @if($product->discount_price && $product->price > 0)
+                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                    {{ $discountPercent }}% OFF
+                                </div>
+                            @endif
+
+                           {{-- WISHLIST ICON (TOP RIGHT) --}}
                             @auth
                             <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
+                                class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
                                 data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
                             >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
+                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
                             </button>
                             @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
+                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
                             </a>
                             @endauth
 
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                   
                                     <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
-                                        class="w-full h-full object-contain" 
+                                        class="w-full h-full object-contain p-2" 
                                         alt="{{ $product->name }}">
-                                    
                                 </div>
                             </a>
 
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                                <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                                </svg>
-                                8 MINS
-                            </span>
-
-                            <div class="mt-2 flex-1">
+                            {{-- INFO --}}
+                            <div class="mt-3 flex-1">
+                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[9px] font-semibold px-2 py-0.5 rounded-full mb-1">
+                                    <i class="fa-solid fa-clock"></i> 8 MINS
+                                </span>
                                 <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                     {{ $product->name }}
                                 </p>
 
+                                {{-- STAR RATINGS --}}
+                                @php 
+                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                @endphp
+                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                        @endfor
+                                    </div>
+                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                </div>
+
                                 @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">{{ $product->size }}</p>
                                 @endif
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
                             <div class="mt-3 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
-                                    <span class="text-base font-bold text-gray-900">
-                                        ₹{{ $product->price }}
-                                    </span>
-
-                                    @if ($product->discount_price)
-                                        <span class="line-through text-xs text-gray-400">
-                                            ₹{{ $product->discount_price }}
-                                        </span>
+                                    @if ($product->discount_price && $product->discount_price > 0)
+                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                                        <span class="line-through text-xs text-gray-400">₹{{ $product->price }}</span>
+                                    @else
+                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
                                     @endif
                                 </div>
 
@@ -488,7 +503,7 @@ $productDetails = [
                                 @else
                                     @auth
                                         <button
-                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold shrink-0
+                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold shrink-0
                                             {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
                                             data-product-id="{{ $product->id }}"
                                             >
@@ -496,7 +511,7 @@ $productDetails = [
                                         </button>
                                     @else
                                         <a href="{{ route('login') }}"
-                                            class="px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold text-green-600 block text-center shrink-0 hover:bg-green-50">
+                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600 block text-center shrink-0">
                                             ADD
                                         </a>
                                     @endauth
@@ -516,79 +531,90 @@ $productDetails = [
                 <h2 class="text-lg font-semibold mb-4">People Also Bought</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($peopleAlsoBought as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
+                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col overflow-hidden">
                             
-                           {{-- WISHLIST ICON (TOP RIGHT) --}}
+                            {{-- STOCK SCARCITY (DIAGONAL RIBBON) --}}
+                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                    {{ $product->stock_quantity }} LEFT
+                                </div>
+                            @endif
 
+                            {{-- DISCOUNT BADGE --}}
+                            @if($product->discount_price && $product->price > 0)
+                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                                    {{ $discountPercent }}% OFF
+                                </div>
+                            @endif
+
+                           {{-- WISHLIST ICON (TOP RIGHT) --}}
                             @auth
                             <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
+                                class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
                                 data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
                             >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
+                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
                             </button>
                             @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
+                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
+                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
                             </a>
                             @endauth
 
                             {{-- IMAGE --}}
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    
                                     <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
-                                        class="w-full h-full object-contain" 
+                                        class="w-full h-full object-contain p-2" 
                                         alt="{{ $product->name }}">
-                                  
                                 </div>
                             </a>
 
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                                <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                                </svg>
-                                8 MINS
-                            </span>
-
-                            <div class="mt-2 flex-1">
+                            {{-- INFO --}}
+                            <div class="mt-3 flex-1">
+                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[9px] font-semibold px-2 py-0.5 rounded-full mb-1">
+                                    <i class="fa-solid fa-clock"></i> 8 MINS
+                                </span>
                                 <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
                                     {{ $product->name }}
                                 </p>
 
+                                {{-- STAR RATINGS --}}
+                                @php 
+                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+                                @endphp
+                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
+                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                                        @endfor
+                                    </div>
+                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+                                </div>
+
                                 @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">{{ $product->size }}</p>
                                 @endif
                             </div>
 
                             {{-- PRICE & ADD BUTTON --}}
                             <div class="mt-3 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
                                 <div class="flex flex-col leading-tight">
-                                    <span class="text-base font-bold text-gray-900">
-                                        ₹{{ $product->price }}
-                                    </span>
-
-                                    @if ($product->discount_price)
-                                        <span class="line-through text-xs text-gray-400">
-                                            ₹{{ $product->discount_price }}
-                                        </span>
+                                    @if ($product->discount_price && $product->discount_price > 0)
+                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
+                                        <span class="line-through text-xs text-gray-400">₹{{ $product->price }}</span>
+                                    @else
+                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
                                     @endif
                                 </div>
 
                                 {{-- ADD BUTTON --}}
                                 @auth
                                     <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold
+                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold shrink-0
                                         {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
                                         data-product-id="{{ $product->id }}"
                                         >
@@ -596,7 +622,7 @@ $productDetails = [
                                     </button>
                                 @else
                                     <a href="{{ route('login') }}"
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold">
+                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600 block text-center shrink-0">
                                         ADD
                                     </a>
                                 @endauth
@@ -613,15 +639,75 @@ $productDetails = [
 
 
 <script>
-    function changeMainImage(element) {
-    document.getElementById('mainProductImage').src = element.src;
+    let currentImageIndex = 0;
+    const productImages = [
+        @foreach ($product->images as $image)
+            "{{ asset('public/storage/' . $image->path) }}",
+        @endforeach
+    ];
 
-    document.querySelectorAll('.thumbnail-img').forEach(img => {
-        img.classList.remove('border-green-500');
-    });
+    function changeMainImage(element, index) {
+        currentImageIndex = index;
+        const mainImg = document.getElementById('mainProductImage');
+        mainImg.src = element.src;
 
-    element.classList.add('border-green-500');
-}
+        document.querySelectorAll('.thumbnail-img').forEach(img => {
+            img.classList.remove('border-green-500', 'shadow-sm');
+            img.classList.add('border-gray-100');
+        });
+
+        element.classList.remove('border-gray-100');
+        element.classList.add('border-green-500', 'shadow-sm');
+    }
+
+    function prevImage() {
+        if (productImages.length <= 1) return;
+        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+        updateMainImageFromIndex();
+    }
+
+    function nextImage() {
+        if (productImages.length <= 1) return;
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        updateMainImageFromIndex();
+    }
+
+    function updateMainImageFromIndex() {
+        const mainImg = document.getElementById('mainProductImage');
+        mainImg.src = productImages[currentImageIndex];
+        
+        const thumbnails = document.querySelectorAll('.thumbnail-img');
+        thumbnails.forEach((img, idx) => {
+            if (idx === currentImageIndex) {
+                img.classList.remove('border-gray-100');
+                img.classList.add('border-green-500', 'shadow-sm');
+                img.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+                img.classList.remove('border-green-500', 'shadow-sm');
+                img.classList.add('border-gray-100');
+            }
+        });
+    }
+
+    function zoomImage(e) {
+        const img = document.getElementById('mainProductImage');
+        const x = e.offsetX;
+        const y = e.offsetY;
+        const w = img.offsetWidth;
+        const h = img.offsetHeight;
+        
+        const xPerc = (x / w) * 100;
+        const yPerc = (y / h) * 100;
+
+        img.style.transformOrigin = `${xPerc}% ${yPerc}%`;
+        img.style.transform = "scale(2.5)";
+    }
+
+    function resetZoom() {
+        const img = document.getElementById('mainProductImage');
+        img.style.transform = "scale(1)";
+        img.style.transformOrigin = "center";
+    }
 
     function toggleProductDetails() {
         const content = document.getElementById('productDetailsContent');
