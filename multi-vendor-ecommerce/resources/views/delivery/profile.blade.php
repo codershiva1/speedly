@@ -34,7 +34,7 @@
                         <div class="relative w-32 h-32 rounded-full mb-4 shadow-md border-4 border-white cursor-pointer group-hover:border-green-100 transition-all focus-within:ring-4 focus-within:ring-green-200" onclick="document.getElementById('avatarInput').click()" tabindex="0" role="button" aria-label="Update profile picture">
                             
                             @if($user->image_url)
-                                <img id="avatarPreview" src="{{ asset('storage/' . $user->image_url) }}" alt="Rider Profile" class="w-full h-full object-cover rounded-full">
+                                <img id="avatarPreview" src="@storageUrl($user->image_url)" alt="Rider Profile" class="w-full h-full object-cover rounded-full">
                             @else
                                 <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-green-100 text-green-700 text-4xl font-extrabold rounded-full">
                                     {{ strtoupper(substr($user->name, 0, 1) . substr($user->last_name ?? '', 0, 1)) }}

@@ -87,7 +87,7 @@
                                 <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
                                     @foreach ($product->images as $image)
                                         <div>
-                                            <img src="{{ asset('storage/'.$image->path) }}" alt="" class="w-full h-24 object-cover rounded">
+                                            <img src="@storageUrl($image->path)" alt="" class="w-full h-24 object-cover rounded">
                                         </div>
                                     @endforeach
                                 </div>

@@ -72,8 +72,8 @@ document.querySelectorAll('.product-slider-container').forEach((container) => {
     if (swiperEl) {
         // Dynamic slides based on container width (e.g. sections with sidebars)
         const desktopSlides = container.dataset.slidesDesktop ? parseInt(container.dataset.slidesDesktop) : 7;
-        const tabletSlides = container.dataset.slidesDesktop ? Math.max(2, Math.min(6, parseInt(container.dataset.slidesDesktop) - 1)) : 6;
-        const mobileSlides = container.dataset.slidesDesktop ? Math.max(1, Math.min(2, parseInt(container.dataset.slidesDesktop) - 1)) : 2;
+        const tabletSlides = container.dataset.slidesTablet ? parseInt(container.dataset.slidesTablet) : Math.max(2, Math.min(6, desktopSlides - 1));
+        const mobileSlides = container.dataset.slidesMobile ? parseInt(container.dataset.slidesMobile) : Math.max(1, Math.min(2, desktopSlides - 1));
 
         new Swiper(swiperEl, {
             modules: [Navigation, Autoplay],
@@ -81,16 +81,16 @@ document.querySelectorAll('.product-slider-container').forEach((container) => {
             slidesPerGroup: 1,
             loop: false,
             autoplay: false,
-            spaceBetween: 16,
+            spaceBetween: 20, // Increased default
             navigation: {
                 nextEl: nextEl,
                 prevEl: prevEl,
             },
             breakpoints: {
-                320: { slidesPerView: mobileSlides, spaceBetween: 10 },
-                640: { slidesPerView: Math.min(4, desktopSlides), spaceBetween: 12 },
-                1024: { slidesPerView: tabletSlides, spaceBetween: 16 },
-                1280: { slidesPerView: desktopSlides, spaceBetween: 20 },
+                320: { slidesPerView: mobileSlides, spaceBetween: 12 },
+                640: { slidesPerView: Math.min(4, tabletSlides), spaceBetween: 16 },
+                1024: { slidesPerView: tabletSlides, spaceBetween: 20 },
+                1280: { slidesPerView: desktopSlides, spaceBetween: 24 },
             },
             speed: 500,
             watchOverflow: true,

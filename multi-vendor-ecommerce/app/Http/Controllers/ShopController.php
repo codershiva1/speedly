@@ -51,6 +51,13 @@ class ShopController extends Controller
             $query->where('price', '<=', (float) $maxPrice);
         }
 
+        $brandSlug = $request->input('brand');
+        if($brandSlug) {
+            $query->whereHas('brand', function($q) use ($brandSlug) {
+                $q->where('slug', $brandSlug);
+            });
+        }
+
         // Apply Sorting
         $sort = $request->input('sort');
         if ($sort === 'price_low_high') {
@@ -92,6 +99,9 @@ class ShopController extends Controller
                 })->values();
             }
         }
+
+        $brands = \App\Models\Brand::where('status', 'active')->orderBy('name')->get();
+        $selectedBrand = $brandSlug ? $brands->firstWhere('slug', $brandSlug) : null;
 
         $featuredProducts = Product::with('images', 'categories')
             ->where('status', 'active')
@@ -185,6 +195,7 @@ class ShopController extends Controller
         $filters = [
             'q' => $search,
             'category' => $selectedCategory,
+            'brand' => $brandSlug,
             'min_price' => $minPrice,
             'max_price' => $maxPrice,
         ];
@@ -196,7 +207,7 @@ class ShopController extends Controller
             ]);
         }
 
-        return view('shop.index', compact('products', 'categories', 'featuredProducts', 'filters'));
+        return view('shop.index', compact('products', 'categories', 'brands', 'selectedBrand', 'featuredProducts', 'filters'));
     }
 
     public function show(string $slug): View

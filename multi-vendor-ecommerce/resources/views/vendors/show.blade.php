@@ -22,7 +22,7 @@
                         <div class="h-44 bg-gray-100 flex items-center justify-center overflow-hidden">
                             @php $primaryImage = $product->images->first(); @endphp
                             @if ($primaryImage)
-                                <img src="{{ asset('storage/'.$primaryImage->path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                <img src="@storageUrl($primaryImage->path)" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @else
                                 <span class="text-gray-400 text-xs">{{ __('No Image') }}</span>
                             @endif

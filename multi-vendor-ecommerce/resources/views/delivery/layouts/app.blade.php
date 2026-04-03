@@ -57,7 +57,7 @@
                     <div class="relative pl-2 border-l border-gray-200">
                         <a href="{{ route('delivery.profile') }}" class="flex items-center cursor-pointer space-x-2 border-2 border-transparent hover:border-green-500 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
                             @if(auth()->user()->image_url)
-                                <img src="{{ asset('storage/' . auth()->user()->image_url) }}" alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-sm bg-white border border-gray-100">
+                                <img src="@storageUrl(auth()->user()->image_url)" alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-sm bg-white border border-gray-100">
                             @else
                                 <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-extrabold shadow-sm border border-green-200 text-sm">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1) . substr(auth()->user()->last_name ?? '', 0, 1)) }}

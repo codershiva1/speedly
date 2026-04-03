@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Custom directive to solve Local vs Live public/storage double-public issue
+        Blade::directive('storageUrl', function ($expression) {
+            return "<?php echo (str_contains(request()->root(), '/public') ? asset('storage/' . ($expression)) : asset('public/storage/' . ($expression))); ?>";
+        });
+
         //
         View::composer('*', function ($view) {
             $wishlistCount = auth()->check()

@@ -144,7 +144,7 @@
                                     {{ $previewCount === 1 ? 'h-24' : 'h-14' }}">
                                     @if($img)
                                         <img
-                                            src="{{ asset('public/storage/' . $img->path) }}"
+                                            src="@storageUrl($img->path)"
                                             class="object-contain w-full h-full p-1"
                                             alt="{{ $product->name }}"
                                             loading="lazy">
@@ -350,7 +350,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                             <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                             </div>
                                         </a>
@@ -473,7 +473,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                             <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                             </div>
                                         </a>
@@ -713,7 +713,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                             <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
                                                     class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                             </div>
                                         </a>
@@ -832,7 +832,7 @@
                                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                                 <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                     @php $img = $product->images->first(); @endphp
-                                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
                                                         class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                                 </div>
                                             </a>
@@ -896,6 +896,64 @@
                         </div>
                         <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
                             <i class="fa fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </section>
+            @endif
+
+            {{-- ================= SHOP BY BRANDS ================= --}}
+            @if(isset($brands) && $brands->isNotEmpty())
+                <section class="py-12 bg-white overflow-hidden" data-aos="fade-up">
+                    <div class="px-2">
+                        <div class="flex items-center justify-between mb-6">
+                            <x-section-header 
+                                title="Shop by Brands" 
+                                badgeText="Featured" 
+                                icon="award" 
+                                :pulse="true"
+                            />
+                            <a href="{{ route('shop.index') }}" class="text-[10px] font-black text-green-600 hover:text-green-800 transition-all tracking-widest flex items-center gap-1 group/all uppercase bg-green-50 px-3 py-1.5 rounded-full hover:bg-green-100 shadow-sm border border-green-200/50">
+                                View ALL <i class="fa-solid fa-chevron-right text-[8px] group-hover/all:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+
+                        <!-- Brands Slider (Optimized Content-to-Slide Density) -->
+                        <div class="relative group product-slider-container" data-slides-desktop="10" data-slides-tablet="7" data-slides-mobile="4">
+                            <div class="swiper">
+                                <div class="swiper-wrapper">
+                                    @foreach($brands as $brand)
+                                        <div class="swiper-slide h-auto pb-6">
+                                            <a href="{{ route('shop.index', ['brand' => $brand->slug]) }}" 
+                                               class="group/brand flex flex-col items-center gap-2 p-3 bg-gray-50/50 rounded-3xl border border-transparent hover:border-green-100 hover:bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 mx-auto w-full overflow-hidden">
+                                                
+                                                <div class="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-white rounded-full flex items-center justify-center p-2 sm:p-4 shadow-sm border border-gray-100 group-hover/brand:shadow-md transition-all duration-500 overflow-hidden relative">
+                                                    <div class="absolute inset-0 bg-green-500/0 group-hover/brand:bg-green-500/5 transition-colors"></div>
+                                                    <img src="@storageUrl($brand->logo)" 
+                                                         class="w-full h-full object-contain grayscale group-hover/brand:grayscale-0 transition-all duration-700 scale-90 group-hover/brand:scale-110" 
+                                                         alt="{{ $brand->name }}">
+                                                </div>
+
+                                                <div class="flex flex-col items-center text-center w-full px-0.5">
+                                                    <span class="text-[8px] sm:text-[9px] lg:text-[10px] font-black text-gray-800 group-hover/brand:text-green-600 uppercase tracking-tighter transition-colors leading-tight w-full truncate block">
+                                                        {{ $brand->name }}
+                                                    </span>
+                                                    <span class="text-[7px] text-gray-400 font-bold mt-1 opacity-0 group-hover/brand:opacity-100 transition-all duration-300 transform translate-y-1 group-hover/brand:translate-y-0 hidden sm:block whitespace-nowrap">
+                                                        VIEW ALL
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
+                            {{-- Minified Navigation Arrows --}}
+                            <div class="swiper-prev absolute -left-2 top-1/2 -translate-y-1/2 z-20 bg-white/95 shadow-lg rounded-full w-9 h-9 flex items-center justify-center border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </div>
+                            <div class="swiper-next absolute -right-2 top-1/2 -translate-y-1/2 z-20 bg-white/95 shadow-lg rounded-full w-9 h-9 flex items-center justify-center border border-gray-100 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1000,7 +1058,7 @@
                                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                                 <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                                     @php $img = $product->images->first(); @endphp
-                                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('storage/uploads/products/default.png') }}"
+                                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
                                                         class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
                                                 </div>
                                             </a>
@@ -1091,7 +1149,7 @@
                     </div>
 
                     <!-- SLIDER CONTAINER -->
-                    <div class="relative group product-slider-container" data-slides-desktop="2" data-slides-tablet="2">
+                    <div class="relative group product-slider-container" data-slides-desktop="3" data-slides-tablet="2">
                         <div class="swiper">
                             <div class="swiper-wrapper">
                                 @foreach ($categories as $category)
@@ -1103,7 +1161,7 @@
 
                                     @if($pCount >= 3)
                                         <div class="swiper-slide h-auto pb-2">
-                                            <div class="bg-gray-50/80 rounded-2xl p-3 border border-gray-100 hover:border-green-200 transition-all hover:shadow-xl group/card h-full flex flex-col mx-1">
+                                            <div class="w-full bg-gray-50/80 rounded-2xl p-3 border border-gray-100 hover:border-green-200 transition-all hover:shadow-xl group/card h-full flex flex-col">
                                                 
                                                 <!-- HEADER -->
                                                 <div class="flex items-center justify-between mb-3">
@@ -1124,12 +1182,12 @@
                                                     <div class="flex flex-col gap-[2px] w-1/2 h-full">
                                                         {{-- Small Top --}}
                                                         <a href="{{ route('shop.show', $displayProducts[0]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
-                                                            <img src="{{ asset('public/storage/' . $displayProducts[0]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                            <img src="@storageUrl($displayProducts[0]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
                                                         </a>
                                                         {{-- Large Bottom --}}
                                                         @if($pCount > 1)
                                                         <a href="{{ route('shop.show', $displayProducts[1]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
-                                                            <img src="{{ asset('public/storage/' . $displayProducts[1]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                            <img src="@storageUrl($displayProducts[1]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
                                                         </a>
                                                         @endif
                                                     </div>
@@ -1139,13 +1197,13 @@
                                                         {{-- Large Top --}}
                                                         @if($pCount > 2)
                                                         <a href="{{ route('shop.show', $displayProducts[2]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
-                                                            <img src="{{ asset('public/storage/' . $displayProducts[2]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                            <img src="@storageUrl($displayProducts[2]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
                                                         </a>
                                                         @endif
                                                         {{-- Small Bottom --}}
                                                         @if($pCount > 3)
                                                         <a href="{{ route('shop.show', $displayProducts[3]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
-                                                            <img src="{{ asset('public/storage/' . $displayProducts[3]->images->first()->path) }}" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
+                                                            <img src="@storageUrl($displayProducts[3]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
                                                         </a>
                                                         @else
                                                             {{-- Placeholder --}}
@@ -1183,28 +1241,6 @@
         @endif
 
        
-            {{-- ================= LATEST NEWS ================= --}}
-            <section class="bg-white  shadow-sm p-2">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-sm font-semibold text-gray-900" style="font-size:22px;">Latest News</h2>
-                    <a href="{{ route('pages.blog') }}" class="text-xl text-green-600 hover:underline">View all articles</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    @foreach($latestNews as $article)
-                        <article class="bg-white border border-gray-100  overflow-hidden flex flex-col text-xs" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                            <div class="h-48 bg-gray-100 overflow-hidden news-img">
-                                <!-- <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover"> -->
-                                 <img src="https://i.pinimg.com/1200x/e0/2a/f3/e02af35aeb189bb2414984bd23e921da.jpg" alt="" class="w-full h-full object-cover">
-                            </div>
-                            <div class="p-3 flex-1 flex flex-col">
-                                <p class="text-[11px] text-gray-400 mb-1">{{ $article['date']->format('d M Y') }}</p>
-                                <h3 class="font-semibold text-gray-900 mb-1 line-clamp-2">{{ $article['title'] }}</h3>
-                                <p class="text-gray-600 line-clamp-3 flex-1">{{ $article['excerpt'] }}</p>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-            </section>
           
         </div>
     </div>

@@ -18,10 +18,6 @@
 
         @php 
             $img = $wish->product?->images->first();
-
-            $fullPath = $img
-                ? asset('public/storage/'.$img->path)
-                : asset('storage/uploads/products/1/image3.png');
         @endphp
 
         <div class="bg-white rounded-xl shadow-sm p-2 mb-2">
@@ -31,7 +27,7 @@
                 <!-- PRODUCT IMAGE -->
                 <div class="flex-shrink-0">
                     <img 
-                        src="{{ $fullPath }}"
+                        src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')"
                         class="w-20 h-20 object-cover rounded-lg border">
                     
                     <!--@if($wish->product->stock == 0)-->

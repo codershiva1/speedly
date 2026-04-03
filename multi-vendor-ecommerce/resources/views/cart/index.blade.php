@@ -60,8 +60,7 @@ data-unit="{{ $item->unit_price }}">
 @php $img = $item->product->images->first(); @endphp
 
 <div class="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-<img
-src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/placeholder.png') }}"
+<img src="@storageUrl($img ? $img->path : 'placeholder.png')"
 class="w-full h-full object-cover">
 </div>
 

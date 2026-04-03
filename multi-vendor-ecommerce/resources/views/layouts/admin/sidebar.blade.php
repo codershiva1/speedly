@@ -50,7 +50,7 @@
     <div class="pt-2 pb-7 flex justify-center">
         <a href="{{ route('home') }}">
             <img class="w-[150px]"
-                 src="{{ asset('uploads/logo/speedly_logo3.png') }}"
+                 src="@storageUrl('uploads/logo/speedly_logo3.png')"
                  alt="logo">
         </a>
     </div>

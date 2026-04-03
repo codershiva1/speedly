@@ -62,7 +62,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                         <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center group/main-image cursor-zoom-in relative">
                             @php $primaryImage = $product->images->first(); @endphp
                             
-                            <img id="mainProductImage" src="{{ $primaryImage ? asset('public/storage/' . $primaryImage->path) : asset('public/storage/uploads/products/1/image3.png') }}"
+                            <img id="mainProductImage" src="@storageUrl($primaryImage ? $primaryImage->path : 'uploads/products/1/image3.png')"
                                 alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transition-transform duration-500 origin-center"
                                 onmousemove="zoomImage(event)"
@@ -89,7 +89,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                 
                          <div class="flex gap-3 overflow-x-auto mt-2 pb-2 custom-scrollbar">
                             @foreach ($product->images as $index => $image)
-                                <img src="{{ asset('public/storage/' . $image->path) }}"
+                                <img src="@storageUrl($image->path)"
                                     class="thumbnail-img w-20 h-20 object-contain bg-gray-50 rounded-xl p-2 border cursor-pointer hover:border-green-500 transition {{ $index === 0 ? 'border-green-500 shadow-sm' : 'border-gray-100' }}"
                                     onclick="changeMainImage(this, {{ $index }})">
                             @endforeach
@@ -340,7 +340,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                                 <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
                                    
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
                                         class="w-full h-full object-contain" 
                                         alt="{{ $product->name }}">
                                     
@@ -450,7 +450,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
                                         class="w-full h-full object-contain p-2" 
                                         alt="{{ $product->name }}">
                                 </div>
@@ -566,7 +566,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                             <a href="{{ route('shop.show', $product->slug) }}" class="block">
                                 <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
                                     @php $img = $product->images->first(); @endphp
-                                    <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/uploads/products/1/image3.png') }}" 
+                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
                                         class="w-full h-full object-contain p-2" 
                                         alt="{{ $product->name }}">
                                 </div>
@@ -642,7 +642,7 @@ if ($product->description && !isset($productDetails['Description'])) {
     let currentImageIndex = 0;
     const productImages = [
         @foreach ($product->images as $image)
-            "{{ asset('public/storage/' . $image->path) }}",
+            "@storageUrl($image->path)",
         @endforeach
     ];
 

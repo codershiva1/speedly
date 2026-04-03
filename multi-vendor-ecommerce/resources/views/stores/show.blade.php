@@ -19,7 +19,7 @@
                     3. aspect-video: Maintains a professional cinematic ratio.
                     --}}
                     <div class="min-w-[calc(50%-4px)] md:min-w-[calc(48.33%-8px)] h-58 md:h-40 bg-gray-100 rounded-xl overflow-hidden snap-start flex-shrink-0 border border-gray-100 shadow-sm">
-                        <img src="{{ asset('public/storage/'.$banner->banner_image) }}" 
+                        <img src="@storageUrl($banner->banner_image)" 
                             class="w-full h-full object-cover" 
                             alt="Promotion">
                     </div>

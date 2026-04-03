@@ -20,7 +20,7 @@
     <div class="p-4">
         @if($categoryAds && $categoryAds->ads->count() > 0)
             <div class="rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                <img src="{{ asset('public/storage/'.$categoryAds->ads->first()->banner_image) }}" class="w-full object-cover h-32 md:h-48">
+                <img src="@storageUrl($categoryAds->ads->first()->banner_image)" class="w-full object-cover h-32 md:h-48">
             </div>
         @endif
     </div>
@@ -42,7 +42,7 @@
                     @foreach($parent->children as $child)
                         <a href="{{ route('shop.index', ['category' => $child->slug]) }}" class="min-w-[110px] max-w-[110px] text-center group category-card">
                             <div class="w-24 h-24 mx-auto bg-gray-50 rounded-3xl flex items-center justify-center p-4 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-green-100/50 transition-all duration-300 border border-gray-100 group-hover:border-green-100">
-                                <img src="{{ asset('public/storage/'.$child->image) }}" class="max-h-full object-contain transition-transform duration-300 ease-out" loading="lazy">
+                                <img src="@storageUrl($child->image)" class="max-h-full object-contain transition-transform duration-300 ease-out" loading="lazy">
                             </div>
                             <div class="mt-3 px-1">
                                 <p class="text-[13px] font-bold text-gray-800 leading-tight group-hover:text-green-600 transition-colors">
@@ -71,7 +71,7 @@
                 @foreach($standaloneCategories as $cat)
                     <a href="{{ route('shop.index', ['category' => $cat->slug]) }}" class="text-center group category-card">
                         <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center p-3 border border-gray-100 group-hover:bg-white group-hover:shadow-lg transition-all">
-                            <img src="{{ asset('public/storage/'.$cat->image) }}" class="max-h-full object-contain" loading="lazy">
+                            <img src="@storageUrl($cat->image)" class="max-h-full object-contain" loading="lazy">
                         </div>
                         <p class="mt-2 text-[11px] font-bold text-gray-700 leading-tight truncate px-1 group-hover:text-green-600">
                             {{ $cat->name }}
@@ -91,7 +91,7 @@
             @foreach($brands as $brand)
                 <a href="{{ route('products.all', ['brand' => $brand->slug]) }}" 
                 class="bg-white min-w-[100px] h-24 rounded-2xl flex items-center justify-center p-4 shadow-sm border border-gray-100 hover:border-green-200 transition-all">
-                    <img src="{{ asset('public/storage/'.$brand->logo) }}" class="max-h-full object-contain" alt="{{ $brand->name }}">
+                    <img src="@storageUrl($brand->logo)" class="max-h-full object-contain" alt="{{ $brand->name }}">
                 </a>
             @endforeach
         </div>

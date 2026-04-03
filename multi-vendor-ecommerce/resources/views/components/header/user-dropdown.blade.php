@@ -15,7 +15,7 @@
     >
         <div class="relative overflow-hidden rounded-2xl h-11 w-11 border-2 border-emerald-50 group-hover:border-emerald-200 transition-all shadow-sm">
             @if(auth()->user()->image_url)
-                <img src="{{ asset('uploads/' . auth()->user()->image_url) }}" alt="User" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <img src="@storageUrl('uploads/' . auth()->user()->image_url)" alt="User" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
                 <div class="hidden absolute inset-0 bg-emerald-600 items-center justify-center text-white text-xs font-black uppercase tracking-tighter">
                     {{ substr(auth()->user()->name, 0, 1) }}{{ auth()->user()->last_name ? substr(auth()->user()->last_name, 0, 1) : substr(auth()->user()->name, 1, 1) }}
                 </div>

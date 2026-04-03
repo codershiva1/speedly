@@ -11,7 +11,7 @@
             <div class="w-full max-w-[420px] p-10 rounded-[20px]">
 
                 <a href="{{ url('/') }}">
-                    <img class="w-[150px] mb-5" src="{{ asset('storage/uploads/logo/speedlylogo4.png') }}" alt="Logo">
+                    <img class="w-[150px] mb-5" src="@storageUrl('uploads/logo/speedlylogo4.png')" alt="Logo">
                 </a>
 
                 <h1 class="text-[28px] font-bold mb-[5px] text-black">Welcome back 👋</h1>

@@ -8,7 +8,7 @@
         <div class="flex items-center space-x-4">
             <div class="relative w-12 h-12">
                 @if(auth()->user()->image_url)
-                    <img src="{{ asset('storage/' . auth()->user()->image_url) }}" class="w-full h-full rounded-full object-cover border-2 border-white shadow-sm" alt="Profile">
+                    <img src="@storageUrl(auth()->user()->image_url)" class="w-full h-full rounded-full object-cover border-2 border-white shadow-sm" alt="Profile">
                 @else
                     <div class="w-full h-full rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-xl border-2 border-white shadow-sm">
                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}

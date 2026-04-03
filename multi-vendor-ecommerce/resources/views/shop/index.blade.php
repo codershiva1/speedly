@@ -41,7 +41,7 @@
                            class="flex flex-col items-center p-2 mb-1 text-center transition-all {{ $isActive ? 'category-active' : 'text-gray-500 hover:bg-gray-50' }}">
                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-transform {{ $isActive ? 'scale-110' : '' }}">
                                 @if($category->image)
-                                    <img src="{{ asset('public/storage/' . $category->image) }}" class="w-9 h-9 object-contain">
+                                    <img src="@storageUrl($category->image)" class="w-9 h-9 object-contain">
                                 @else
                                     <div class="w-9 h-9 bg-gray-100 rounded-full"></div>
                                 @endif
@@ -55,24 +55,52 @@
             {{-- Main Content Area --}}
             <main id="main-scroll-container" class="flex-1 overflow-y-auto custom-scroll px-1 pb-2">
                 
-                {{-- 1. Sort & Count Header --}}
-                <div class="sticky top-0 z-20 bg-white/90 backdrop-blur-md py-1 flex items-center justify-between border-b border-gray-50 mb-1">
-                    <h1 class="text-sm font-bold text-gray-800 px-2">
-                        {{ $filters['category'] ?? 'All Products' }} 
-                        <span class="text-gray-400 font-normal ml-1">({{ $products->total() }})</span>
-                    </h1>
-                    
-                    <form id="sort-form" method="GET" action="{{ route('shop.index') }}">
-                        <select id="sort-select" name="sort" class="text-[11px] font-bold border-none bg-gray-50 rounded-lg px-2 py-1 focus:ring-0">
-                            <option value="">Sort</option>
-                            <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>Price ↑</option>
-                            <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>Price ↓</option>
-                            <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Newest</option>
-                        </select>
-                        @foreach(request()->except('page', 'sort') as $name => $value)
-                            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+                {{-- 1. Sort & Count Header (Brand Aware) --}}
+                <div class="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-gray-100 mb-1">
+                    <div class="py-2 px-3 flex items-center justify-between">
+                        <h1 class="text-sm font-black text-gray-900 uppercase tracking-tighter flex items-center gap-2">
+                            @if($selectedBrand)
+                                <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 underline decoration-2 underline-offset-4 decoration-green-400">BRAND :</span>
+                                <span class="text-green-600">{{ $selectedBrand->name }}</span>
+                            @elseif($filters['category'])
+                                <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 uppercase">{{ str_replace('-', ' ', $filters['category']) }}</span>
+                            @else
+                                <span class="text-gray-800">ALL COLLECTIONS</span>
+                            @endif
+                            <span class="text-gray-400 font-bold ml-1 text-[11px] lowercase tracking-normal">({{ $products->total() }})</span>
+                        </h1>
+                        
+                        <form id="sort-form" method="GET" action="{{ route('shop.index') }}">
+                            <select id="sort-select" name="sort" class="text-[11px] font-black border-none bg-gray-100/50 rounded-full px-4 py-1.5 focus:ring-1 focus:ring-green-400 transition-all outline-none cursor-pointer">
+                                <option value="">SORT BY</option>
+                                <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>PRICE: LOW TO HIGH</option>
+                                <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>PRICE: HIGH TO LOW</option>
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>NEWEST DEALS</option>
+                            </select>
+                            {{-- PERSIST ALL FILTERS --}}
+                            @foreach(request()->except('page', 'sort') as $name => $value)
+                                <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+                            @endforeach
+                        </form>
+                    </div>
+
+                    {{-- 1b. Horizontal Brands QuickFilter --}}
+                    <div class="flex items-center gap-3 px-3 pb-2 overflow-x-auto custom-scroll no-scrollbar scroll-smooth">
+                        <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => null])) }}" 
+                           class="whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold border transition-all {{ empty($filters['brand']) ? 'bg-green-600 text-white border-green-600 shadow-sm' : 'bg-gray-50 text-gray-500 border-gray-100 hover:bg-gray-100 hover:text-gray-700' }}">
+                            ALL BRANDS
+                        </a>
+                        @foreach($brands->take(15) as $brand)
+                            @php $isBrandActive = ($filters['brand'] ?? null) == $brand->slug; @endphp
+                            <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => $brand->slug])) }}" 
+                               class="flex items-center gap-2 whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold border transition-all {{ $isBrandActive ? 'bg-white text-green-600 border-green-200 shadow-md ring-1 ring-green-100 scale-105' : 'bg-white text-gray-500 border-gray-100 hover:border-green-100 hover:text-green-600 shadow-sm' }}">
+                                @if($brand->logo)
+                                    <img src="@storageUrl($brand->logo)" class="w-4 h-4 object-contain {{ $isBrandActive ? '' : 'grayscale opacity-70 group-hover:grayscale-0' }}">
+                                @endif
+                                {{ strtoupper($brand->name) }}
+                            </a>
                         @endforeach
-                    </form>
+                    </div>
                 </div>
 
                 {{-- 2. Main Product Grid --}}
@@ -133,7 +161,7 @@
                                         <a href="{{ route('shop.show', $product->slug) }}" class="block mb-2">
                                             <div class="w-full h-32 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50/50">
                                                 @php $img = $product->images->first(); @endphp
-                                                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/placeholder.png') }}" 
+                                                <img src="@storageUrl($img ? $img->path : 'placeholder.png')" 
                                                     class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform" 
                                                     alt="{{ $product->name }}">
                                             </div>

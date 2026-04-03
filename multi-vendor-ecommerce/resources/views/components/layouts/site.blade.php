@@ -751,7 +751,7 @@
             <div class="top-bar sticky-header" style="border-bottom:1px solid #eee;">
                 
                 <div class="top-left logo top-mobile-header" >
-                    <a href="{{ route('home') }}"><img  class="logo-image" src="{{asset('storage/uploads/logo/speedlylogo4.png')}}" alt=""></a>
+                    <a href="{{ route('home') }}"><img  class="logo-image" src="@storageUrl('uploads/logo/speedlylogo4.png')" alt=""></a>
                     <div class="location-box " id="mainlocationHeader">
                         <span class="delivery-text flex items-center gap-1 text-sm font-semibold text-gray-700" style="width:155px">
                             Delivery in 8 minutes
@@ -1225,7 +1225,7 @@ class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
                                 <li><a href="{{ route('pages.faq') }}" class="hover:text-amber-400">FAQ's</a></li>
                                 <li><a href="{{ route('pages.about') }}" class="hover:text-amber-400">About Us</a></li>
 
-                                 <!-- New Policy / Legal Pages -->
+                                <li><a href="{{ route('pages.blog') }}" class="hover:text-amber-400">Latest News (Blog)</a></li>
                                 <li><a href="{{ route('pages.privacy') }}" class="hover:text-amber-400">Privacy Policy</a></li>
                                 <li><a href="{{ route('pages.terms') }}" class="hover:text-amber-400">Terms & Conditions</a></li>
                                 <li><a href="{{ route('pages.return-refund') }}" class="hover:text-amber-400">Return & Refund Policy</a></li>

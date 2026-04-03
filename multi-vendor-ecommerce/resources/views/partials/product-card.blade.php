@@ -37,7 +37,7 @@
 
             @if ($img)
 
-                <img src="{{ $img ? asset('public/storage/' . $img->path) : asset('public/storage/placeholder.png') }}" 
+                <img src="@storageUrl($img ? $img->path : 'placeholder.png')" 
                     class="w-full h-full object-contain"
                     alt="{{ $product->name }}" >
             @else

@@ -68,7 +68,7 @@ Track and manage your recent purchases
 @php $img = $item->product->images->first(); @endphp
 
 <img
-src="{{ $img ? asset('public/storage/'.$img->path) : asset('images/no-image.png') }}"
+src="@storageUrl($img ? $img->path : '../../images/no-image.png')"
 class="w-10 h-10 rounded-full object-cover border">
 
 @endforeach
@@ -160,7 +160,7 @@ Details
 @php $img = $item->product->images->first(); @endphp
 
 <img
-src="{{ $img ? asset('public/storage/'.$img->path) : asset('images/no-image.png') }}"
+src="@storageUrl($img ? $img->path : '../../images/no-image.png')"
 class="w-9 h-9 rounded-full border object-cover">
 
 @endforeach

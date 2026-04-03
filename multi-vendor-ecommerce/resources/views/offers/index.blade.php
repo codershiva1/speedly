@@ -80,7 +80,7 @@
             <div class="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory ">
                 @foreach($placements['off_hero']->ads as $ad)
                 <a href="{{ route('offers.click', $ad) }}" class="min-w-[90%] md:min-w-[32%] aspect-[21/9] bg-white rounded-[2rem] overflow-hidden shadow-2xl snap-center relative block group border-[2px] border-white">
-                    <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <img src="@storageUrl($ad->banner_image)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-4 flex flex-col justify-end">
                         <div class="translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                             <h2 class="text-1xl md:text-2xl font-black text-white italic uppercase tracking-tighter leading-none mb-2">{{ $ad->title }}</h2>
@@ -110,7 +110,7 @@
                 @foreach($placements['off_grid']->ads as $ad)
                 <a href="{{ route('offers.click', $ad) }}" class="bg-white p-2 rounded-[1rem] shadow-xl hover:shadow-green-200 hover:-translate-y-3 transition-all group border border-white">
                     <div class="aspect-square rounded-[1rem] overflow-hidden mb-1 relative shadow-inner bg-gray-50">
-                        <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-60 object-contain group-hover:scale-110 transition-all duration-700">
+                        <img src="@storageUrl($ad->banner_image)" class="w-full h-60 object-contain group-hover:scale-110 transition-all duration-700">
                         <div class="absolute top-3 left-3 bg-red-600 text-white text-[9px] font-black px-3 py-1 rounded-lg">
                             TOP DEAL
                         </div>
@@ -132,7 +132,7 @@
         <div class="grid md:grid-cols-2 gap-8 mb-10">
             @foreach($placements['off_slim']->ads as $ad)
             <a href="{{ route('offers.click', $ad) }}" class="group relative h-48 rounded-[2rem] overflow-hidden shadow-2xl">
-                <img src="{{ asset('storage/'.$ad->banner_image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <img src="@storageUrl($ad->banner_image)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-r from-green-900/90 to-transparent p-10 flex flex-col justify-center">
                     <span class="text-green-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2">Category Spotlight</span>
                     <h4 class="text-2xl font-black text-white italic uppercase tracking-tighter">{{ $ad->title }}</h4>
