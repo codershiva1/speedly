@@ -959,11 +959,79 @@
                 </section>
             @endif
 
-
+            {{-- ================= BUDGET PARADISE (PRICE CARDS) ================= --}}
+            <section class="py-8 relative overflow-hidden bg-[#fffdfa]">
+                {{-- Floral backgrounds --}}
+                <div class="absolute -top-16 -left-16 w-48 h-48 opacity-10 pointer-events-none rotate-12">
+                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#059669" d="M44.7,-76.4C58.1,-69.2,69.5,-57.4,77.3,-43.8C85.1,-30.2,89.2,-15.1,88.3,-0.5C87.4,14,81.4,28.1,72.9,40.7C64.4,53.3,53.4,64.4,40.1,72.3C26.8,80.2,13.4,84.9,-0.6,85.9C-14.6,87,-29.2,84.3,-42.6,76.5C-56,68.7,-68.2,55.7,-76.1,41.2C-84,26.7,-87.6,10.7,-86.3,-5.1C-85,-20.9,-78.8,-36.5,-68.9,-49.1C-59.1,-61.7,-45.5,-71.4,-31.4,-78.1C-17.3,-84.8,-2.7,-88.5,12.7,-86.3C28.2,-84.1,44.7,-76.4,44.7,-76.4Z" transform="translate(100 100)" />
+                    </svg>
+                </div>
+                <div class="absolute -bottom-16 -right-16 w-48 h-48 opacity-10 pointer-events-none -rotate-12">
+                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#059669" d="M44.7,-76.4C58.1,-69.2,69.5,-57.4,77.3,-43.8C85.1,-30.2,89.2,-15.1,88.3,-0.5C87.4,14,81.4,28.1,72.9,40.7C64.4,53.3,53.4,64.4,40.1,72.3C26.8,80.2,13.4,84.9,-0.6,85.9C-14.6,87,-29.2,84.3,-42.6,76.5C-56,68.7,-68.2,55.7,-76.1,41.2C-84,26.7,-87.6,10.7,-86.3,-5.1C-85,-20.9,-78.8,-36.5,-68.9,-49.1C-59.1,-61.7,-45.5,-71.4,-31.4,-78.1C-17.3,-84.8,-2.7,-88.5,12.7,-86.3C28.2,-84.1,44.7,-76.4,44.7,-76.4Z" transform="translate(100 100)" />
+                    </svg>
                 </div>
 
+                <div class="px-2 relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-sm font-black text-gray-900 italic tracking-tighter leading-none">
+                                BUDGET <span class="text-transparent" style="-webkit-text-stroke: 1px #059669;">PARADISE</span>
+                            </h2>
+                            <span class="inline-block text-green-600 font-extrabold text-[9px] uppercase tracking-[0.3em] px-2 py-0.5 rounded-full bg-green-50 border border-green-100 italic">Bloom Your Savings</span>
+                        </div>
+                    </div>
 
-                
+                    <div class="relative group product-slider-container" data-slides-desktop="7" data-slides-tablet="5" data-slides-mobile="3">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                @php
+                                    $priceTiers = [
+                                        ['p' => 99, 'c' => 'from-emerald-500 to-teal-700', 'i' => 'bi-flower1', 'd' => 'The Pocket Bloom'],
+                                        ['p' => 199, 'c' => 'from-green-500 to-emerald-800', 'i' => 'bi-flower2', 'd' => 'Green Garden'],
+                                        ['p' => 299, 'c' => 'from-lime-500 to-green-700', 'i' => 'bi-flower3', 'd' => 'Fresh Harvest'],
+                                        ['p' => 399, 'c' => 'from-teal-500 to-cyan-700', 'i' => 'bi-tree', 'd' => 'Bantang Grove'],
+                                        ['p' => 499, 'c' => 'from-emerald-600 to-green-900', 'i' => 'bi-sun', 'd' => 'Summer Meadow'],
+                                        ['p' => 999, 'c' => 'from-green-700 to-emerald-950', 'i' => 'bi-stars', 'd' => 'Elite Petals'],
+                                        ['p' => 1999, 'c' => 'from-teal-600 to-green-900', 'i' => 'bi-gem', 'd' => 'Royal Orchard'],
+                                    ];
+                                @endphp
+
+                                @foreach($priceTiers as $tier)
+                                    <div class="swiper-slide h-auto pb-6">
+                                        <a href="{{ route('stores.show', $tier['p']) }}" class="group/pcard flex flex-col items-center gap-2 p-3 bg-white rounded-3xl border border-transparent hover:border-green-100 hover:bg-white hover:shadow-2xl transition-all duration-500 overflow-hidden relative transform hover:-translate-y-2 mx-auto w-full">
+
+                                            {{-- Decorative circle --}}
+                                            <div class="absolute -top-2 -right-2 w-10 h-10 bg-green-50 rounded-full opacity-40 group-hover/pcard:scale-150 transition-transform duration-700"></div>
+                                            <i class="bi {{ $tier['i'] }} absolute top-2 right-2 text-green-100 text-lg group-hover/pcard:text-green-200 transition-colors duration-500"></i>
+
+                                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br {{ $tier['c'] }} flex items-center justify-center text-white shadow-md group-hover/pcard:scale-110 transition-transform duration-500 mt-1">
+                                                <i class="bi bi-tag-fill text-sm"></i>
+                                            </div>
+
+                                            <div class="flex flex-col items-center text-center w-full px-0.5">
+                                                <span class="text-[8px] sm:text-[9px] font-black text-green-600 uppercase tracking-tight italic leading-tight truncate block w-full">{{ $tier['d'] }}</span>
+                                                <h3 class="text-lg font-black text-gray-900 leading-none mt-0.5">
+                                                    <span class="text-[10px] align-top mt-0.5 inline-block">₹</span>{{ $tier['p'] }}
+                                                </h3>
+                                                <span class="text-[7px] text-gray-400 font-bold uppercase tracking-tighter mt-1 opacity-0 group-hover/pcard:opacity-100 transition-all duration-300 whitespace-nowrap">Shop Now →</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Slider Controls --}}
+                        <div class="swiper-prev absolute -left-2 top-1/2 -translate-y-1/2 z-20 bg-white/95 shadow-lg rounded-full w-9 h-9 flex items-center justify-center border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </div>
+                        <div class="swiper-next absolute -right-2 top-1/2 -translate-y-1/2 z-20 bg-white/95 shadow-lg rounded-full w-9 h-9 flex items-center justify-center border border-gray-100 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </div>
+                </div>
             </section>
 
         @if($budgetStore->isNotEmpty())

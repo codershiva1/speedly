@@ -28,7 +28,7 @@
             <aside class="w-16 sm:w-24 md:w-28 bg-white flex flex-col border-r border-gray-100">
                 <div class="flex flex-col overflow-y-auto custom-scroll h-full py-2">
                     <a href="{{ route('shop.index', array_merge(request()->except('page', 'category'), ['category' => null])) }}" 
-                       class="flex flex-col items-center p-2 mb-2 text-center transition-all {{ empty($filters['category']) ? 'category-active' : 'text-gray-500 hover:bg-gray-50' }}">
+                       class="ajax-link flex flex-col items-center p-2 mb-2 text-center transition-all {{ empty($filters['category']) ? 'category-active' : 'text-gray-500 hover:bg-gray-50' }}">
                         <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1">
                             <i class="fa fa-grid-2 text-lg"></i>
                         </div>
@@ -38,7 +38,7 @@
                     @foreach($categories as $category)
                         @php $isActive = ($filters['category'] ?? null) == $category->slug; @endphp
                         <a href="{{ route('shop.index', array_merge(request()->except('page', 'category'), ['category' => $category->slug])) }}"
-                           class="flex flex-col items-center p-2 mb-1 text-center transition-all {{ $isActive ? 'category-active' : 'text-gray-500 hover:bg-gray-50' }}">
+                           class="ajax-link flex flex-col items-center p-2 mb-1 text-center transition-all {{ $isActive ? 'category-active' : 'text-gray-500 hover:bg-gray-50' }}">
                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-transform {{ $isActive ? 'scale-110' : '' }}">
                                 @if($category->image)
                                     <img src="@storageUrl($category->image)" class="w-9 h-9 object-contain">
@@ -53,53 +53,130 @@
             </aside>
 
             {{-- Main Content Area --}}
-            <main id="main-scroll-container" class="flex-1 overflow-y-auto custom-scroll px-1 pb-2">
+            <main id="main-scroll-container" class="flex-1 overflow-y-auto custom-scroll px-1 pb-2 relative">
                 
+                {{-- Loading Overlay --}}
+                <div id="products-loading" class="hidden absolute inset-0 z-30 bg-white/70 backdrop-blur-sm items-center justify-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full"></div>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Filtering…</span>
+                    </div>
+                </div>
+
                 {{-- 1. Sort & Count Header (Brand Aware) --}}
                 <div class="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-gray-100 mb-1">
-                    <div class="py-2 px-3 flex items-center justify-between">
-                        <h1 class="text-sm font-black text-gray-900 uppercase tracking-tighter flex items-center gap-2">
-                            @if($selectedBrand)
-                                <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 underline decoration-2 underline-offset-4 decoration-green-400">BRAND :</span>
-                                <span class="text-green-600">{{ $selectedBrand->name }}</span>
-                            @elseif($filters['category'])
-                                <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 uppercase">{{ str_replace('-', ' ', $filters['category']) }}</span>
-                            @else
-                                <span class="text-gray-800">ALL COLLECTIONS</span>
-                            @endif
-                            <span class="text-gray-400 font-bold ml-1 text-[11px] lowercase tracking-normal">({{ $products->total() }})</span>
-                        </h1>
-                        
-                        <form id="sort-form" method="GET" action="{{ route('shop.index') }}">
-                            <select id="sort-select" name="sort" class="text-[11px] font-black border-none bg-gray-100/50 rounded-full px-4 py-1.5 focus:ring-1 focus:ring-green-400 transition-all outline-none cursor-pointer">
-                                <option value="">SORT BY</option>
-                                <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>PRICE: LOW TO HIGH</option>
-                                <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>PRICE: HIGH TO LOW</option>
-                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>NEWEST DEALS</option>
-                            </select>
-                            {{-- PERSIST ALL FILTERS --}}
-                            @foreach(request()->except('page', 'sort') as $name => $value)
-                                <input type="hidden" name="{{ $name }}" value="{{ $value }}">
-                            @endforeach
-                        </form>
-                    </div>
-
-                    {{-- 1b. Horizontal Brands QuickFilter --}}
-                    <div class="flex items-center gap-3 px-3 pb-2 overflow-x-auto custom-scroll no-scrollbar scroll-smooth">
-                        <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => null])) }}" 
-                           class="whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold border transition-all {{ empty($filters['brand']) ? 'bg-green-600 text-white border-green-600 shadow-sm' : 'bg-gray-50 text-gray-500 border-gray-100 hover:bg-gray-100 hover:text-gray-700' }}">
-                            ALL BRANDS
-                        </a>
-                        @foreach($brands->take(15) as $brand)
-                            @php $isBrandActive = ($filters['brand'] ?? null) == $brand->slug; @endphp
-                            <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => $brand->slug])) }}" 
-                               class="flex items-center gap-2 whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold border transition-all {{ $isBrandActive ? 'bg-white text-green-600 border-green-200 shadow-md ring-1 ring-green-100 scale-105' : 'bg-white text-gray-500 border-gray-100 hover:border-green-100 hover:text-green-600 shadow-sm' }}">
-                                @if($brand->logo)
-                                    <img src="@storageUrl($brand->logo)" class="w-4 h-4 object-contain {{ $isBrandActive ? '' : 'grayscale opacity-70 group-hover:grayscale-0' }}">
+                    <div class="pt-2 px-3 flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <h1 class="text-sm font-black text-gray-900 uppercase tracking-tighter flex items-center gap-2" id="results-count-header">
+                                @if(isset($selectedBrands) && $selectedBrands->count() > 0)
+                                    <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 underline decoration-2 underline-offset-4 decoration-green-400">BRAND{{ $selectedBrands->count() > 1 ? 'S' : '' }} :</span>
+                                @elseif($filters['category'])
+                                    <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-black mr-1 uppercase">{{ str_replace('-', ' ', $filters['category']) }}</span>
+                                @else
+                                    <span class="text-gray-800">ALL COLLECTIONS</span>
                                 @endif
-                                {{ strtoupper($brand->name) }}
-                            </a>
-                        @endforeach
+                                <span class="text-gray-400 font-bold ml-1 text-[11px] lowercase tracking-normal">({{ $products->total() }})</span>
+                            </h1>
+
+                            <div class="flex items-center gap-2">
+                                {{-- Sort & Price Dropdown Area --}}
+                                @php
+                                    $activeSorts = array_filter(explode(',', request('sort', '')));
+                                    $sortOptions = [
+                                        'latest'       => '🕐 Latest Deals',
+                                        'price_asc'    => '↑ Price: Low → High',
+                                        'price_desc'   => '↓ Price: High → Low',
+                                        'range_0_99'   => '₹0 – ₹99 (Budget)',
+                                        'range_99_199' => '₹99 – ₹199',
+                                        'range_199_299'=> '₹199 – ₹299',
+                                        'range_299_499'=> '₹299 – ₹499',
+                                        'range_499_999'=> '₹499 – ₹999',
+                                        'range_999_plus'=> '₹999+ (Premium)',
+                                    ];
+                                @endphp
+                                
+                                <div class="relative flex-shrink-0 flex justify-end">
+                                    <button type="button" onclick="document.getElementById('price-dropdown').classList.toggle('hidden')" class="border border-gray-200 bg-white rounded-full flex items-center justify-center gap-1.5 px-3 py-1.5 text-[10px] font-bold text-gray-700 shadow-sm relative hover:bg-gray-50 transition-colors">
+                                        <i class="fa fa-filter text-green-600"></i> Price
+                                        @if(count($activeSorts) > 0)
+                                            <a href="{{ route('shop.index', request()->except('page', 'sort')) }}" class="ajax-link absolute -top-1.5 -right-1.5 bg-red-500 hover:bg-red-600 border border-white text-white w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black z-10 shadow-md" title="Reset Price Filters">
+                                                {{ count($activeSorts) }}
+                                            </a>
+                                        @endif
+                                        <i class="fa fa-chevron-down text-[8px] text-gray-400"></i>
+                                    </button>
+                                    
+                                    {{-- Custom Dropdown Menu --}}
+                                    <div id="price-dropdown" class="absolute top-8 right-0 w-48 bg-white border border-gray-100 shadow-xl rounded-xl z-50 hidden py-2 max-h-64 overflow-y-auto custom-scroll">
+                                        @foreach($sortOptions as $key => $label)
+                                            @php 
+                                                $isActive = in_array($key, $activeSorts); 
+                                                if ($isActive) {
+                                                    $newSortSlugs = array_diff($activeSorts, [$key]);
+                                                } else {
+                                                    $newSortSlugs = $activeSorts;
+                                                    $newSortSlugs[] = $key;
+                                                }
+                                                $newSortStr = implode(',', array_filter($newSortSlugs));
+                                            @endphp
+                                            <a href="{{ route('shop.index', array_merge(request()->except('page', 'sort'), ['sort' => $newSortStr])) }}" 
+                                               class="ajax-link flex items-center px-4 py-2 hover:bg-green-50 transition-colors group">
+                                                <div class="w-3.5 h-3.5 border rounded flex items-center justify-center mr-2 transition-colors {{ $isActive ? 'bg-green-500 border-green-500' : 'border-gray-300' }}">
+                                                    @if($isActive)<i class="fa fa-check text-white text-[8px]"></i>@endif
+                                                </div>
+                                                <span class="text-[10px] font-bold {{ $isActive ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-800' }}">{{ $label }}</span>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {{-- 1b. Horizontal Brands QuickFilter --}}
+                        <div class="flex items-center mt-2 pb-1">
+                            @if($brands && $brands->count() > 0)
+                                <div class="flex items-center gap-2 overflow-x-auto custom-scroll no-scrollbar scroll-smooth w-full">
+                                    @php
+                                        $activeBrandSlugs = array_filter(explode(',', request('brand', '')));
+                                    @endphp
+                                    
+                                    @if(count($activeBrandSlugs) > 0)
+                                        <a href="{{ route('shop.index', request()->except('page', 'brand')) }}" 
+                                           class="ajax-link flex-shrink-0 text-[10px] font-black text-red-600 bg-red-50 border border-red-100 px-3 py-1.5 rounded-full hover:bg-red-100 transition-all flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa fa-times-circle"></i> Reset Brands
+                                        </a>
+                                    @else
+                                        <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => null])) }}" 
+                                           class="ajax-link flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border transition-all bg-green-600 text-white border-green-600 shadow-sm">
+                                            ALL BRANDS
+                                        </a>
+                                    @endif
+                                    
+                                    @foreach($Brands ?? $brands->take(15) as $brand)
+                                        @php 
+                                            $isBrandActive = in_array($brand->slug, $activeBrandSlugs); 
+                                            if ($isBrandActive) {
+                                                $newBrandSlugs = array_diff($activeBrandSlugs, [$brand->slug]);
+                                            } else {
+                                                $newBrandSlugs = $activeBrandSlugs;
+                                                $newBrandSlugs[] = $brand->slug;
+                                            }
+                                            $newBrandStr = implode(',', array_filter($newBrandSlugs));
+                                        @endphp
+                                        <a href="{{ route('shop.index', array_merge(request()->except('page', 'brand'), ['brand' => $newBrandStr])) }}" 
+                                           class="ajax-link flex-shrink-0 flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border transition-all {{ $isBrandActive ? 'bg-white text-green-600 border-green-200 shadow-sm ring-1 ring-green-100 scale-105' : 'bg-white text-gray-500 border-gray-100 hover:border-green-100 hover:text-green-600 shadow-sm' }}">
+                                            @if($brand->logo)
+                                                <img src="@storageUrl($brand->logo)" class="w-4 h-4 object-contain {{ $isBrandActive ? '' : 'grayscale opacity-70 group-hover:grayscale-0' }}">
+                                            @endif
+                                            {{ strtoupper($brand->name) }}
+                                            @if($isBrandActive)
+                                                <i class="fa fa-times ml-1 text-xs opacity-60 hover:opacity-100"></i>
+                                            @endif
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -109,7 +186,7 @@
                 </div>
 
                 {{-- 3. Loading Spinner (Trigger for Infinite Scroll) --}}
-                <div id="loading-spinner" class="py-10 flex justify-center {{ $products->hasMorePages() ? '' : 'hidden' }}">
+                <div id="loading-spinner" data-next-page="{{ $products->nextPageUrl() }}" class="py-10 flex justify-center {{ $products->hasMorePages() ? '' : 'hidden' }}">
                     <div class="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full"></div>
                 </div>
 
@@ -232,36 +309,70 @@
             const grid = document.getElementById('product-grid');
             const mainContainer = document.getElementById('main-scroll-container');
             const featuredSection = document.getElementById('featured-section-end');
+            const loadingOverlay = document.getElementById('products-loading');
 
-            // 1. AJAX Sorting
-            const sortSelect = document.getElementById('sort-select');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', function() {
-                    const form = document.getElementById('sort-form');
-                    const url = new URL(form.action);
-                    const params = new URLSearchParams(new FormData(form));
-                    url.search = params.toString();
+            // 1. AJAX Filtering (Category, Brand, Sort via .ajax-link)
+            document.body.addEventListener('click', function(e) {
+                const link = e.target.closest('.ajax-link');
+                if (link) {
+                    e.preventDefault();
+                    const url = link.href;
 
-                    grid.style.opacity = '0.5';
-                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-                    .then(res => res.json())
-                    .then(data => {
-                        grid.innerHTML = data.html;
-                        nextPageUrl = data.next_page;
-                        grid.style.opacity = '1';
-                        history.pushState(null, '', url.toString());
-                        
-                        // Reset visibility based on new page state
-                        if (nextPageUrl) {
-                            spinner.classList.remove('hidden');
-                            featuredSection.classList.add('hidden');
-                        } else {
-                            spinner.classList.add('hidden');
-                            featuredSection.classList.remove('hidden');
+                    // Show loading overlay
+                    if(loadingOverlay) loadingOverlay.classList.remove('hidden');
+                    if(loadingOverlay) loadingOverlay.classList.add('flex');
+                    if(grid) grid.style.opacity = '0.5';
+
+                    fetch(url) // Fetch full HTML page
+                    .then(res => res.text())
+                    .then(html => {
+                        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+                        // Replace dynamic parts
+                        document.querySelector('aside').innerHTML = doc.querySelector('aside').innerHTML;
+                        const thisSticky = document.querySelector('.sticky.top-0');
+                        const newSticky = doc.querySelector('.sticky.top-0');
+                        if (thisSticky && newSticky) {
+                            thisSticky.innerHTML = newSticky.innerHTML;
                         }
+                        const newGrid = doc.getElementById('product-grid');
+                        if (grid && newGrid) {
+                            grid.innerHTML = newGrid.innerHTML;
+                            grid.style.opacity = '1';
+                        }
+                        
+                        // Update infinite scroll params
+                        const newSpinner = doc.getElementById('loading-spinner');
+                        if (newSpinner) {
+                            nextPageUrl = newSpinner.getAttribute('data-next-page');
+                            
+                            // Replace spinner definition to update classes
+                            if (spinner) {
+                                spinner.className = newSpinner.className;
+                                spinner.setAttribute('data-next-page', nextPageUrl || '');
+                            }
+                        }
+
+                        // Toggle visibility of spinner and featured section
+                        const newFeatured = doc.getElementById('featured-section-end');
+                        if (featuredSection && newFeatured) {
+                            featuredSection.className = newFeatured.className;
+                            featuredSection.innerHTML = newFeatured.innerHTML;
+                        }
+                        
+                        if (nextPageUrl) {
+                            observer.observe(spinner); // Re-observe in case it was unobserved
+                        }
+
+                    })
+                    .catch(err => { console.error(err); })
+                    .finally(() => {
+                        if(loadingOverlay) loadingOverlay.classList.add('hidden');
+                        if(loadingOverlay) loadingOverlay.classList.remove('flex');
+                        history.pushState(null, '', url);
                     });
-                });
-            }
+                }
+            });
 
             // 2. Infinite Scroll
             if (spinner && grid) {

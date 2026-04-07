@@ -53,19 +53,41 @@ class ShopController extends Controller
 
         $brandSlug = $request->input('brand');
         if($brandSlug) {
-            $query->whereHas('brand', function($q) use ($brandSlug) {
-                $q->where('slug', $brandSlug);
+            $brandSlugs = array_filter(explode(',', $brandSlug));
+            $query->whereHas('brand', function($q) use ($brandSlugs) {
+                $q->whereIn('slug', $brandSlugs);
             });
         }
 
         // Apply Sorting
         $sort = $request->input('sort');
-        if ($sort === 'price_low_high') {
-            $query->orderBy('price', 'asc');
-        } elseif ($sort === 'price_high_low') {
-            $query->orderBy('price', 'desc');
+        if ($sort) {
+            $sorts = array_filter(explode(',', $sort));
+            
+            // Extract price ranges
+            $ranges = array_filter($sorts, fn($s) => str_starts_with($s, 'range_'));
+            if (count($ranges) > 0) {
+                $query->where(function ($q) use ($ranges) {
+                    foreach ($ranges as $r) {
+                        if ($r == 'range_0_99') $q->orWhere('price', '<=', 99);
+                        if ($r == 'range_99_199') $q->orWhereBetween('price', [99, 199]);
+                        if ($r == 'range_199_299') $q->orWhereBetween('price', [199, 299]);
+                        if ($r == 'range_299_499') $q->orWhereBetween('price', [299, 499]);
+                        if ($r == 'range_499_999') $q->orWhereBetween('price', [499, 999]);
+                        if ($r == 'range_999_plus') $q->orWhere('price', '>', 999);
+                    }
+                });
+            }
+
+            // Apply ordering
+            if (in_array('price_asc', $sorts)) {
+                $query->orderBy('price', 'asc');
+            } elseif (in_array('price_desc', $sorts)) {
+                $query->orderBy('price', 'desc');
+            } else {
+                $query->latest();
+            }
         } else {
-            // Default or 'latest'
             $query->latest();
         }
 
@@ -101,7 +123,11 @@ class ShopController extends Controller
         }
 
         $brands = \App\Models\Brand::where('status', 'active')->orderBy('name')->get();
-        $selectedBrand = $brandSlug ? $brands->firstWhere('slug', $brandSlug) : null;
+        $selectedBrands = collect();
+        if ($brandSlug) {
+             $brandSlugs = array_filter(explode(',', $brandSlug));
+             $selectedBrands = $brands->whereIn('slug', $brandSlugs);
+        }
 
         $featuredProducts = Product::with('images', 'categories')
             ->where('status', 'active')
@@ -207,7 +233,7 @@ class ShopController extends Controller
             ]);
         }
 
-        return view('shop.index', compact('products', 'categories', 'brands', 'selectedBrand', 'featuredProducts', 'filters'));
+        return view('shop.index', compact('products', 'categories', 'filters', 'brands', 'selectedBrands', 'featuredProducts', 'relatedProducts'));
     }
 
     public function show(string $slug): View
