@@ -222,6 +222,48 @@
             </div>
         </section>
 
+        {{-- ================= BUY IT AGAIN (PERSONALIZED) ================= --}}
+        @isset($buyItAgainProducts)
+        @if($buyItAgainProducts->isNotEmpty())
+            <section class="overflow-hidden mt-6 bg-gradient-to-r from-green-50 to-white rounded-2xl border border-green-100 p-2 shadow-sm mb-6">
+                {{-- HEADER --}}
+                <div class="flex items-center justify-between mb-3 px-2">
+                    <div>
+                        <h2 class="text-lg font-black text-gray-900 tracking-tight flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-full bg-green-200 text-green-800 flex items-center justify-center shadow-sm">
+                                <i class="fa fa-rotate-left"></i>
+                            </span>
+                            Buy it Again
+                        </h2>
+                        <p class="text-[11px] text-gray-500 font-bold ml-10 -mt-1">Your frequent essentials, ready to repick.</p>
+                    </div>
+                    <a href="{{ route('account.orders.index') }}" class="text-xs font-bold text-green-600 hover:underline">View Orders</a>
+                </div>
+
+                {{-- SLIDER --}}
+                <div class="relative group px-1 product-slider-container">
+                    <div class="swiper">
+                        <div class="swiper-wrapper">
+                            @foreach ($buyItAgainProducts as $product)
+                                <div class="swiper-slide h-auto flex pb-4">
+                                     @include('partials.product-card', ['product' => $product, 'isAd' => false])
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    {{-- NAVIGATION --}}
+                    <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-left text-xs"></i>
+                    </div>
+                    <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-100 text-green-600">
+                        <i class="fa fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+            </section>
+        @endif
+        @endisset
+
          {{-- ================= ICONS SLIDER SECTION (shows 3 at a time, slides by 1) ================= --}}
            <section class="icons-carousel-section max-w-8xl mx-auto" data-aos="fade-up">
                 <div class="">
@@ -296,6 +338,67 @@
            </section>
 
 
+
+         {{-- ================= UNIFIED SMART DYNAMIC SECTION ================= --}}
+         <section class="mt-4 px-2" data-aos="fade-up">
+            <div class="bg-white rounded-[2.5rem] shadow-xl shadow-green-900/5 border border-gray-100 overflow-hidden group">
+                
+                {{-- 1. COMPACT TOP HERO PART (Dynamic Header) --}}
+                <div class="relative py-4 px-6 md:px-8 flex items-center justify-between gap-4 overflow-hidden bg-gradient-to-r from-green-50/50 to-white">
+                    <div class="flex items-center gap-4 z-10">
+                        {{-- Small Floating Icon --}}
+                        <div class="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center rounded-full bg-gradient-to-tr from-green-600 to-green-400 text-2xl md:text-3xl text-white shadow-lg shadow-green-200">
+                             @if($timeSlotData['icon'] == 'sun-low') <i class="bi bi-brightness-low"></i>
+                            @elseif($timeSlotData['icon'] == 'sun-high') <i class="bi bi-brightness-high"></i>
+                            @elseif($timeSlotData['icon'] == 'moon-stars') <i class="bi bi-moon-stars"></i>
+                            @elseif($timeSlotData['icon'] == 'alarm') <i class="bi bi-alarm"></i>
+                            @endif
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <span class="inline-flex items-center gap-2 text-green-700 text-[9px] font-black uppercase tracking-[0.2em]">
+                                <i class="bi bi-clock-history"></i> {{ $timeSlotData['greeting'] }}
+                            </span>
+                            <h2 class="text-xl md:text-3xl font-black text-gray-900 leading-tight uppercase tracking-tighter italic">
+                                {{ $timeSlotData['title'] }}
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="hidden md:flex flex-col items-end z-10">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ strtolower($timeSlotData['badge']) }} collection</p>
+                        <a href="{{ route('products.all') }}" class="mt-1 inline-flex items-center gap-2 text-green-600 text-[10px] font-black uppercase tracking-widest hover:underline">
+                            EXPLORE ALL <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- 2. BOTTOM PRODUCT SLIDER PART --}}
+                @if(isset($smartProducts) && $smartProducts->isNotEmpty())
+                    <div class="bg-gray-50/20 border-t border-gray-100 p-2 md:p-4">
+                        <div class="relative group product-slider-container" data-slides-desktop="6" data-slides-tablet="4">
+                            <div class="swiper smartProductSwiper">
+                                <div class="swiper-wrapper">
+                                    @foreach ($smartProducts as $product)
+                                        <div class="swiper-slide h-auto flex pb-4">
+                                            @include('partials.product-card', ['product' => $product, 'isAd' => false])
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
+                            {{-- Unified Slider Controls --}}
+                            <div class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-2xl cursor-pointer opacity-0 group-hover:opacity-100 transition-all hidden md:flex border border-gray-100 text-green-600 hover:bg-green-600 hover:text-white">
+                                <i class="fa fa-chevron-left text-xs"></i>
+                            </div>
+                            <div class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-2xl cursor-pointer opacity-0 group-hover:opacity-100 transition-all hidden md:flex border border-gray-100 text-green-600 hover:bg-green-600 hover:text-white">
+                                <i class="fa fa-chevron-right text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+         </section>
 
         @if($megaDeals->isNotEmpty())
             <section class="overflow-hidden">

@@ -11,6 +11,8 @@ class HomeController extends Controller
 {
     public function index(): View
     {
+
+
         $categories = Category::where('status', 'active')
             ->orderBy('name')
             ->get();
@@ -32,6 +34,56 @@ class HomeController extends Controller
         ...(auth()->check() ? ['cartItem'] : [])
         ])
         ->where('status', 'active');
+
+        // 1. Time-Based Logic (Smart Dynamic Section)
+        $hour = now()->hour;
+        if ($hour >= 11 && $hour < 17) {
+            $timeSlotData = [
+                'greeting' => 'Good Afternoon',
+                'title' => 'Lunch & Snacks',
+                'badge' => 'Quick Bites',
+                'icon' => 'sun-high',
+                'query_type' => 'snacks',
+                'slugs' => ['instant-food', 'drinks-juices', 'sauces-spreads']
+            ];
+        } elseif ($hour >= 17 && $hour < 22) {
+            $timeSlotData = [
+                'greeting' => 'Good Evening',
+                'title' => 'Dinner Essentials',
+                'badge' => 'Daily Fresh',
+                'icon' => 'moon-stars',
+                'query_type' => 'dinner',
+                'slugs' => ['fruits-vegetables', 'atta-rice-dal', 'masala-dry-fruits', 'cleaners-repellents']
+            ];
+        } elseif ($hour >= 22 || $hour < 5) {
+            $timeSlotData = [
+                'greeting' => 'Good Night',
+                'title' => 'Late Night Cravings',
+                'badge' => 'Midnight Needs',
+                'icon' => 'alarm',
+                'query_type' => 'late-night',
+                'slugs' => ['ice-creams-more', 'sweets-chocolates', 'instant-food']
+            ];
+        } else {
+            // Early morning default
+             $timeSlotData = [
+                'greeting' => 'Good Morning',
+                'title' => 'Morning Essentials',
+                'badge' => 'Breakfast & Dairy',
+                'icon' => 'sun-low',
+                'query_type' => 'breakfast',
+                'slugs' => ['dairy-bread-eggs', 'tea-coffee-milk-drinks', 'fruits-vegetables']
+            ];
+        }
+
+        // Fetch Smart Products specifically for this hour
+        $smartProducts = (clone $baseProductQuery)
+            ->whereHas('categories', function($q) use ($timeSlotData) {
+                $q->whereIn('slug', $timeSlotData['slugs']);
+            })
+            ->inRandomOrder()
+            ->take(8)
+            ->get();
 
         // -----------------
 
@@ -91,6 +143,20 @@ class HomeController extends Controller
             ->take(6)
             ->get();
         $budgetStore = $fillProducts($budgetStore, 6);
+
+        // SECTION 6: Buy It Again (Personalized past purchases)
+        $buyItAgainProducts = collect();
+        if (auth()->check()) {
+            $pastProductIds = \App\Models\OrderItem::whereHas('order', function($q) {
+                $q->where('user_id', auth()->id())->where('status', '!=', 'cancelled');
+            })->latest()->pluck('product_id')->unique()->take(10)->toArray();
+
+            if (!empty($pastProductIds)) {
+                $buyItAgainProducts = (clone $baseProductQuery)
+                    ->whereIn('id', $pastProductIds)
+                    ->get();
+            }
+        }
         // ---------------------
 
        $placements = \App\Models\AdPlacement::with(['ads' => function($q) {
@@ -110,8 +176,11 @@ class HomeController extends Controller
             'trendingProducts' => $trendingProducts,
             'featuredProducts' => $featuredProducts,
             'budgetStore' => $budgetStore,
+            'buyItAgainProducts' => $buyItAgainProducts,
             'adsplacements' => $placements,
             'brands' => $brands,
+            'timeSlotData' => $timeSlotData,
+            'smartProducts' => $smartProducts,
         ]);
     }
 }

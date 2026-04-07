@@ -4,24 +4,39 @@
         : 'border border-gray-100 bg-white hover:shadow-xl hover:border-transparent';
 @endphp
 
-<div class="relative rounded-xl {{ $cardStyle }} p-2 flex flex-col transition-all duration-500 group h-full">
+<div class="relative overflow-hidden rounded-xl {{ $cardStyle }} p-2 flex flex-col transition-all duration-500 group h-full">
     
     {{-- SPONSORED TAG --}}
     @if($isAd)
-        <div class="absolute top-3 left-3 z-10">
-            <span class="bg-amber-400 text-white text-[9px] font-black px-2 py-0.5 rounded shadow-sm uppercase">Sponsored</span>
+        <div class="absolute top-2 left-2 z-10">
+            <span class="bg-amber-400 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm uppercase">Sponsored</span>
+        </div>
+    @endif
+
+    {{-- STOCK SCARCITY (DIAGONAL RIBBON) --}}
+    @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
+        <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-10 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            {{ $product->stock_quantity }} LEFT
+        </div>
+    @endif
+
+    {{-- DISCOUNT BADGE --}}
+    @if($product->discount_price && $product->price > 0 && !$isAd)
+        @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
+        <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+            {{ $discountPercent }}% OFF
         </div>
     @endif
 
     {{-- WISHLIST (Same as your code) --}}
     @auth
-        <button class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-sm wishlist-btn hover:scale-110 transition"
+        <button class="absolute top-2 right-2 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-sm wishlist-btn hover:scale-110 transition"
                 data-product-id="{{ $product->id }}">
-            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-300' }}"></i>
+            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-300' }} text-[10px]"></i>
         </button>
     @else
-        <a href="{{ route('login') }}" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-sm">
-            <i class="fa fa-heart text-gray-300"></i>
+        <a href="{{ route('login') }}" class="absolute top-2 right-2 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-sm">
+            <i class="fa fa-heart text-gray-300 text-[10px]"></i>
         </a>
     @endauth
 
@@ -56,12 +71,26 @@
 
     {{-- PRODUCT INFO --}}
     <div class="mt-2 flex-1">
-        <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
+        <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
             {{ $product->name }}
         </p>
 
+        {{-- STAR RATINGS --}}
+        @php 
+            $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
+            $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
+        @endphp
+        <div class="flex items-center gap-1 mt-1 opacity-90">
+            <div class="flex text-yellow-400 text-[8px] gap-0.5">
+                @for($i = 1; $i <= 5; $i++)
+                    <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
+                @endfor
+            </div>
+            <span class="text-[8px] text-gray-500 font-medium">({{ $reviewCount }})</span>
+        </div>
+
         @if($product->size)
-           <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
+           <p class="text-[11px] text-gray-400 mt-1">{{ $product->size }}</p>
          @endif
     </div>
 
