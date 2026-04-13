@@ -30,15 +30,54 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        
+        // Update basic info
+        $user->name = $request->name;
+        $user->last_name = $request->last_name;
+        $user->mobile = $request->mobile;
+        $user->gender = $request->gender;
+        $user->dob = $request->dob;
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Update avatar if provided
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->image_url = $path;
         }
 
-        $request->user()->save();
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+            $user->email = $request->email;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->image_url = $path;
+            $user->save();
+
+            $url = str_contains(request()->root(), '/public') ? asset('storage/' . $path) : asset('public/storage/' . $path);
+
+            return response()->json([
+                'success' => true,
+                'image_url' => $url,
+                'message' => 'Profile image updated successfully!'
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'No image uploaded'], 400);
     }
 
     /**
