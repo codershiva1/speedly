@@ -20,11 +20,19 @@ class CartController extends Controller
         ]);
     }
 
-   public function index(): View
+    public function index(): View
     {
         $cart = $this->getUserCart()->load('items.product');
 
         $subtotal = $cart->items->sum('total_price');
+        
+        // Fetch trending products for upselling (excluding those already in cart)
+        $inCartIds = $cart->items->pluck('product_id')->toArray();
+        $trendingProducts = Product::where('status', 'active')
+            ->whereNotIn('id', $inCartIds)
+            ->where('is_trending', 1)
+            ->limit(6)
+            ->get();
 
         // ✅ Fetch ONLY eligible coupons
         $coupons = Coupon::where('is_active', 1)
@@ -38,7 +46,7 @@ class CartController extends Controller
             })
             ->get();
 
-        return view('cart.index', compact('cart', 'coupons', 'subtotal'));
+        return view('cart.index', compact('cart', 'coupons', 'subtotal', 'trendingProducts'));
     }
 
 

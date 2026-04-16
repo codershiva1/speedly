@@ -26,6 +26,18 @@ if ($product->description && !isset($productDetails['Description'])) {
     }
 </style>
 
+@push('meta')
+    <meta property="og:title" content="{{ $product->name }} | Speedly Shop">
+    <meta property="og:description" content="Buy {{ $product->name }} for ₹{{ $product->discount_price ?? $product->price }}. Fresh stock, superfast delivery in 8 mins!">
+    <meta property="og:image" content="@storageUrl($product->images->first()?->path ?? 'placeholder.png')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="product">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $product->name }}">
+    <meta name="twitter:description" content="Get {{ $product->name }} delivered in minutes via Speedly.">
+    <meta name="twitter:image" content="@storageUrl($product->images->first()?->path ?? 'placeholder.png')">
+@endpush
+
     <div class="bg-gray-50 min-h-screen ">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-1 space-y-8">
 
@@ -38,26 +50,39 @@ if ($product->description && !isset($productDetails['Description'])) {
                     <!-- IMAGE -->
                     <div class="relative">
 
-                    {{-- WISHLIST ICON (TOP RIGHT) --}}
+                    {{-- ACTION BUTTONS (TOP RIGHT) --}}
+                    <div class="absolute top-2 right-2 z-20 flex flex-col gap-2">
+                        {{-- SHARE BUTTON --}}
+                        <button
+                            onclick="shareProduct('{{ addslashes($product->name) }}', window.location.href)"
+                            class="w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-gray-50 transition-all border border-gray-100"
+                            title="Share Product"
+                        >
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                        </button>
 
-                            @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                            @endauth
+                        {{-- WISHLIST --}}
+                        @auth
+                        <button
+                            class="w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition border border-gray-100"
+                            data-product-id="{{ $product->id }}"
+                            aria-label="Add to wishlist"
+                        >
+                            <i class="fa fa-heart
+                                {{ auth()->user()->wishlist->contains('product_id', $product->id)
+                                    ? 'text-red-500'
+                                    : 'text-gray-400' }}">
+                            </i>
+                        </button>
+                        @else
+                        <a href="{{ route('login') }}"
+                        class="w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-md border border-gray-100">
+                            <i class="fa fa-heart text-gray-400"></i>
+                        </a>
+                        @endauth
+                    </div>
 
                         {{-- PRODUCT IMAGE SLIDER --}}
                         <div class="relative group/main-image">
@@ -472,6 +497,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                 if(chevron) chevron.style.transform = 'rotate(180deg)';
             }
         };
+
     });
 
     window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";

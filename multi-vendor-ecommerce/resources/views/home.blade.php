@@ -124,12 +124,12 @@
                     <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 group-hover:shadow-md group-hover:border-green-200 transition-all duration-200 h-full flex flex-col">
                         
                         {{-- 4 Product Grid Inside Card --}}
-                        <div class="grid grid-cols-2 gap-1.5 mb-2 flex-grow">
+                        <div class="relative grid grid-cols-2 gap-1.5 mb-5 flex-grow">
                             @foreach ($catProducts as $product)
                                 @php $img = $product->images->first(); @endphp
                                 <div class="bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden h-16 md:h-20">
                                     @if($img)
-                                        <img src="@storageUrl($img->path)" class="object-contain w-full h-full p-1" alt="{{ $product->name }}" loading="lazy">
+                                        <img src="@storageUrl($img->path)" class="object-contain w-full h-full p-1 group-hover:scale-110 transition-transform duration-500" alt="{{ $product->name }}" loading="lazy">
                                     @else
                                         <i class="bi bi-image text-gray-300 text-xl"></i>
                                     @endif
@@ -142,21 +142,23 @@
                                     </div>
                                 @endfor
                             @endif
+
+                             {{-- Product count badge (Repositioned to overlap bottom of grid) --}}
+                            @php
+                                $totalCount = $category->products()->count();
+                                $extraCount = max(0, $totalCount - 4);
+                            @endphp
+                            @if($extraCount > 0)
+                                <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 z-10">
+                                    <span class="bg-green-100 text-green-700 text-[10px] md:text-[11px] font-bold px-3 py-1.5 rounded-2xl shadow-sm border border-white whitespace-nowrap">
+                                        +{{ $extraCount }} more
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                         
-                        {{-- Product count badge --}}
-                        @php
-                            $totalCount = $category->products()->count();
-                            $extraCount = max(0, $totalCount - 4);
-                        @endphp
-                        <div class="flex justify-center mb-1">
-                            <span class="bg-green-100 text-green-700 text-[9px] font-semibold px-2 py-0.5 rounded-full">
-                                @if($extraCount > 0) &middot; +{{ $extraCount }} more @else {{ $totalCount }} Items @endif
-                            </span>
-                        </div>
-
                         {{-- Category Name --}}
-                        <p class="text-[12px] md:text-sm font-black text-gray-900 text-center leading-tight uppercase italic tracking-tighter">
+                        <p class="text-[12px] md:text-sm font-black text-gray-900 text-center leading-tight uppercase italic tracking-tighter mt-1">
                             {{ $category->name }}
                         </p>
                     </div>

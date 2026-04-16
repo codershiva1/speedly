@@ -265,6 +265,29 @@ document.addEventListener('click', function (e) {
     });
 });
 
-window.Alpine = Alpine;
+window.shareProduct = function(name, url) {
+    const shareData = {
+        title: name,
+        text: `Check out this product on Speedly Shop: ${name}`,
+        url: url || window.location.href
+    };
 
+    if (navigator.share) {
+        navigator.share(shareData)
+            .catch((error) => console.log('Error sharing:', error));
+    } else {
+        navigator.clipboard.writeText(url || window.location.href).then(() => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Product link copied!',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        });
+    }
+};
+
+window.Alpine = Alpine;
 Alpine.start();

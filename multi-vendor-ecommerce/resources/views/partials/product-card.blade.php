@@ -70,6 +70,12 @@
                     <span class="text-[8px] text-gray-400 font-bold">NEW</span>
                 </div>
                 @endif
+
+                {{-- SHARE BUTTON OVERLAY (Bottom-Right of Image) --}}
+                <button onclick="event.preventDefault(); shareProduct('{{ addslashes($product->name) }}', '{{ route('shop.show', $product->slug) }}')" 
+                    class="absolute bottom-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white/40 backdrop-blur-xl shadow-sm border border-white/50 hover:bg-white/60 hover:scale-110 transition group/share">
+                    <i class="fa-solid fa-share text-[#8cc63f] text-[10px]"></i>
+                </button>
             </div>
         </a>
     </div>

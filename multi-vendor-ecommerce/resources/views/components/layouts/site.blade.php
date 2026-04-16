@@ -28,6 +28,7 @@
 
         @stack('styles')
 
+        @stack('meta')
     </head>
     <body class="font-sans antialiased bg-gray-50 text-gray-900" >
         <div class="min-h-screen flex flex-col" style="overflow-x: clip;">
