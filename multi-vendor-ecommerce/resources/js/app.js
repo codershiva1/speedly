@@ -7,12 +7,17 @@ import Swal from 'sweetalert2';
 // import './homeslider.js';
 
 // at top of app.js (if not already)
-import 'swiper/css';
-import 'swiper/css/navigation';
-
-
 import Swiper from 'swiper';
 import { Navigation, Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
+
+// Make Swiper and modules global
+window.Swiper = Swiper;
+window.Navigation = Navigation;
+window.Pagination = Pagination;
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 // ----------icon slider --------------------
 const iconSwiper = new Swiper('.iconSwiper', {

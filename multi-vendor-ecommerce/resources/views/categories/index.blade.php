@@ -20,61 +20,41 @@
     </div>
     --}}
 
-    {{-- 2. Grouped Sections (Parent -> Children) --}}
-    <div class="space-y-8">
-        @foreach($parentCategories as $parent)
-            <section class="mt-6">
-                <div class="px-4 flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-extrabold text-gray-900 flex items-center gap-2">
-                        {{ $parent->name }}
-                        <span class="h-1 w-1 bg-gray-300 rounded-full"></span>
-                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Sub-categories</span>
-                    </h2>
-                </div>
+    {{-- Unified Categories Grid --}}
+    <section class="mt-10 px-4">
+        <div class="mb-8">
+            <h1 class="text-2xl font-black text-gray-900 italic uppercase tracking-tighter">Shop by Category</h1>
+            <div class="h-1 w-20 bg-green-600 mt-2 rounded-full"></div>
+        </div>
 
-                <div class="flex overflow-x-auto gap-4 px-4 pb-2 no-scrollbar">
-                    @foreach($parent->children as $child)
-                        <a href="{{ route('shop.index', ['category' => $child->slug]) }}" class="min-w-[110px] max-w-[110px] text-center group category-card">
-                            <div class="w-24 h-24 mx-auto bg-gray-50 rounded-3xl flex items-center justify-center p-4 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-green-100/50 transition-all duration-300 border border-gray-100 group-hover:border-green-100">
-                                <img src="@storageUrl($child->image)" class="max-h-full object-contain transition-transform duration-300 ease-out" loading="lazy">
-                            </div>
-                            <div class="mt-3 px-1">
-                                <p class="text-[13px] font-bold text-gray-800 leading-tight group-hover:text-green-600 transition-colors">
-                                    {{ $child->name }}
-                                </p>
-                                <p class="text-[10px] text-gray-400 font-semibold mt-1 bg-gray-100 inline-block px-2 py-0.5 rounded-full">
-                                    {{ $child->products_count }} Items
-                                </p>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </section>
-        @endforeach
-    </div>
-
-    {{-- 3. Standalone Categories Section --}}
-    @if($standaloneCategories->count() > 0)
-        <section class="mt-12 px-4">
-            <div class="mb-6">
-                <h2 class="text-lg font-extrabold text-gray-900">More Categories</h2>
-                <p class="text-xs text-gray-400 font-medium uppercase tracking-widest mt-1">Explore specialized collections</p>
-            </div>
-
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-                @foreach($standaloneCategories as $cat)
-                    <a href="{{ route('shop.index', ['category' => $cat->slug]) }}" class="text-center group category-card">
-                        <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center p-3 border border-gray-100 group-hover:bg-white group-hover:shadow-lg transition-all">
-                            <img src="@storageUrl($cat->image)" class="max-h-full object-contain" loading="lazy">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            @foreach($allTopCategories as $cat)
+                <a href="{{ route('shop.index', ['category' => $cat->slug]) }}" class="group block">
+                    <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 group-hover:shadow-2xl group-hover:shadow-green-900/10 group-hover:border-green-200 transition-all duration-500 flex flex-col items-center">
+                        {{-- Image Container --}}
+                        <div class="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center p-4 mb-4 group-hover:bg-white transition-colors duration-500 overflow-hidden">
+                            <img src="@storageUrl($cat->image)" 
+                                 class="max-h-full object-contain transform group-hover:scale-110 transition-transform duration-700" 
+                                 loading="lazy" 
+                                 alt="{{ $cat->name }}">
                         </div>
-                        <p class="mt-2 text-[11px] font-bold text-gray-700 leading-tight truncate px-1 group-hover:text-green-600">
-                            {{ $cat->name }}
-                        </p>
-                    </a>
-                @endforeach
-            </div>
-        </section>
-    @endif
+                        
+                        {{-- Meta Info --}}
+                        <div class="text-center w-full">
+                            <h3 class="text-sm font-black text-gray-900 uppercase italic tracking-tighter group-hover:text-green-600 transition-colors truncate">
+                                {{ $cat->name }}
+                            </h3>
+                            <div class="mt-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest inline-flex items-center gap-1.5 bg-gray-50 px-3 py-1 rounded-full group-hover:bg-green-50 group-hover:text-green-700 transition-all">
+                                <span>{{ $cat->products_count }}</span>
+                                <span class="h-1 w-1 bg-gray-300 rounded-full group-hover:bg-green-300"></span>
+                                <span>Items</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </section>
 
     {{-- 4. Brands Section --}}
     <section class="bg-gray-50 py-10 mt-12 mb-20">

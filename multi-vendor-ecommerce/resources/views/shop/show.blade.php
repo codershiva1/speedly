@@ -59,81 +59,97 @@ if ($product->description && !isset($productDetails['Description'])) {
                             </a>
                             @endauth
 
-                        <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center group/main-image cursor-zoom-in relative">
-                            @php $primaryImage = $product->images->first(); @endphp
-                            
-                            <img id="mainProductImage" src="@storageUrl($primaryImage ? $primaryImage->path : 'uploads/products/1/image3.png')"
-                                alt="{{ $product->name }}"
-                                class="w-full h-full object-cover transition-transform duration-500 origin-center"
-                                onmousemove="zoomImage(event)"
-                                onmouseleave="resetZoom()">
-                            
-                             <!-- SLIDER OVERLAYS -->
-                             <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 opacity-0 group-hover/main-image:opacity-100 transition-opacity">
-                                <button onclick="prevImage()" class="w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center text-gray-800 transition">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <button onclick="nextImage()" class="w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center text-gray-800 transition">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                             </div>
+                        {{-- PRODUCT IMAGE SLIDER --}}
+                        <div class="relative group/main-image">
+                            <!-- Swiper -->
+                            <div class="swiper mainProductSwiper rounded-3xl overflow-hidden bg-white">
+                                <div class="swiper-wrapper">
+                                    @foreach ($product->images as $image)
+                                        <div class="swiper-slide flex items-center justify-center p-4">
+                                            <img src="@storageUrl($image->path)" 
+                                                alt="{{ $product->name }}"
+                                                class="w-full h-auto max-h-[450px] object-contain">
+                                        </div>
+                                    @endforeach
+                                    @if($product->images->isEmpty())
+                                        <div class="swiper-slide flex items-center justify-center p-4">
+                                            <img src="@storageUrl('uploads/products/1/image3.png')" 
+                                                alt="{{ $product->name }}"
+                                                class="w-full h-auto max-h-[450px] object-contain">
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                {{-- NAVIGATION BUTTONS (Light Green Blur) --}}
+                                <div class="swiper-button-prev !left-4 !w-11 !h-11 !bg-white/40 !backdrop-blur-lg !rounded-full !text-green-500 after:!text-lg hover:!bg-white/60 transition-all shadow-sm !hidden group-hover/main-image:!flex border-none"></div>
+                                <div class="swiper-button-next !right-4 !w-11 !h-11 !bg-white/40 !backdrop-blur-lg !rounded-full !text-green-500 after:!text-lg hover:!bg-white/60 transition-all shadow-sm !hidden group-hover/main-image:!flex border-none"></div>
+                            </div>
+
+                            {{-- RATING & TIMING PILL + PAGINATION DOTS (Matched to Ref) --}}
+                            <div class="flex items-center justify-between mt-5 px-1">
+                                <div class="flex items-center gap-2 bg-[#f8f9fa] border border-gray-100/50 rounded-xl px-2.5 py-1.5 shadow-sm">
+                                    {{-- Time --}}
+                                    <div class="flex items-center gap-1.5 pr-2.5 border-r border-gray-200">
+                                        <div class="w-4 h-4 rounded-full flex items-center justify-center">
+                                            <i class="bi bi-clock-fill text-green-600 text-[11px]"></i>
+                                        </div>
+                                        <span class="text-[11px] font-black text-gray-800 tracking-tight">8 MINS</span>
+                                    </div>
+                                    {{-- Rating --}}
+                                    <div class="flex items-center gap-1.5 pl-1">
+                                        <div class="flex text-yellow-400 text-[10px]">
+                                            @for($i=1; $i<=5; $i++)
+                                                <i class="fa fa-star {{ $i > ($averageRating ?? 0) ? 'text-gray-200' : '' }}"></i>
+                                            @endfor
+                                        </div>
+                                        <span class="text-[10px] font-black text-gray-500">({{ number_format($ratingCount ?? 0) }})</span>
+                                    </div>
+                                </div>
+
+                                {{-- SLIDER DOTS --}}
+                                <div class="main-slider-pagination !flex !static !w-auto"></div>
+                            </div>
                         </div>
 
-                        @if ($product->discount_price)
-                            <span class="absolute top-3 left-3 bg-green-600 text-white text-xs px-2 py-1 rounded-full">
-                                SAVE ₹{{ $product->price - $product->discount_price }}
-                            </span>
-                        @endif
-
-                         {{-- THUMBNAILS --}}
-                
-                         <div class="flex gap-3 overflow-x-auto mt-2 pb-2 custom-scrollbar">
-                            @foreach ($product->images as $index => $image)
-                                <img src="@storageUrl($image->path)"
-                                    class="thumbnail-img w-20 h-20 object-contain bg-gray-50 rounded-xl p-2 border cursor-pointer hover:border-green-500 transition {{ $index === 0 ? 'border-green-500 shadow-sm' : 'border-gray-100' }}"
-                                    onclick="changeMainImage(this, {{ $index }})">
-                            @endforeach
-                        </div>
-
+                        <style>
+                            .main-slider-pagination .swiper-pagination-bullet {
+                                width: 7px;
+                                height: 7px;
+                                background: #d1d5db;
+                                opacity: 1;
+                                transition: all 0.3s ease;
+                                margin: 0 4px !important;
+                            }
+                            .main-slider-pagination .swiper-pagination-bullet-active {
+                                width: 16px;
+                                border-radius: 4px;
+                                background: #4b5563;
+                            }
+                        </style>
                     </div>
 
-                    <!-- PRODUCT DETAILS (COLLAPSIBLE) -->
-                    <div class="bg-white rounded-xl border mt-6">
+                    <!-- PRODUCT DETAILS (COLLAPSIBLE) - Hidden on mobile here, moved below price -->
+                    <div class="bg-white rounded-xl border mt-6 hidden md:block">
                         <button
                             type="button"
                             onclick="toggleProductDetails()"
-                            class="w-full flex justify-between items-center px-3 py-3 text-[14px] font-medium text-gray-900">
-                            Product Details
-                            <span id="productDetailsToggle" class="text-green-600 text-[12px] font-semibold">
-                                View more
-                            </span>
+                            class="w-full flex justify-between items-center px-4 py-3.5 text-sm font-bold text-green-600 hover:bg-gray-50 transition-colors rounded-xl">
+                            <span id="productDetailsLabel">View product details</span>
+                            <i id="productDetailsChevron" class="fa fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
 
                         <div id="productDetailsContent"
-                            class="hidden border-t px-3 pb-3 text-[12px] text-gray-700 space-y-3">
-
+                            class="hidden border-t border-gray-100 px-4 pb-4 pt-3 text-[12px] text-gray-700 space-y-4">
                             @foreach ($productDetails as $label => $value)
-                                <div class="grid grid-cols-2 gap-3">
-                                    <p class="text-gray-500">{{ $label }}</p>
-
-                                    @if (is_array($value))
-                                        <ul class="list-disc pl-4 space-y-1 text-gray-900">
-                                            @foreach ($value as $item)
-                                                <li>{{ $item }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="text-gray-900 leading-relaxed">
-                                            {{ $value }}
-                                        </p>
-                                    @endif
+                                <div class="grid grid-cols-2 gap-4">
+                                    <p class="text-gray-500 font-medium">{{ $label }}</p>
+                                    <p class="text-gray-900 leading-relaxed font-semibold">
+                                        {{ is_array($value) ? implode(', ', $value) : $value }}
+                                    </p>
                                 </div>
                             @endforeach
-
-                            <!-- DISCLAIMER -->
-                            <p class="pt-2 text-[11px] text-gray-400 leading-relaxed">
-                                Every effort is made to maintain accuracy of all information. However,
-                                actual product packaging and materials may contain more and/or different information.
+                            <p class="pt-3 text-[10px] text-gray-400 italic leading-relaxed border-t border-gray-50">
+                                Every effort is made to maintain accuracy. Products may vary slightly from images shown.
                             </p>
                         </div>
                     </div>
@@ -141,110 +157,177 @@ if ($product->description && !isset($productDetails['Description'])) {
                 </div>
 
                 <!-- RIGHT COLUMN (PRODUCT INFO) - STICKY -->
-                <aside class="sticky top-32 self-start space-y-4">
+                <aside class="sticky top-32 self-start space-y-6">
 
                     <!-- TITLE -->
                     <div>
-                        <h1 class="text-xl md:text-2xl font-semibold text-gray-900">
+                        <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight leading-tight">
                             {{ $product->name }}
                         </h1>
-                        <p class="text-xs text-gray-500 mt-1">
+                        <p class="text-sm font-bold text-gray-400 mt-2 tracking-wide">
                             {{ optional($product->category)->name }}
                             @if ($product->brand) • {{ $product->brand->name }} @endif
                         </p>
                     </div>
 
-                    <!-- DELIVERY INFO -->
-                    <div class="flex items-center gap-1 space-x-2 text-sm bg-green-50 text-green-700 px-3 py-2 rounded-lg w-fit">
-                        🚚 Delivery in <span class="font-semibold">8 mins</span>
-                    </div>
-
                     <!-- PRICE & ADD TO CART -->
-                    <div class="flex flex-col space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl font-bold text-gray-900">
+                    <div class="flex flex-col space-y-5">
+                        <div class="flex items-baseline space-x-3">
+                            <span class="text-3xl font-black text-gray-900">
                                 ₹{{ $product->discount_price ?? $product->price }}
                             </span>
                             @if ($product->discount_price)
-                                <span class="text-sm text-gray-400 line-through">
+                                <span class="text-base text-gray-400 line-through font-bold">
                                     ₹{{ $product->price }}
                                 </span>
                             @endif
                         </div>
 
-                       {{-- ADD BUTTON --}}
-                        @if(auth()->check() && auth()->user()->isDeliveryBoy())
-                            <div class="px-2 py-3 px-6 border border-gray-200 bg-gray-50 text-gray-400 rounded-full text-xs font-semibold text-center cursor-not-allowed w-50" title="Delivery accounts cannot make purchases.">
-                                NOT ALLOWED
-                            </div>
-                        @else
-                            @auth
-                                <button
-                                    class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold w-50
-                                    {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                    data-product-id="{{ $product->id }}"
-                                    >
-                                    {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
-                                </button>
+                        {{-- MOBILE ACTION ROW: Product Details + Cart in one row --}}
+                        <div class="grid grid-cols-2 md:grid-cols-1 gap-3">
+                            <button
+                                type="button"
+                                onclick="toggleProductDetails()"
+                                class="md:hidden flex items-center justify-between px-4 py-3 border border-gray-100 rounded-2xl text-xs font-black text-green-600 bg-white shadow-sm overflow-hidden"
+                            >
+                                <span class="truncate">VIEW DETAILS</span>
+                                <i class="fa fa-chevron-down text-[10px]"></i>
+                            </button>
+
+                            @if(auth()->check() && auth()->user()->isDeliveryBoy())
+                                <div class="px-6 py-3.5 bg-gray-100 text-gray-400 rounded-2xl text-[11px] font-black text-center cursor-not-allowed border border-gray-200 uppercase tracking-widest">
+                                    NOT ALLOWED
+                                </div>
                             @else
-                                <a href="{{ route('login') }}"
-                                    class="cart-btn px-2 py-3 px-6 border border-green-600 rounded-full text-sm font-semibold text-center w-50 block">
-                                    ADD TO CART
-                                </a>
-                            @endauth
-                        @endif
+                                @auth
+                                    <button
+                                        class="cart-btn px-6 py-3.5 border-2 border-green-600 rounded-2xl text-xs font-black transition-all tracking-widest
+                                        {{ $product->cartItem ? 'bg-green-600 text-white shadow-lg shadow-green-200' : 'text-green-600 bg-white hover:bg-green-50' }}"
+                                        data-product-id="{{ $product->id }}"
+                                        >
+                                        {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
+                                    </button>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                        class="px-6 py-3.5 border-2 border-green-600 rounded-2xl text-xs font-black text-center text-green-600 bg-white hover:bg-green-50 tracking-widest block">
+                                        ADD TO CART
+                                    </a>
+                                @endauth
+                            @endif
+                        </div>
+
+                         {{-- Mobile Collapsible Content (Duplicates here but hidden on Desktop) --}}
+                         <div id="productDetailsContentMobile" class="md:hidden hidden mt-2 bg-gray-50 rounded-2xl p-4 border border-gray-100 text-[11px] space-y-3">
+                            @foreach ($productDetails as $label => $value)
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-gray-500 shrink-0">{{ $label }}</span>
+                                    <span class="text-gray-900 font-bold text-right">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                                </div>
+                            @endforeach
+                         </div>
                     </div>
 
-                    <!-- RATINGS -->
-                    @if ($ratingCount)
-                        <div class="flex items-center text-sm text-gray-600">
-                            <span class="mr-1 font-medium">{{ number_format($averageRating, 1) }}</span>
-                            <span class="text-yellow-400">★★★★★</span>
-                            <span class="ml-1 text-xs text-gray-500">({{ $ratingCount }})</span>
-                        </div>
-                    @endif
-
-                    <!-- WHY SHOP FROM BLINKIT / SELLER INFO -->
-                    <div class="border-t pt-4 space-y-3 text-xs text-gray-600">
-                        <p class="font-semibold text-gray-900">Why shop from SpeedlyMart</p>
-                        <div class="space-y-2">
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-600">⚡</span>
-                                <p>
-                                    <span class="font-medium text-gray-900">Superfast delivery</span><br>
-                                    Get your groceries delivered in minutes
-                                </p>
-                            </div>
-
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-600">💰</span>
-                                <p>
-                                    <span class="font-medium text-gray-900">Best prices & offers</span><br>
-                                    Great deals, discounts & savings everyday
-                                </p>
-                            </div>
-
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-600">🛒</span>
-                                <p>
-                                    <span class="font-medium text-gray-900">Wide assortment</span><br>
-                                    Choose from thousands of products
-                                </p>
-                            </div>
-                        </div>
-
-                        @if ($product->vendor && $product->vendor->vendorProfile)
-                            <p class="text-gray-500 mt-2 text-xs">
-                                Sold by
-                                <a href="{{ route('vendors.show', $product->vendor->vendorProfile->slug) }}"
-                                class="text-indigo-600 font-medium">
-                                    {{ $product->vendor->vendorProfile->store_name }}
-                                </a>
-                            </p>
+                    <!-- PRODUCT FEATURES & BRAND -->
+                    <div class="border-t pt-6 space-y-6">
+                        {{-- BRAND CARD (NOW ABOVE) --}}
+                        @if ($product->brand)
+                            <a href="{{ route('products.all', ['brand' => $product->brand->slug]) }}" 
+                               class="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:bg-gray-50 transition-all group shadow-sm">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-xl border border-gray-50 flex items-center justify-center bg-gray-50 overflow-hidden shrink-0">
+                                        @if($product->brand->image)
+                                            <img src="@storageUrl($product->brand->image)" alt="{{ $product->brand->name }}" class="w-full h-full object-contain">
+                                        @else
+                                            <span class="text-xs font-black text-gray-400 opacity-50 uppercase">{{ substr($product->brand->name, 0, 1) }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="space-y-0.5">
+                                        <h3 class="text-sm font-black text-gray-900 tracking-tight leading-none">{{ $product->brand->name }}</h3>
+                                        <p class="text-[11px] font-bold text-gray-400">Explore all products</p>
+                                    </div>
+                                </div>
+                                <i class="fa fa-chevron-right text-xs text-gray-300 group-hover:text-green-600 group-hover:translate-x-1 transition-all"></i>
+                            </a>
                         @endif
+
+                        {{-- RATINGS --}}
+                        @if ($ratingCount)
+                            <div class="flex items-center gap-2 text-sm text-gray-600 px-1">
+                                <div class="flex text-yellow-400">
+                                    @for($i=1; $i<=5; $i++)
+                                        <i class="fa fa-star {{ $i > ($averageRating ?? 0) ? 'text-gray-200' : '' }}"></i>
+                                    @endfor
+                                </div>
+                                <span class="font-black text-gray-900">{{ number_format($averageRating, 1) }}</span>
+                                <span class="text-gray-400 font-bold">({{ number_format($ratingCount) }} reviews)</span>
+                            </div>
+                        @endif
+
+                        {{-- WHY SHOP FROM SPEEDLY --}}
+                        <div class="space-y-4 text-xs text-gray-600 px-1">
+                            <p class="font-black text-gray-900 uppercase tracking-widest text-[10px]">Why shop from SpeedlyMart</p>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 bg-green-50 rounded-lg flex items-center justify-center shrink-0">
+                                        <span class="text-green-600 text-xs text-[10px]">⚡</span>
+                                    </div>
+                                    <p class="leading-relaxed">
+                                        <span class="font-black text-gray-900">Superfast delivery</span><br>
+                                        <span class="text-gray-400">Get your order in minutes</span>
+                                    </p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 bg-green-50 rounded-lg flex items-center justify-center shrink-0">
+                                        <span class="text-green-600 text-[10px]">💰</span>
+                                    </div>
+                                    <p class="leading-relaxed">
+                                        <span class="font-black text-gray-900">Best prices</span><br>
+                                        <span class="text-gray-400">Great deals & savings every day</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </aside>
+
+    {{-- MOBILE FLOATING ADD BUTTON --}}
+    <div class="fixed bottom-24 left-4 right-4 z-50 md:hidden pointer-events-none">
+        <div class="flex justify-end">
+            <div class="pointer-events-auto bg-black/90 backdrop-blur-md rounded-2xl shadow-2xl p-2.5 flex items-center gap-4 border border-white/10 animate-bounce-subtle">
+                {{-- Product Preview --}}
+                <div class="flex items-center gap-3 pl-1">
+                    <div class="w-10 h-10 rounded-full bg-white p-1 overflow-hidden shrink-0 border border-white/20">
+                        <img src="@storageUrl($product->images->first()?->path ?? 'uploads/products/1/image3.png')" alt="" class="w-full h-full object-contain">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-black text-white leading-none">₹{{ $product->discount_price ?? $product->price }}</span>
+                        <span class="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Unit Price</span>
+                    </div>
+                </div>
+
+                {{-- Trigger Button --}}
+                @if(!(auth()->check() && auth()->user()->isDeliveryBoy()))
+                    <button 
+                        class="cart-btn bg-green-600 text-white px-5 py-2.5 rounded-xl font-black text-[11px] tracking-widest flex items-center gap-2 hover:bg-green-500 transition-colors shadow-lg active:scale-95"
+                        data-product-id="{{ $product->id }}">
+                        {{ $product->cartItem ? 'ADDED' : 'ADD TO CART' }}
+                    </button>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-subtle {
+            animation: bounce-subtle 4s infinite ease-in-out;
+        }
+    </style>
 
             </div>
 
@@ -312,98 +395,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                 <h2 class="text-lg font-semibold mb-4">Similar Products</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($similarProducts as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col">
-                            
-                        {{-- WISHLIST ICON (TOP RIGHT) --}}
-
-                            @auth
-                            <button
-                                class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                                aria-label="Add to wishlist"
-                            >
-                                <i class="fa fa-heart
-                                    {{ auth()->user()->wishlist->contains('product_id', $product->id)
-                                        ? 'text-red-500'
-                                        : 'text-gray-400' }}">
-                                </i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}"
-                            class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
-                                <i class="fa fa-heart text-gray-400"></i>
-                            </a>
-                            @endauth
-
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php $img = $product->images->first(); @endphp
-                                   
-                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
-                                        class="w-full h-full object-contain" 
-                                        alt="{{ $product->name }}">
-                                    
-                                </div>
-                            </a>
-
-                            {{-- PRODUCT TITLE & SIZE --}}
-                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full mt-3">
-                                <svg class="w-3.5 h-3.5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.75a.75.75 0 00-1.5 0v4.19l-2.2 2.2a.75.75 0 101.06 1.06l2.39-2.39V5.25z" clip-rule="evenodd" />
-                                </svg>
-                                8 MINS
-                            </span>
-
-                            <div class="mt-2 flex-1">
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                @if($product->size)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
-                                
-                                {{-- PRICE (discount below actual) --}}
-                                <div class="flex flex-col leading-tight">
-                                    <span class="text-base font-bold text-gray-900">
-                                        ₹{{ $product->price }}
-                                    </span>
-
-                                    @if ($product->discount_price)
-                                        <span class="line-through text-xs text-gray-400">
-                                            ₹{{ $product->discount_price }}
-                                        </span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                                @if(auth()->check() && auth()->user()->isDeliveryBoy())
-                                    <button disabled class="px-2 py-1.5 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg text-[10px] font-semibold cursor-not-allowed shrink-0" title="Delivery accounts cannot make purchases.">
-                                        RESTRICTED
-                                    </button>
-                                @else
-                                    @auth
-                                        <button
-                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold shrink-0
-                                            {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                            data-product-id="{{ $product->id }}"
-                                            >
-                                            {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                        </button>
-                                    @else
-                                        <a href="{{ route('login') }}"
-                                            class="px-2 py-1.5 border border-green-600 rounded-lg text-[11px] font-semibold text-green-600 block text-center shrink-0 hover:bg-green-50">
-                                            ADD
-                                        </a>
-                                    @endauth
-                                @endif
-                            </div>
-                        </div>
+                        @include('partials.product-card', ['product' => $product, 'isAd' => false])
                     @endforeach
                 </div>
             </section>
@@ -415,109 +407,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                 <h2 class="text-lg font-semibold mb-4">Top 10 Products in this Category</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($topCategoryProducts as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col overflow-hidden">
-                            
-                            {{-- STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                    {{ $product->stock_quantity }} LEFT
-                                </div>
-                            @endif
-
-                            {{-- DISCOUNT BADGE --}}
-                            @if($product->discount_price && $product->price > 0)
-                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                    {{ $discountPercent }}% OFF
-                                </div>
-                            @endif
-
-                           {{-- WISHLIST ICON (TOP RIGHT) --}}
-                            @auth
-                            <button
-                                class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                            >
-                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                            </a>
-                            @endauth
-
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php $img = $product->images->first(); @endphp
-                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
-                                        class="w-full h-full object-contain p-2" 
-                                        alt="{{ $product->name }}">
-                                </div>
-                            </a>
-
-                            {{-- INFO --}}
-                            <div class="mt-3 flex-1">
-                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[9px] font-semibold px-2 py-0.5 rounded-full mb-1">
-                                    <i class="fa-solid fa-clock"></i> 8 MINS
-                                </span>
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                {{-- STAR RATINGS --}}
-                                @php 
-                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                @endphp
-                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                        @endfor
-                                    </div>
-                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                </div>
-
-                                @if($product->size)
-                                    <p class="text-xs text-gray-500 mt-0.5">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
-                                <div class="flex flex-col leading-tight">
-                                    @if ($product->discount_price && $product->discount_price > 0)
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                        <span class="line-through text-xs text-gray-400">₹{{ $product->price }}</span>
-                                    @else
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                                @if(auth()->check() && auth()->user()->isDeliveryBoy())
-                                    <button disabled class="px-2 py-1.5 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg text-[10px] font-semibold cursor-not-allowed shrink-0" title="Delivery accounts cannot make purchases.">
-                                        RESTRICTED
-                                    </button>
-                                @else
-                                    @auth
-                                        <button
-                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold shrink-0
-                                            {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                            data-product-id="{{ $product->id }}"
-                                            >
-                                            {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                        </button>
-                                    @else
-                                        <a href="{{ route('login') }}"
-                                            class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600 block text-center shrink-0">
-                                            ADD
-                                        </a>
-                                    @endauth
-                                @endif
-                            </div>
-                        </div>
+                        @include('partials.product-card', ['product' => $product, 'isAd' => false])
                     @endforeach
                 </div>
             </section>
@@ -531,103 +421,7 @@ if ($product->description && !isset($productDetails['Description'])) {
                 <h2 class="text-lg font-semibold mb-4">People Also Bought</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach ($peopleAlsoBought as $product)
-                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col overflow-hidden">
-                            
-                            {{-- STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                    {{ $product->stock_quantity }} LEFT
-                                </div>
-                            @endif
-
-                            {{-- DISCOUNT BADGE --}}
-                            @if($product->discount_price && $product->price > 0)
-                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                    {{ $discountPercent }}% OFF
-                                </div>
-                            @endif
-
-                           {{-- WISHLIST ICON (TOP RIGHT) --}}
-                            @auth
-                            <button
-                                class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                data-product-id="{{ $product->id }}"
-                            >
-                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                            </button>
-                            @else
-                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                            </a>
-                            @endauth
-
-                            {{-- IMAGE --}}
-                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                    @php $img = $product->images->first(); @endphp
-                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/1/image3.png')" 
-                                        class="w-full h-full object-contain p-2" 
-                                        alt="{{ $product->name }}">
-                                </div>
-                            </a>
-
-                            {{-- INFO --}}
-                            <div class="mt-3 flex-1">
-                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[9px] font-semibold px-2 py-0.5 rounded-full mb-1">
-                                    <i class="fa-solid fa-clock"></i> 8 MINS
-                                </span>
-                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                    {{ $product->name }}
-                                </p>
-
-                                {{-- STAR RATINGS --}}
-                                @php 
-                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                @endphp
-                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                        @endfor
-                                    </div>
-                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                </div>
-
-                                @if($product->size)
-                                    <p class="text-xs text-gray-500 mt-0.5">{{ $product->size }}</p>
-                                @endif
-                            </div>
-
-                            {{-- PRICE & ADD BUTTON --}}
-                            <div class="mt-3 flex items-center justify-between">
-                                <div class="flex flex-col leading-tight">
-                                    @if ($product->discount_price && $product->discount_price > 0)
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                        <span class="line-through text-xs text-gray-400">₹{{ $product->price }}</span>
-                                    @else
-                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                    @endif
-                                </div>
-
-                                {{-- ADD BUTTON --}}
-                                @auth
-                                    <button
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold shrink-0
-                                        {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                        data-product-id="{{ $product->id }}"
-                                        >
-                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                    </button>
-                                @else
-                                    <a href="{{ route('login') }}"
-                                        class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600 block text-center shrink-0">
-                                        ADD
-                                    </a>
-                                @endauth
-                            </div>
-                        </div>
+                        @include('partials.product-card', ['product' => $product, 'isAd' => false])
                     @endforeach
                 </div>
             </section>
@@ -638,94 +432,51 @@ if ($product->description && !isset($productDetails['Description'])) {
 
 
 
+@push('scripts')
 <script>
-    let currentImageIndex = 0;
-    const productImages = [
-        @foreach ($product->images as $image)
-            "@storageUrl($image->path)",
-        @endforeach
-    ];
-
-    function changeMainImage(element, index) {
-        currentImageIndex = index;
-        const mainImg = document.getElementById('mainProductImage');
-        mainImg.src = element.src;
-
-        document.querySelectorAll('.thumbnail-img').forEach(img => {
-            img.classList.remove('border-green-500', 'shadow-sm');
-            img.classList.add('border-gray-100');
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Main Product Slider
+        const mainProductSwiper = new Swiper('.mainProductSwiper', {
+            modules: [window.Navigation, window.Pagination],
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.main-slider-pagination',
+                clickable: true,
+            },
         });
 
-        element.classList.remove('border-gray-100');
-        element.classList.add('border-green-500', 'shadow-sm');
-    }
+        window.toggleProductDetails = function() {
+            const content = document.getElementById('productDetailsContent');
+            const mobileContent = document.getElementById('productDetailsContentMobile');
+            const label = document.getElementById('productDetailsLabel');
+            const chevron = document.getElementById('productDetailsChevron');
 
-    function prevImage() {
-        if (productImages.length <= 1) return;
-        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-        updateMainImageFromIndex();
-    }
+            const isDesktopVisible = !content.classList.contains('hidden');
+            const isMobileVisible = !mobileContent.classList.contains('hidden');
 
-    function nextImage() {
-        if (productImages.length <= 1) return;
-        currentImageIndex = (currentImageIndex + 1) % productImages.length;
-        updateMainImageFromIndex();
-    }
-
-    function updateMainImageFromIndex() {
-        const mainImg = document.getElementById('mainProductImage');
-        mainImg.src = productImages[currentImageIndex];
-        
-        const thumbnails = document.querySelectorAll('.thumbnail-img');
-        thumbnails.forEach((img, idx) => {
-            if (idx === currentImageIndex) {
-                img.classList.remove('border-gray-100');
-                img.classList.add('border-green-500', 'shadow-sm');
-                img.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            if (isDesktopVisible || isMobileVisible) {
+                content.classList.add('hidden');
+                mobileContent.classList.add('hidden');
+                if(label) label.innerText = 'View product details';
+                if(chevron) chevron.style.transform = 'rotate(0deg)';
             } else {
-                img.classList.remove('border-green-500', 'shadow-sm');
-                img.classList.add('border-gray-100');
+                content.classList.remove('hidden');
+                mobileContent.classList.remove('hidden');
+                if(label) label.innerText = 'Hide product details';
+                if(chevron) chevron.style.transform = 'rotate(180deg)';
             }
-        });
-    }
+        };
+    });
 
-    function zoomImage(e) {
-        const img = document.getElementById('mainProductImage');
-        const x = e.offsetX;
-        const y = e.offsetY;
-        const w = img.offsetWidth;
-        const h = img.offsetHeight;
-        
-        const xPerc = (x / w) * 100;
-        const yPerc = (y / h) * 100;
-
-        img.style.transformOrigin = `${xPerc}% ${yPerc}%`;
-        img.style.transform = "scale(2.5)";
-    }
-
-    function resetZoom() {
-        const img = document.getElementById('mainProductImage');
-        img.style.transform = "scale(1)";
-        img.style.transformOrigin = "center";
-    }
-
-    function toggleProductDetails() {
-        const content = document.getElementById('productDetailsContent');
-        const toggle = document.getElementById('productDetailsToggle');
-
-        const isOpen = !content.classList.contains('hidden');
-
-        if (isOpen) {
-            content.classList.add('hidden');
-            toggle.innerText = 'View more';
-        } else {
-            content.classList.remove('hidden');
-            toggle.innerText = 'View less';
-        }
-    }
-
-        window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
-        window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
+    window.wishlistToggleUrl = "{{ route('wishlist.toggle', ':id') }}";
+    window.CartToggleUrl = "{{ route('account.cart.toggle', ':id') }}";
 </script>
+@endpush
 
 </x-layouts.site>

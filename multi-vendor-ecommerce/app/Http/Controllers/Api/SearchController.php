@@ -19,6 +19,8 @@ class SearchController extends Controller
             $categories = Category::limit(20)->get(['id', 'name', 'slug', 'image']);
             
             $products = Product::with(['images', 'cartItem'])
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
                 ->where('is_featured', true) // Or use ->latest()
                 ->limit(100)
                 ->get();
@@ -32,6 +34,8 @@ class SearchController extends Controller
             $products = Product::where('name', 'LIKE', "%{$q}%")
                 ->orWhere('meta_keywords', 'LIKE', "%{$q}%")
                 ->with(['images', 'cartItem'])
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
                 ->limit(12)
                 ->get();
         }
@@ -48,6 +52,9 @@ class SearchController extends Controller
                 'image' => optional($product->images->first())->path,
                 'in_wishlist' => $user ? $user->wishlist->contains('product_id', $product->id) : false,
                 'in_cart' => $product->cartItem ? true : false,
+                'stock_quantity' => $product->stock_quantity,
+                'avg_rating' => $product->reviews_avg_rating,
+                'reviews_count' => $product->reviews_count,
             ];
         });
 

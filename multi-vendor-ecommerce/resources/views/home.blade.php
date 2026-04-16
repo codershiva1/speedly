@@ -108,68 +108,59 @@
         <x-homeslider />
     </section>
 
-@if($categories->isNotEmpty())
+@if($categories->where('parent_id', null)->isNotEmpty())
     {{-- ================= CATEGORY CARDS ================= --}}
     <section class="bg-gradient-to-b from-green-50/50 to-white py-3 px-2">
-
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-2">
-
-            @foreach ($categories->take(16) as $category)
+        <div class="grid grid-cols-3 lg:grid-cols-4 gap-3">
+            @foreach ($categories->where('parent_id', null)->take(6) as $category)
                 @php
-                    $catProducts = $category->products()->with('images')->get();
+                    $catProducts = $category->products()->with('images')->take(4)->get();
                     $count = $catProducts->count();
-                @endphp
-
-                {{-- Skip categories with less than 4 products --}}
-                @if($count < 4)
-                    @continue
-                @endif
-
-                @php
-                    $preview = $catProducts->take(4);
-                    $previewCount = $preview->count();
-                    // Grid cols: 1 item = 1 col full-width, 2-4 items = 2 cols
-                    $gridCols = $previewCount === 1 ? 'grid-cols-1' : 'grid-cols-2';
-                    $extraCount = max(0, $count - 4);
+                    // Grid cols: 1 item = 1 col, 2-4 items = 2 cols
+                    $gridCols = $count === 1 ? 'grid-cols-1' : 'grid-cols-2';
                 @endphp
 
                 <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="group block">
-                    <div class="bg-white rounded-2xl p-2 shadow-sm border border-gray-100 group-hover:shadow-md group-hover:border-green-200 transition-all duration-200">
-
-                        {{-- Adaptive Product Image Grid --}}
-                        <div class="grid {{ $gridCols }} gap-1 mb-2">
-                            @foreach ($preview as $product)
+                    <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 group-hover:shadow-md group-hover:border-green-200 transition-all duration-200 h-full flex flex-col">
+                        
+                        {{-- 4 Product Grid Inside Card --}}
+                        <div class="grid grid-cols-2 gap-1.5 mb-2 flex-grow">
+                            @foreach ($catProducts as $product)
                                 @php $img = $product->images->first(); @endphp
-                                <div class="bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden
-                                    {{ $previewCount === 1 ? 'h-24' : 'h-14' }}">
+                                <div class="bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden h-16 md:h-20">
                                     @if($img)
-                                        <img
-                                            src="@storageUrl($img->path)"
-                                            class="object-contain w-full h-full p-1"
-                                            alt="{{ $product->name }}"
-                                            loading="lazy">
+                                        <img src="@storageUrl($img->path)" class="object-contain w-full h-full p-1" alt="{{ $product->name }}" loading="lazy">
                                     @else
                                         <i class="bi bi-image text-gray-300 text-xl"></i>
                                     @endif
                                 </div>
                             @endforeach
+                            @if($count < 4)
+                                @for($i = $count; $i < 4; $i++)
+                                    <div class="bg-gray-50/40 rounded-xl flex items-center justify-center h-16 md:h-20 border border-dashed border-gray-100">
+                                        <i class="bi bi-plus text-gray-200"></i>
+                                    </div>
+                                @endfor
+                            @endif
                         </div>
-
                         
                         {{-- Product count badge --}}
-                        <div class="flex justify-center mt-1">
+                        @php
+                            $totalCount = $category->products()->count();
+                            $extraCount = max(0, $totalCount - 4);
+                        @endphp
+                        <div class="flex justify-center mb-1">
                             <span class="bg-green-100 text-green-700 text-[9px] font-semibold px-2 py-0.5 rounded-full">
-                                @if($extraCount > 0) &middot; +{{ $extraCount }} more @endif
+                                @if($extraCount > 0) &middot; +{{ $extraCount }} more @else {{ $totalCount }} Items @endif
                             </span>
                         </div>
-                        
+
                         {{-- Category Name --}}
-                        <p class="text-[11px] font-semibold text-gray-800 text-center leading-tight truncate">
+                        <p class="text-[12px] md:text-sm font-black text-gray-900 text-center leading-tight uppercase italic tracking-tighter">
                             {{ $category->name }}
                         </p>
                     </div>
                 </a>
-
             @endforeach
         </div>
     </section>
@@ -420,92 +411,7 @@
                             @foreach ($megaDeals as $product)
                                 <div class="swiper-slide h-auto flex pb-4">
                                     {{-- PRODUCT CARD START --}}
-                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
-                                        
-                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                                {{ $product->stock_quantity }} LEFT
-                                            </div>
-                                        @endif
-
-                                        {{-- 1. DISCOUNT BADGE --}}
-                                        @if($product->discount_price && $product->price > 0)
-                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                                {{ $discountPercent }}% OFF
-                                            </div>
-                                        @endif
-
-                                        {{-- WISHLIST (STAYS ON TOP) --}}
-                                        @auth
-                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                                data-product-id="{{ $product->id }}">
-                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                                        </button>
-                                        @else
-                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                                        </a>
-                                        @endauth
-
-                                        {{-- IMAGE --}}
-                                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                                @php $img = $product->images->first(); @endphp
-                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
-                                                    class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
-                                            </div>
-                                        </a>
-
-                                        {{-- INFO --}}
-                                        <div class="mt-3 flex-1">
-                                            <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
-                                                <i class="fa-solid fa-clock"></i> 8 MINS
-                                            </span>
-                                            <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                                {{ $product->name }}
-                                            </p>
-
-                                            {{-- 2. STAR RATINGS (Always visible now) --}}
-                                            @php 
-                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                            @endphp
-                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                                    @for($i = 1; $i <= 5; $i++)
-                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                                    @endfor
-                                                </div>
-                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                            </div>
-
-                                            @if($product->size)
-                                                <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
-                                            @endif
-                                        </div>
-
-                                        {{-- PRICE & ACTION --}}
-                                        <div class="mt-3 flex items-center justify-between">
-                                            <div class="flex flex-col leading-tight">
-                                                @if ($product->discount_price && $product->discount_price > 0)
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                    <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                                @else
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                                @endif
-                                            </div>
-                                            @auth
-                                                <button class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                        data-product-id="{{ $product->id }}">
-                                                    {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                                </button>
-                                            @else
-                                                <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">ADD</a>
-                                            @endauth
-                                        </div>
-                                    </div>
+                                    @include('partials.product-card', ['product' => $product, 'isAd' => false])
                                     {{-- PRODUCT CARD END --}}
                                 </div>
                             @endforeach
@@ -533,102 +439,17 @@
                         icon="leaf" 
                         :pulse="true"
                     />
-                    <a href="{{ route('products.all', ['type' => 'new-arrivals']) }}" class="text-xl text-green-600 hover:underline">View all</a>
+                    <a href="{{ route('products.all', ['type' => 'new-arrivals']) }}" class="text-xs font-bold text-green-600 hover:text-green-700 transition-colors bg-green-50 px-3 py-1.5 rounded-full border border-green-100 flex items-center gap-1">View all <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
                 </div>
 
                 {{-- UNIVERSAL SLIDER --}}
-                <div class="relative group px-2 product-slider-container">
+                <div class="relative group px-2 product-slider-container" data-slides-desktop="6" data-slides-tablet="4" data-slides-mobile="2">
                     <div class="swiper">
                         <div class="swiper-wrapper">
                             @foreach ($newProducts as $product)
                                 <div class="swiper-slide h-auto flex pb-4">
                                      {{-- PRODUCT CARD START --}}
-                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
-                                        
-                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                                {{ $product->stock_quantity }} LEFT
-                                            </div>
-                                        @endif
-
-                                        {{-- 1. DISCOUNT BADGE --}}
-                                        @if($product->discount_price && $product->price > 0)
-                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                                {{ $discountPercent }}% OFF
-                                            </div>
-                                        @endif
-
-                                        {{-- WISHLIST (STAYS ON TOP) --}}
-                                        @auth
-                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                                data-product-id="{{ $product->id }}">
-                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                                        </button>
-                                        @else
-                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                                        </a>
-                                        @endauth
-
-                                        {{-- IMAGE --}}
-                                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                                @php $img = $product->images->first(); @endphp
-                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
-                                                    class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
-                                            </div>
-                                        </a>
-
-                                        {{-- INFO --}}
-                                        <div class="mt-3 flex-1">
-                                            <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
-                                                <i class="fa-solid fa-clock"></i> 8 MINS
-                                            </span>
-                                            <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                                {{ $product->name }}
-                                            </p>
-
-                                            {{-- STAR RATINGS --}}
-                                            @php 
-                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                            @endphp
-                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                                    @for($i = 1; $i <= 5; $i++)
-                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                                    @endfor
-                                                </div>
-                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                            </div>
-
-                                            @if($product->size)
-                                                <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
-                                            @endif
-                                        </div>
-
-                                        {{-- PRICE & ACTION --}}
-                                        <div class="mt-3 flex items-center justify-between">
-                                            <div class="flex flex-col leading-tight">
-                                                @if ($product->discount_price && $product->discount_price > 0)
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                    <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                                @else
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                                @endif
-                                            </div>
-                                            @auth
-                                                <button class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                        data-product-id="{{ $product->id }}">
-                                                    {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                                </button>
-                                            @else
-                                                <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">ADD</a>
-                                            @endauth
-                                        </div>
-                                    </div>
+                                    @include('partials.product-card', ['product' => $product, 'isAd' => false])
                                 </div>
                             @endforeach
                         </div>
@@ -775,100 +596,15 @@
                             icon="fire" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xl text-green-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'trending']) }}" class="text-xs font-bold text-green-600 hover:text-green-700 transition-colors bg-green-50 px-3 py-1.5 rounded-full border border-green-100 flex items-center gap-1">View all <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
                     </div>
           
-                <div class="relative group px-2 product-slider-container">
+                <div class="relative group px-2 product-slider-container" data-slides-desktop="6" data-slides-tablet="4" data-slides-mobile="2">
                     <div class="swiper">
                         <div class="swiper-wrapper">
                             @foreach ($trendingProducts as $product)
                                 <div class="swiper-slide h-auto flex pb-4">
-                                    <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
-                                        
-                                        {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                                        @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                            <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                                {{ $product->stock_quantity }} LEFT
-                                            </div>
-                                        @endif
-
-                                        {{-- 1. DISCOUNT BADGE --}}
-                                        @if($product->discount_price && $product->price > 0)
-                                            @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                            <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                                {{ $discountPercent }}% OFF
-                                            </div>
-                                        @endif
-
-                                        {{-- WISHLIST (STAYS ON TOP) --}}
-                                        @auth
-                                        <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                                data-product-id="{{ $product->id }}">
-                                            <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                                        </button>
-                                        @else
-                                        <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                            <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                                        </a>
-                                        @endauth
-
-                                        {{-- IMAGE --}}
-                                        <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                            <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                                @php $img = $product->images->first(); @endphp
-                                                <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
-                                                    class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
-                                            </div>
-                                        </a>
-
-                                        {{-- INFO --}}
-                                        <div class="mt-3 flex-1">
-                                            <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                                                <i class="fa-solid fa-clock"></i> 8 MINS
-                                            </span>
-                                            <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1 mt-2">
-                                                {{ $product->name }}
-                                            </p>
-
-                                            {{-- STAR RATINGS --}}
-                                            @php 
-                                                $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                                $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                            @endphp
-                                            <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                                <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                                    @for($i = 1; $i <= 5; $i++)
-                                                        <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                                    @endfor
-                                                </div>
-                                                <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                            </div>
-
-                                            @if($product->size)
-                                                <p class="text-sm text-gray-500 mt-0.5">{{ $product->size }}</p>
-                                            @endif
-                                        </div>
-
-                                        {{-- PRICE & ACTION --}}
-                                        <div class="mt-2 flex items-center justify-between">
-                                            <div class="flex flex-col leading-tight">
-                                                @if ($product->discount_price && $product->discount_price > 0)
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                    <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                                @else
-                                                    <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                                @endif
-                                            </div>
-                                            @auth
-                                                 <button class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                    data-product-id="{{ $product->id }}">
-                                                    {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                                </button>
-                                            @else
-                                                <a href="{{ route('login') }}" class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">ADD</a>
-                                            @endauth
-                                        </div>
-                                    </div>
+                                     @include('partials.product-card', ['product' => $product, 'isAd' => false])
                                 </div>
                             @endforeach
                         </div>
@@ -894,102 +630,18 @@
                             icon="star" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xl text-green-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'featured']) }}" class="text-xs font-bold text-green-600 hover:text-green-700 transition-colors bg-green-50 px-3 py-1.5 rounded-full border border-green-100 flex items-center gap-1">View all <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
                     </div>
                     
-                    <div class="relative group px-2 product-slider-container">
+                    <div class="relative group px-2 product-slider-container" data-slides-desktop="6" data-slides-tablet="4" data-slides-mobile="2">
                         <div class="swiper">
                             <div class="swiper-wrapper">
                                 @foreach ($featuredProducts as $product)
                                     <div class="swiper-slide h-auto flex pb-4">
-                                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
-                                            
-                                            {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                                    {{ $product->stock_quantity }} LEFT
-                                                </div>
-                                            @endif
-
-                                            {{-- 1. DISCOUNT BADGE --}}
-                                            @if($product->discount_price && $product->price > 0)
-                                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                                    {{ $discountPercent }}% OFF
-                                                </div>
-                                            @endif
-
-                                            {{-- WISHLIST (STAYS ON TOP) --}}
-                                            @auth
-                                            <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                                    data-product-id="{{ $product->id }}">
-                                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                                            </button>
-                                            @else
-                                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                                            </a>
-                                            @endauth
-
-                                            {{-- IMAGE --}}
-                                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                                    @php $img = $product->images->first(); @endphp
-                                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
-                                                        class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
-                                                </div>
-                                            </a>
-
-                                            {{-- INFO --}}
-                                            <div class="mt-3 flex-1">
-                                                <span class="w-fit inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                                                    <i class="fa-solid fa-clock"></i> 8 MINS
-                                                </span>
-                                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1 mt-2">
-                                                    {{ $product->name }}
-                                                </p>
-
-                                                {{-- STAR RATINGS --}}
-                                                @php 
-                                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                                @endphp
-                                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                                        @for($i = 1; $i <= 5; $i++)
-                                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                                        @endfor
-                                                    </div>
-                                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                                </div>
-
-                                                @if($product->size)
-                                                    <p class="text-sm text-gray-500 mt-0.5">{{ $product->size }}</p>
-                                                @endif
-                                            </div>
-
-                                            {{-- PRICE & ACTION --}}
-                                            <div class="mt-2 flex items-center justify-between">
-                                                <div class="flex flex-col leading-tight">
-                                                    @if ($product->discount_price && $product->discount_price > 0)
-                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                                    @else
-                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                                    @endif
-                                                </div>
-                                                @auth
-                                                     <button class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                        data-product-id="{{ $product->id }}">
-                                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                                    </button>
-                                                @else
-                                                    <a href="{{ route('login') }}" class="cart-btn px-2 py-1.5 border border-green-600 rounded-lg text-sm font-semibold text-green-600">ADD</a>
-                                                @endauth
-                                            </div>
-                                        </div>
+                                        @include('partials.product-card', ['product' => $product, 'isAd' => false])
                                     </div>
                                 @endforeach
+                            </div>
                             </div>
                         </div>
                         
@@ -1147,7 +799,7 @@
                             icon="bolt" 
                             :pulse="true"
                         />
-                        <a href="{{ route('products.all', ['type' => 'budget-store']) }}" class="text-xl text-green-600 hover:underline">View all</a>
+                        <a href="{{ route('products.all', ['type' => 'budget-store']) }}" class="text-xs font-bold text-green-600 hover:text-green-700 transition-colors bg-green-50 px-3 py-1.5 rounded-full border border-green-100 flex items-center gap-1">View all <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
                     </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -1190,98 +842,12 @@
                     {{-- RIGHT PRODUCTS STRIP --}}
                 <div class="lg:col-span-3 bg-gray-50">
                     {{-- UNIVERSAL SLIDER --}}
-                    <div class="relative group px-2 product-slider-container" data-slides-desktop="5">
+                    <div class="relative group px-2 product-slider-container" data-slides-desktop="6" data-slides-tablet="4" data-slides-mobile="2">
                         <div class="swiper">
                             <div class="swiper-wrapper">
                                 @foreach ($budgetStore as $product)
                                     <div class="swiper-slide h-auto flex pb-4">
-                                        {{-- PRODUCT CARD START --}}
-                                        <div class="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all p-2 flex flex-col w-full overflow-hidden">
-                                            
-                                            {{-- 3. STOCK SCARCITY (DIAGONAL RIBBON) --}}
-                                            @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                                <div class="absolute -right-[34px] top-[14px] w-[140px] h-[24px] bg-[#1a7a1a] text-white text-[9px] font-black tracking-widest flex items-center justify-center rotate-45 z-1 shadow-sm border-y border-white/20 uppercase" style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                                    {{ $product->stock_quantity }} LEFT
-                                                </div>
-                                            @endif
-
-                                            {{-- 1. DISCOUNT BADGE --}}
-                                            @if($product->discount_price && $product->price > 0)
-                                                @php $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100); @endphp
-                                                <div class="absolute top-2 left-2 z-10 bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                                    {{ $discountPercent }}% OFF
-                                                </div>
-                                            @endif
-
-                                            {{-- WISHLIST (STAYS ON TOP) --}}
-                                            @auth
-                                            <button class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm wishlist-btn hover:scale-105 transition"
-                                                    data-product-id="{{ $product->id }}">
-                                                <i class="fa fa-heart {{ auth()->user()->wishlist->contains('product_id', $product->id) ? 'text-red-500' : 'text-gray-400' }} text-[10px]"></i>
-                                            </button>
-                                            @else
-                                            <a href="{{ route('login') }}" class="absolute top-1 right-1 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow-sm">
-                                                <i class="fa fa-heart text-gray-400 text-[10px]"></i>
-                                            </a>
-                                            @endauth
-
-                                            {{-- IMAGE --}}
-                                            <a href="{{ route('shop.show', $product->slug) }}" class="block">
-                                                <div class="w-full h-36 rounded-lg overflow-hidden flex items-center justify-center">
-                                                    @php $img = $product->images->first(); @endphp
-                                                    <img src="@storageUrl($img ? $img->path : 'uploads/products/default.png')"
-                                                        class="w-full h-full object-contain p-2" alt="{{ $product->name }}">
-                                                </div>
-                                            </a>
-
-                                            {{-- INFO --}}
-                                            <div class="mt-3 flex-1">
-                                                <span class="inline-flex items-center gap-1 bg-orange-50 text-yellow-900 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2">
-                                                    <i class="fa-solid fa-clock"></i> 8 MINS
-                                                </span>
-                                                <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-1">
-                                                    {{ $product->name }}
-                                                </p>
-
-                                                {{-- STAR RATINGS --}}
-                                                @php 
-                                                    $avgRating = $product->reviews_avg_rating ?? $product->reviews()->avg('rating') ?? 0;
-                                                    $reviewCount = $product->reviews_count ?? $product->reviews()->count() ?? 0;
-                                                @endphp
-                                                <div class="flex items-center gap-1 mt-1 mb-1 opacity-90">
-                                                    <div class="flex text-yellow-400 text-[9px] gap-0.5">
-                                                        @for($i = 1; $i <= 5; $i++)
-                                                            <i class="fa{{ $i <= round($avgRating) ? '-solid' : '-regular' }} fa-star"></i>
-                                                        @endfor
-                                                    </div>
-                                                    <span class="text-[9px] text-gray-500 font-medium">({{ $reviewCount }})</span>
-                                                </div>
-
-                                                @if($product->size)
-                                                    <p class="text-xs text-gray-500 mt-0.5 leading-tight">{{ $product->size }}</p>
-                                                @endif
-                                            </div>
-
-                                            {{-- PRICE & ACTION --}}
-                                            <div class="mt-3 flex items-center justify-between">
-                                                <div class="flex flex-col leading-tight">
-                                                    @if ($product->discount_price && $product->discount_price > 0)
-                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->discount_price }}</span>
-                                                        <span class="line-through text-[10px] text-gray-400">₹{{ $product->price }}</span>
-                                                    @else
-                                                        <span class="text-base font-bold text-gray-900">₹{{ $product->price }}</span>
-                                                    @endif
-                                                </div>
-                                                @auth
-                                                    <button class="cart-btn px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold {{ $product->cartItem ? 'bg-green-100 text-green-600' : 'text-green-600 hover:bg-green-50' }}"
-                                                            data-product-id="{{ $product->id }}">
-                                                        {{ $product->cartItem ? 'ADDED' : 'ADD' }}
-                                                    </button>
-                                                @else
-                                                    <a href="{{ route('login') }}" class="px-3 py-1.5 border border-green-600 rounded-lg text-xs font-bold text-green-600">ADD</a>
-                                                @endauth
-                                            </div>
-                                        </div>
+                                        @include('partials.product-card', ['product' => $product, 'isAd' => false])
                                     </div>
                                 @endforeach
                             </div>
@@ -1297,124 +863,9 @@
                     </div>
                 </div>
 
-                    </div>
-                </div>
-            </section>
-       @endif
-
-       @if($categories->isNotEmpty())
-            {{-- ================= BEST SELLERS (SLIDER) ================= --}}
-            <section class="bg-white py-6 overflow-hidden">
-                <div class="px-2">
-                    <!-- SECTION HEADING -->
-                    <div class="flex items-center justify-between mb-4">
-                        <x-section-header 
-                            title="Best Sellers" 
-                            badgeText="Best Selections" 
-                            icon="bolt" 
-                            :pulse="true"
-                        />
-                        <a href="{{ route('categories.index') }}" class="text-xs font-bold text-green-600 hover:underline uppercase tracking-wider flex items-center gap-1">
-                            Explore All <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </a>
-                    </div>
-
-                    <!-- SLIDER CONTAINER -->
-                    <div class="relative group product-slider-container" data-slides-desktop="3" data-slides-tablet="2">
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                @foreach ($categories as $category)
-                                    @php
-                                        // Take up to 4 products for the specific criss-cross bento grid in the image
-                                        $displayProducts = $category->products->take(4);
-                                        $pCount = $displayProducts->count();
-                                    @endphp
-
-                                    @if($pCount >= 3)
-                                        <div class="swiper-slide h-auto pb-2">
-                                            <div class="w-full bg-gray-50/80 rounded-2xl p-3 border border-gray-100 hover:border-green-200 transition-all hover:shadow-xl group/card h-full flex flex-col">
-                                                
-                                                <!-- HEADER -->
-                                                <div class="flex items-center justify-between mb-3">
-                                                    <div class="flex flex-col">
-                                                        <h3 class="text-sm font-extrabold text-gray-900 group-hover/card:text-green-700 transition-colors line-clamp-1">
-                                                            {{ $category->name }}
-                                                        </h3>
-                                                        <span class="text-[10px] font-medium text-gray-500 uppercase tracking-tight">{{ $category->products->count() }} items</span>
-                                                    </div>
-                                                    <span class="text-[10px] font-black text-white bg-green-600 px-2 py-1 rounded shadow-sm">
-                                                        BEST
-                                                    </span>
-                                                </div>
-
-                                                <!-- CRISS-CROSS BENTO GRID (WITH WHITE DIVIDER LINES) -->
-                                                <div class="flex gap-[2px] bg-white rounded-xl overflow-hidden border-2 border-white shadow-sm h-72">
-                                                    {{-- LEFT COLUMN --}}
-                                                    <div class="flex flex-col gap-[2px] w-1/2 h-full">
-                                                        {{-- Small Top --}}
-                                                        <a href="{{ route('shop.show', $displayProducts[0]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
-                                                            <img src="@storageUrl($displayProducts[0]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
-                                                        </a>
-                                                        {{-- Large Bottom --}}
-                                                        @if($pCount > 1)
-                                                        <a href="{{ route('shop.show', $displayProducts[1]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
-                                                            <img src="@storageUrl($displayProducts[1]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
-                                                        </a>
-                                                        @endif
-                                                    </div>
-
-                                                    {{-- RIGHT COLUMN --}}
-                                                    <div class="flex flex-col gap-[2px] w-1/2 h-full">
-                                                        {{-- Large Top --}}
-                                                        @if($pCount > 2)
-                                                        <a href="{{ route('shop.show', $displayProducts[2]->slug) }}" class="h-[60%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-4 relative group/img">
-                                                            <img src="@storageUrl($displayProducts[2]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
-                                                        </a>
-                                                        @endif
-                                                        {{-- Small Bottom --}}
-                                                        @if($pCount > 3)
-                                                        <a href="{{ route('shop.show', $displayProducts[3]->slug) }}" class="h-[40%] bg-gray-50/80 hover:bg-white transition-colors h-full flex items-center justify-center p-2 relative group/img">
-                                                            <img src="@storageUrl($displayProducts[3]->images->first()->path)" class="w-full h-full object-contain mix-blend-multiply group-hover/img:scale-110 transition-transform duration-500" alt="">
-                                                        </a>
-                                                        @else
-                                                            {{-- Placeholder --}}
-                                                            <div class="h-[40%] bg-gray-50/40 flex items-center justify-center">
-                                                                <i class="fa-solid fa-plus text-gray-200"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-
-                                                <!-- FOOTER ACTIONS -->
-                                                <div class="mt-3 flex items-center justify-between pt-2 border-t border-gray-100">
-                                                     <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="inline-flex items-center gap-1.5 text-[11px] font-black text-green-600 hover:text-green-800 transition-colors group/btn">
-                                                        EXPLORE NOW
-                                                        <i class="fa-solid fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <!-- CUSTOM NAVIGATION -->
-                        <div class="swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-md rounded-full w-12 h-12 items-center justify-center shadow-lg border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all hidden md:flex">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </div>
-                        <div class="swiper-next absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-md rounded-full w-12 h-12 items-center justify-center shadow-lg border border-gray-50 cursor-pointer text-green-600 hover:bg-green-600 hover:text-white transition-all hidden md:flex">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </div>
-                    </div>
                 </div>
             </section>
         @endif
-
-       
-          
-        </div>
-    </div>
 
     @if($cartCount > 0)
         <div id="floating-cart"

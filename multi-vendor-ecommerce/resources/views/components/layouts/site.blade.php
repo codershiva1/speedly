@@ -1613,5 +1613,6 @@ class="flex flex-col items-center px-3 py-1 text-xs font-medium text-black">
         </script>
 
 
+        @stack('scripts')
     </body>
 </html>

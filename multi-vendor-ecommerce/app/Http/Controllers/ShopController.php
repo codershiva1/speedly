@@ -102,23 +102,26 @@ class ShopController extends Controller
         if ($selectedCategory) {
             $currentCat = $categories->firstWhere('slug', $selectedCategory);
             if ($currentCat) {
-                $categories = $categories->sortBy(function ($c) use ($currentCat) {
-                    // 1. Current category always first
-                    if ($c->id === $currentCat->id) return 0;
-                    
-                    // 2. If current is a parent, prioritize its children
-                    if (is_null($currentCat->parent_id)) {
-                        if ($c->parent_id === $currentCat->id) return 1;
-                    } 
-                    // 3. If current is a child, prioritize its siblings (same parent)
-                    else {
-                        if ($c->parent_id === $currentCat->parent_id) return 1;
-                        if ($c->id === $currentCat->parent_id) return 1; // Also show the parent itself high up
-                    }
+                // Determine relevant categories
+                $relevantIds = collect([$currentCat->id]);
 
-                    // 4. Everything else
-                    return 2;
-                })->values();
+                if (is_null($currentCat->parent_id)) {
+                    // It's a parent: show itself + its children
+                    $childIds = $categories->where('parent_id', $currentCat->id)->pluck('id');
+                    $relevantIds = $relevantIds->merge($childIds);
+                } else {
+                    // It's a child: show itself + parent + siblings
+                    $relevantIds->push($currentCat->parent_id);
+                    $siblingIds = $categories->where('parent_id', $currentCat->parent_id)->pluck('id');
+                    $relevantIds = $relevantIds->merge($siblingIds);
+                }
+
+                // Filter to ONLY relevant ones
+                $categories = $categories->whereIn('id', $relevantIds->unique())
+                    ->sortBy(function ($c) use ($currentCat) {
+                        if ($c->id === $currentCat->id) return 0;
+                        return 1;
+                    })->values();
             }
         }
 

@@ -10,21 +10,11 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
-        // 1. Parent Categories (Those that HAVE children)
-        $parentCategories = Category::whereNull('parent_id')
-            ->has('children')
-            ->where('status', 'active')
-            ->with(['children' => function($q) {
-                $q->where('status', 'active')->withCount('products');
-            }])
-            ->get();
-
-        // 2. Standalone Categories (No parent AND no children)
-        // This ensures categories that aren't part of a group still show up
-        $standaloneCategories = Category::whereNull('parent_id')
-            ->doesntHave('children')
+        // Fetch all top-level categories (All where parent_id is null)
+        $allTopCategories = Category::whereNull('parent_id')
             ->where('status', 'active')
             ->withCount('products')
+            ->orderBy('name')
             ->get();
 
         // 3. Featured Brands
@@ -38,8 +28,7 @@ class CategoryController extends Controller
             ->first();
 
         return view('categories.index', compact(
-            'parentCategories', 
-            'standaloneCategories',
+            'allTopCategories', 
             'brands', 
             'categoryAds'
         ));
